@@ -35,7 +35,7 @@
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>()
-                //.AddDefaultUI()
+                .AddDefaultUI()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<TwentyFirstDbContext>();
 
