@@ -9,7 +9,7 @@ using TwentyFirst.Data;
 namespace TwentyFirst.Data.Migrations
 {
     [DbContext(typeof(TwentyFirstDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    partial class TwentyFirstDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
