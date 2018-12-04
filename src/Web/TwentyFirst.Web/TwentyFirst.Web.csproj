@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Data\TwentyFirst.Data.Models\TwentyFirst.Data.Models.csproj" />
-    <ProjectReference Include="..\..\Data\TwentyFirst.Data\TwentyFirst.Data.csproj" />
+    <ProjectReference Include="..\..\Common\TwentyFirst.Common\TwentyFirst.Common.csproj" />
   </ItemGroup>
 
 </Project>
