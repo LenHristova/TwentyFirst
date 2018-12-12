@@ -1,13 +1,15 @@
 ﻿namespace TwentyFirst.Common.Enums
 {
     using System.ComponentModel.DataAnnotations;
+    using Constants;
 
     public enum Role
     {
-        [Display(Name = "Master Administrator")]
+        [Display(Name = GlobalConstants.MasterAdministratorRoleName)]
         MasterAdmin = 1,
-        [Display(Name = "Administrator")]
+        [Display(Name = GlobalConstants.AdministratorRoleName)]
         Admin = 2,
+        [Display(Name = GlobalConstants.EditorRoleName)]
         Editor = 3
     }
 }

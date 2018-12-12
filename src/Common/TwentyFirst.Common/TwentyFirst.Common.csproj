@@ -10,14 +10,4 @@
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.1.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Data\TwentyFirst.Data.Models\TwentyFirst.Data.Models.csproj" />
-    <ProjectReference Include="..\..\Data\TwentyFirst.Data\TwentyFirst.Data.csproj" />
-    <ProjectReference Include="..\..\Services\TwentyFirst.Services.DataServices\TwentyFirst.Services.DataServices.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

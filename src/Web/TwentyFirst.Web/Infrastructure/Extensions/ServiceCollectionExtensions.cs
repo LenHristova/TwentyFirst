@@ -1,4 +1,4 @@
-﻿namespace TwentyFirst.Common.Extensions
+﻿namespace TwentyFirst.Web.Infrastructure.Extensions
 {
     using System.Linq;
     using System.Reflection;

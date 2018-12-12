@@ -1,15 +1,16 @@
-﻿namespace TwentyFirst.Common.Extensions
+﻿namespace TwentyFirst.Web.Infrastructure.Extensions
 {
+    using System;
+    using System.Threading.Tasks;
+    using Common.Enums;
+    using Common.Extensions;
     using Data;
     using Data.Models;
-    using Enums;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
-    using System.Threading.Tasks;
 
     public static class ApplicationBuilderExtensions
     {
