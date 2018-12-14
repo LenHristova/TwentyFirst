@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using TwentyFirst.Web.Models;
-
-namespace TwentyFirst.Web.Controllers
+﻿namespace TwentyFirst.Web.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using System.Diagnostics;
+    using TwentyFirst.Web.Models;
+
     public class HomeController : Controller
     {
         public IActionResult Index()
