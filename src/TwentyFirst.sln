@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{9AE38B35-463D-4A1C-81DA-81B8C5581796}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwentyFirst.Data.Models", "Data\TwentyFirst.Data.Models\TwentyFirst.Data.Models.csproj", "{88827302-D182-446C-9D72-406D76206C7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Data.Models", "Data\TwentyFirst.Data.Models\TwentyFirst.Data.Models.csproj", "{88827302-D182-446C-9D72-406D76206C7D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Data", "Data\TwentyFirst.Data\TwentyFirst.Data.csproj", "{4737A54F-04A6-4323-9E7E-5E94A6B71F3D}"
 EndProject
@@ -19,9 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD47DF24
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B45626E6-DE39-47C5-83FB-28DB3F9DCBCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwentyFirst.Common", "Common\TwentyFirst.Common\TwentyFirst.Common.csproj", "{BF2C01BE-EF96-4F42-A058-C5D537F0690E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Common", "Common\TwentyFirst.Common\TwentyFirst.Common.csproj", "{BF2C01BE-EF96-4F42-A058-C5D537F0690E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwentyFirst.Services.DataServices", "Services\TwentyFirst.Services.DataServices\TwentyFirst.Services.DataServices.csproj", "{7D094D4E-D577-4443-B2B7-0F24AF8B15B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Services.DataServices", "Services\TwentyFirst.Services.DataServices\TwentyFirst.Services.DataServices.csproj", "{7D094D4E-D577-4443-B2B7-0F24AF8B15B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Common.Models", "Common\TwentyFirst.Common.Models\TwentyFirst.Common.Models.csproj", "{1EA12F6E-1EA8-422D-9969-25C3C9E32F65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwentyFirst.Common.Mapping", "Common\TwentyFirst.Common.Mapping\TwentyFirst.Common.Mapping.csproj", "{CD14734C-D2B7-4DB9-AC8A-63FD38079332}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,14 @@ Global
 		{7D094D4E-D577-4443-B2B7-0F24AF8B15B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D094D4E-D577-4443-B2B7-0F24AF8B15B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D094D4E-D577-4443-B2B7-0F24AF8B15B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EA12F6E-1EA8-422D-9969-25C3C9E32F65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EA12F6E-1EA8-422D-9969-25C3C9E32F65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EA12F6E-1EA8-422D-9969-25C3C9E32F65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EA12F6E-1EA8-422D-9969-25C3C9E32F65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD14734C-D2B7-4DB9-AC8A-63FD38079332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD14734C-D2B7-4DB9-AC8A-63FD38079332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD14734C-D2B7-4DB9-AC8A-63FD38079332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD14734C-D2B7-4DB9-AC8A-63FD38079332}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +71,8 @@ Global
 		{9127E553-6A72-48F0-83BF-04848551F0C3} = {1FF2E649-A741-441E-A814-C2C17C9FCD92}
 		{BF2C01BE-EF96-4F42-A058-C5D537F0690E} = {B45626E6-DE39-47C5-83FB-28DB3F9DCBCA}
 		{7D094D4E-D577-4443-B2B7-0F24AF8B15B6} = {62403884-0E55-4120-9FD1-F6F6E1CC9C8D}
+		{1EA12F6E-1EA8-422D-9969-25C3C9E32F65} = {B45626E6-DE39-47C5-83FB-28DB3F9DCBCA}
+		{CD14734C-D2B7-4DB9-AC8A-63FD38079332} = {B45626E6-DE39-47C5-83FB-28DB3F9DCBCA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {410A9E2E-9FC7-4309-93C4-8D56F89B1EB3}

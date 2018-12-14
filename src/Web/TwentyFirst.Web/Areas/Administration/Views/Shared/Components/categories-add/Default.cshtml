@@ -1,0 +1,9 @@
+﻿@model TwentyFirst.Common.Models.Categories.CategoriesChooseInputModel
+
+<div class="py-3">
+<div class="drop-search">
+    <h6>Избери категория/и</h6>
+    <span asp-validation-for="CategoriesIds" class="text-danger"></span>
+    <select asp-for="CategoriesIds" multiple="multiple" style="display: none" asp-items="@Model.Categories"></select>
+</div>
+</div>

@@ -1,0 +1,24 @@
+﻿@model IEnumerable<TwentyFirst.Common.Models.Images.ImageSearchListViewModel>
+
+<div class="container">
+    <div class="row">
+
+        @foreach (var image in Model)
+        {
+            <div class="card col-md-6 border-top" style="width: 17rem;">
+                <a href="#" class="selected-image" data-item-id="@image.Id" data-item-url="@image.ThumbUrl">
+                    <img class="card-img-top" src="@image.ThumbUrl" alt="Card image cap">
+                    <div class="card-body p-0">
+                        <h6 data-toggle="tooltip" data-placement="top" title="@image.Description">
+                            @image.GetShortDescription()
+                        </h6>
+                    </div>
+                </a>
+                <div class="blockquote-footer">
+                    <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
+                    <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOn.ToShortDateString()</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

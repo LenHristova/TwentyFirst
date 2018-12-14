@@ -40,7 +40,7 @@
         public virtual ICollection<ArticleTag> Tags { get; set; } = new HashSet<ArticleTag>();
 
         public virtual ICollection<ArticleToArticle> ConnectedTo { get; set; } = new HashSet<ArticleToArticle>();
-
+        //TODO Not needed?
         public virtual ICollection<ArticleToArticle> ConnectedFrom { get; set; } = new HashSet<ArticleToArticle>();
     }
 }

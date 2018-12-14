@@ -1,0 +1,140 @@
+﻿@model TwentyFirst.Common.Models.Articles.ArticleCreateInputModel
+
+@{
+    ViewData["Title"] = "Добави новина";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<hr />
+
+<form asp-action="Create">
+    <input asp-for="ImageId" class="image-id" type="hidden" />
+    <div class="row h5">
+        <div class="col-md-8">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea asp-for="Content" class="form-control" rows="20"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <div class="checkbox checbox-switch switch-primary">
+                            <label>
+                                <input type="checkbox" asp-for="IsTop" />
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-8">@Html.DisplayNameFor(model => model.IsTop)</div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <div class="checkbox checbox-switch switch-primary">
+                            <label>
+                                <input type="checkbox" asp-for="IsTop" />
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-8">@Html.DisplayNameFor(model => model.IsImportant)</div>
+                </div>
+            </div>
+
+            <!-- Categories drоpdown component-->
+            @await Component.InvokeAsync("categories-add", Model.CategoriesIds)
+
+            <!-- Connected articles drоpdown component-->
+            @await Component.InvokeAsync("connected-articles", Model.ConnectedArticlesIds)
+
+            <!-- Large modal for images search-->
+            <partial name="_ImageAddModalPartial" />
+            <p id="show-image"></p>
+        </div>
+
+        <div class="fixed-bottom bg-dark">
+            <div class="form-group w-25 mx-auto my-1">
+                <input type="submit" value="Запази" class="btn btn-lg btn-admin-twenty-first text-light" />
+                <a asp-action="Index" class="btn btn-lg btn-secondary">Излез</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dropdown.js"></script>
+    <script>
+        $('.drop-search').dropdown({
+            multipleMode: 'label',
+            // read only
+            readOnly: false,
+            // min count
+            minCount: 1,
+            // error message
+            minCountErrorMessage: 'Изберете категория',
+            // the maximum number of options allowed to be selected
+            limitCount: Infinity,
+            // search field
+            input: '<input type="text" maxLength="20" placeholder="Търсене">',
+            // is search able?
+            searchable: true,
+            // when there's no result
+            searchNoData: '<li style="color:#ddd">Няма резултати</li>',
+            // callback
+            choice: function () { },
+            // custom props
+            extendProps: []
+        });
+    </script>
+    <script>
+        $('document').ready(function () {
+            $("#search-button").click(function (e) {
+                e.preventDefault();
+                var search = $(".search-term").val();
+                $.get("/Administration/Images/Search?search=" + search).done(function (data) {
+                    $("#results-table").html(data);
+
+                    var rows = document.querySelector("#results-table").getElementsByClassName("selected-image");
+                    for (i = 0; i < rows.length; i++) {
+                        rows[i].onclick = function () {
+                            var imageId = $(this).attr("data-item-id");
+                            $(".image-id").val(imageId);
+
+                            var imageToAdd = $(this).attr("data-item-url");
+                            $('#show-image').html($('<img>', { src: imageToAdd, class: "img-thumbnail" }));
+
+                            $(".modal").modal("toggle");
+                        }
+                    }
+                });
+            });
+
+            $(".search-term").keypress(function (e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                    $("#search-button").click();
+                }
+            });
+        });
+    </script>
+}
