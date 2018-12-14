@@ -45,7 +45,7 @@
                 //TODO thr custom exception
             }
 
-            return RedirectToAction("Details", "Articles", new { id = id });
+            return RedirectToAction("Details", "Articles", new { id });
         }
     }
 }

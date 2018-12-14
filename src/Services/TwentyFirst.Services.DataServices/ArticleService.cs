@@ -1,5 +1,9 @@
 ﻿namespace TwentyFirst.Services.DataServices
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using Common.Models.Articles;
     using Contracts;
@@ -7,10 +11,6 @@
     using Data.Models;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class ArticleService : IArticleService
     {

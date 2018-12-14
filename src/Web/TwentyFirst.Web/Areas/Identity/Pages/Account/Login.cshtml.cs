@@ -53,7 +53,7 @@
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl = returnUrl ?? Url.Content("/Administration/Images/Upload");
+            returnUrl = returnUrl ?? Url.Content(GlobalConstants.AdministrationHomePage);
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -63,7 +63,7 @@
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("/Administration/Images/Upload");
+            returnUrl = returnUrl ?? Url.Content(GlobalConstants.AdministrationHomePage);
 
             if (ModelState.IsValid)
             {
@@ -89,8 +89,8 @@
                 }
                 else
                 {
-                    ModelState.AddModelError("Input.Username", "Невалидни потребитеслки данни.");
-                    ModelState.AddModelError("Input.Password", "Невалидни потребитеслки данни.");
+                    ModelState.AddModelError("Input.Username", ValidationErrorMessages.InvalidCredentials);
+                    ModelState.AddModelError("Input.Password", ValidationErrorMessages.InvalidCredentials);
                     return Page();
                 }
             }

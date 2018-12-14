@@ -18,6 +18,8 @@
 
         public const string MaxConnectedArticles = "Максималният брой свързани новини е {0}.";
 
+        public const string InvalidCredentials = "Невалидни потребитеслки данни.";
+
         //public const string Required = "Полето \"{0}\" е задължително.";
 
         //public const string MinLength = "Полето \"{0}\" трябва да съдържа поне {1} символа.";

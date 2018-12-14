@@ -9,6 +9,9 @@
 
         public const string EditorRoleName = "Editor";
 
+        //URL
+        public const string AdministrationHomePage = "~/Administration/Articles";
+
         //Image Constants
         public const int ImageShortDescriptionLength = 50;
     }
