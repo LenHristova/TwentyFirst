@@ -1,0 +1,20 @@
+﻿@model CategoryUpdateInputModel
+<!-- Modal for edit category-->
+<div class="modal show" id="delete-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center">
+                    Наистина ли искате да изтриете категория "@Model.Name"
+                </h5>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <form asp-area="Administration" asp-controller="Categories" asp-action="Delete" method="post">
+                    <input asp-for="Id" type="hidden" />
+                    <button type="button" class="btn btn-secondary exit" data-dismiss="modal">Затвори</button>
+                    <button type="submit" class="btn btn-danger">Изтрий</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

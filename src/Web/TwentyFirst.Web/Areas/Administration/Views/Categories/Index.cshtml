@@ -1,0 +1,89 @@
+﻿@model IEnumerable<TwentyFirst.Common.Models.Categories.CategoryListViewModel>
+
+@{
+    ViewData["Title"] = "Всички категории";
+}
+
+<div class="container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="w-50 font-weight-bold">Наименование</th>
+            <th class="w-50 mx-auto">
+                <button type="button" class="btn btn-primary create">Добави категория</button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => category.Name)</td>
+                <td class="btn-group justify-content-center w-50 mx-auto">
+                    <button type="button" class="btn btn-warning edit" data-item-id="@category.Id">Редактирай</button>
+                    <button type="button" class="btn btn-danger delete" data-item-id="@category.Id">Изтрий</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal for add category-->
+<div id="create-container"></div>
+
+<!-- Modal for edit category-->
+<div id="edit-container"></div>
+
+<!-- Modal for delete category-->
+<div id="delete-container"></div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $('document').ready(function () {
+            $('.create').click(function () {
+                $.get("/Administration/Categories/Create"
+                ).done(function (data) {
+                    var container = document.getElementById("create-container");
+                    $(container).html(data);
+                    var forms = container.getElementsByTagName("form");
+                    var newForm = forms[forms.length - 1];
+                    $.validator.unobtrusive.parse(newForm);
+                    $('#create-modal').modal('show');
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ": Couldn't add create form. " + errorThrown);
+                });
+            });
+
+            $('.edit').click(function (e) {
+                var categoryId = $(e.target).attr("data-item-id");
+                $.get("/Administration/Categories/Edit/" + categoryId
+                ).done(function (data) {
+                    var container = document.getElementById("edit-container");
+                    $(container).html(data);
+                    var forms = container.getElementsByTagName("form");
+                    var newForm = forms[forms.length - 1];
+                    $.validator.unobtrusive.parse(newForm);
+                    $('#edit-modal').modal('show');
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ": Couldn't add edit form. " + errorThrown);
+                });
+            });
+
+            $('.delete').click(function (e) {
+                var categoryId = $(e.target).attr("data-item-id");
+                $.get("/Administration/Categories/Delete/" + categoryId
+                ).done(function (data) {
+                    var container = document.getElementById("delete-container");
+                    $(container).html(data);
+                    $('#delete-modal').modal('show');
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ": Couldn't add delete form. " + errorThrown);
+                });
+            });
+        });
+    </script>
+}

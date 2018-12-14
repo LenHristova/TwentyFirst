@@ -1,0 +1,61 @@
+﻿@using TwentyFirst.Common.Constants
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <nav class="navbar navbar-expand-lg navbar-dark bg-admin-twenty-first py-0">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/core-img/logo.png" alt="Logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto font-weight-bold">
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" asp-area="Administration" asp-controller="Articles" asp-action="Index"
+                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Новини</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Index">Всички новини</a>
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Create">Добави новина</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" asp-area="Administration" asp-controller="Interviews" asp-action="Index"
+                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Интервюта</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Index">Всички интервюта</a>
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Create">Добави интервю</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" asp-area="Administration" asp-controller="Images" asp-action="Index"
+                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Снимки</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Index">Всички снимки</a>
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимка</a>
+                    </div>
+                </li>
+            </ul>
+            @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+            {
+                <ul class="nav navbar-nav navbar-right font-weight-bold">
+                    <li>
+                        <a class="nav-link" asp-area="Administration" asp-controller="Categories" asp-action="Index">Категории</a>
+                    </li>
+                </ul>
+            }
+        </div>
+
+        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Identity" })" method="post" id="logoutForm" class="navbar-right">
+            <ul class="nav navbar-nav navbar-right font-weight-bold">
+                <li>
+                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Профил</a>
+                </li>
+                <li>
+                    <button type="submit" class="nav-link bg-admin-twenty-first font-weight-bold">Изход</button>
+                </li>
+            </ul>
+        </form>
+    </nav>
+}

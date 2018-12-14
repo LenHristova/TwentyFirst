@@ -1,0 +1,26 @@
+﻿@model CategoryUpdateInputModel
+
+<!-- Modal for edit category-->
+<div class="modal show" id="edit-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-area="Administration" asp-controller="Categories" asp-action="Edit" method="post">
+                <input asp-for="Id" type="hidden" />
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel">Редактирай категория</h5>
+                    <div class="form-row justify-content-center">
+                        <div class="col-auto">
+                            <input asp-for="Name" class="form-control mb-2">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary exit" data-dismiss="modal">Затвори</button>
+                    <button type="submit" class="btn btn-primary">Запази</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
