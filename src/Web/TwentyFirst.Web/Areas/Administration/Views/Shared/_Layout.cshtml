@@ -21,11 +21,11 @@
 </head>
 <body>
     <header>
-        @await Html.PartialAsync("_LoginPartial")
+        @await Html.PartialAsync("~/Areas/Administration/Views/Shared/_LoginPartial.cshtml")
     </header>
 
     <div class="container p-5">
-        @await Html.PartialAsync("_AlertMessagePartial")
+        @await Html.PartialAsync("~/Areas/Administration/Views/Shared/_AlertMessagePartial.cshtml")
         @RenderBody()
     </div>
 

@@ -1,0 +1,55 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Вход";
+}
+<div class="jumbotron bg-admin-twenty-first m-3">
+    <div class="row">
+        <div class="col-4">
+            <img src="~/img/core-img/logo.png" alt="Logo">
+        </div>
+        <div class="col-4 border rounded bg-light p-3">
+            <h1 class="display-4 text-center">@ViewData["Title"]</h1>
+            <section>
+                <form method="post">
+                    <hr />
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-user-circle"></i></span>
+                            </div>
+                            <input asp-for="Input.Username" class="form-control" placeholder="Потребителско име" />
+                        </div>
+                        <span asp-validation-for="Input.Username" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-key"></i></span>
+                            </div>
+                            <input asp-for="Input.Password" class="form-control" placeholder="Парола" />
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group text-center">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-dark">Вход</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
