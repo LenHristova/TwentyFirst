@@ -1,0 +1,39 @@
+﻿@model IEnumerable<TwentyFirst.Common.Models.Articles.ArticleBaseViewModel>
+
+@if (Model.Any())
+{
+    <!-- ============== Related Post ============== -->
+    <h5 class="title">Още по темата</h5>
+    <hr />
+    <div class="row mb-3">
+        @foreach (var connectedArticle in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <!-- Single Blog Post -->
+                <div class="single-blog-post">
+                    <!-- Post Thumbnail -->
+                    <div class="post-thumbnail">
+                        <img src="@connectedArticle.Image.ThumbUrl" alt="@connectedArticle.Image.Title">
+                    </div>
+                    <!-- Post Content -->
+                    <div class="post-content">
+                        <a asp-area="" asp-controller="Articles" asp-action="Details" asp-route-id="@connectedArticle.Id" class="headline">
+                            <h5 class="mb-0">@connectedArticle.ShortTitle</h5>
+                        </a>
+                        <!-- Post Meta -->
+                        <div class="row text-muted post-meta justify-content-around">
+                            <div class="d-inline">Източник:<em> @connectedArticle.Author</em></div>
+                            <div class="d-inline">Публикувано: @connectedArticle.PublishedOn.ToString("g")</div>
+                            <div class="d-inline">Обновено: @connectedArticle.PublishedOn.ToString("g")</div>
+
+                            @if (connectedArticle.EditedOn.HasValue)
+                            {
+                                <div class="d-inline text-danger">Обновено: @connectedArticle.EditedOn.Value.ToString("g")</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

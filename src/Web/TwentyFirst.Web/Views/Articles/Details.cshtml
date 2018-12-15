@@ -1,17 +1,68 @@
-﻿@{
-    ViewData["Title"] = "Contact";
-}
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+﻿@model TwentyFirst.Common.Models.Articles.ArticleDetailsViewModel
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<!-- ********** Hero Area Start ********** -->
+<div class="hero-area height-600 bg-img background-overlay" style="background-image: url(@Model.ImageUrl);"></div>
+<div class="container h-100 mt-5">
+    <div class="single-blog-title text-center">
+        <h1 class="display-4">@Model.Title</h1>
+    </div>
+</div>
+<!-- ********** Hero Area End ********** -->
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<div class="main-content-wrapper section-padding-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- ============= Post Content Area ============= -->
+            <div class="col-12 col-lg-8">
+                <div class="single-blog-content mb-100">
+                    <!-- Post Meta -->
+                    <div class="row text-muted post-meta justify-content-around">
+                        <div class="d-inline">Източник:<em> @Model.Author</em></div>
+                        <div class="d-inline">Публикувано: @Model.PublishedOn.ToString("g")</div>
+
+                        @if (Model.EditedOn.HasValue)
+                        {
+                            <div class="d-inline text-danger">Обновено на: @Model.EditedOn.Value.ToString("g")</div>
+                        }
+                    </div>
+                    <!-- Post Content -->
+                    <div class="post-content">
+                        <h6>@Html.Raw(Model.HtmlContent)</h6>
+
+                        @if (Model.Categories.Any())
+                        {
+                            <ul class="post-tags">
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <li>
+                                        <a asp-area="" asp-controller="Articles" asp-action="ByCategory" asp-route-categoryId="@category.Id">
+                                            @category.Name
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        <!-- Post Meta -->
+                        <div class="post-meta second-part">
+                            <p><a href="#" class="post-author">@Model.Author</a> on <a href="#" class="post-date">Sep 29, 2017 at 9:48 am</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== Sidebar Area ========== -->
+            <div class="col-12 col-md-8 col-lg-4">
+                <div class="post-sidebar-area mb-100">
+                    @await Component.InvokeAsync("articles-by-categories", Model.CategoriesIds)
+                    @*<vc:articles-by-categories ids="@Model.ActualCategoriesIds"></vc:articles-by-categories>*@
+                </div>
+
+                <!-- ============== Stay Connected ============== -->
+                <partial name="_StayConnectedPartial" />
+            </div>
+        </div>
+
+        <!-- ============== Related Post ============== -->
+        <partial name="_ConnectedArticlesPartial" model="@Model.ConnectedArticles" />
+    </div>
+</div>

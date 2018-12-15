@@ -123,17 +123,17 @@
         public bool Exists(string id)
             => this.db.Categories.Any(c => c.Id == id && c.IsDeleted == false);
 
-        public TModel Get<TModel>(string id)
-            => this.db.Categories
+        public async Task<TModel> GetAsync<TModel>(string id)
+            => await this.db.Categories
                 .Where(c => c.Id == id && c.IsDeleted == false)
                 .To<TModel>()
-                .FirstOrDefault();
+                .SingleOrDefaultAsync();
 
-        public TModel GetArchived<TModel>(string id)
-            => this.db.Categories
+        public async Task<TModel> GetArchivedAsync<TModel>(string id)
+            => await this.db.Categories
                 .Where(c => c.Id == id && c.IsDeleted)
                 .To<TModel>()
-                .FirstOrDefault();
+                .SingleOrDefaultAsync();
 
         public async Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync()
             => await this.db.Categories

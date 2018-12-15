@@ -19,10 +19,10 @@
 
         bool Exists(string id);
 
-        TModel Get<TModel>(string id);
+        Task<TModel> GetAsync<TModel>(string id);
 
         Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync();
 
-        TModel GetArchived<TModel>(string id);
+        Task<TModel> GetArchivedAsync<TModel>(string id);
     }
 }

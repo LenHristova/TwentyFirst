@@ -10,7 +10,7 @@
     public class MaxElementsCountAttribute : ValidationAttribute
     {
         private readonly int maxElementsCount;
-        private const string DefaultErrorMessage = "Max elements count is {0}.";
+        private const string DefaultErrorMessage = "Maximum elements count is {0}.";
 
         public MaxElementsCountAttribute(int maxElementsCount)
         {
@@ -18,7 +18,8 @@
         }
 
         public override bool IsValid(object value)
-            => value is ICollection enumerable && enumerable.Count <= this.maxElementsCount;
+            => value == null || 
+               (value is ICollection enumerable && enumerable.Count <= this.maxElementsCount);
 
         public override string FormatErrorMessage(string name)
             => string.Format(this.ErrorMessage ?? DefaultErrorMessage, this.maxElementsCount);

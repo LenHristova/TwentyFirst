@@ -13,11 +13,14 @@
 
         public string Description { get; set; }
 
-        public string GetShortDescription()
+        public string ShortDescription
         {
-            var description = this.Description ?? string.Empty;
-            var symbolsToGet = Math.Min(description.Length, GlobalConstants.ImageShortDescriptionLength);
-            return this.Description?.Substring(0, symbolsToGet) + "...";
+            get
+            {
+                var description = this.Description ?? string.Empty;
+                var symbolsToGet = Math.Min(description.Length, GlobalConstants.ImageShortDescriptionLength);
+                return this.Description?.Substring(0, symbolsToGet) + "...";
+            }
         }
 
         public string Author { get; set; }

@@ -20,6 +20,7 @@
         <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="~/css/twentyFirstStyle.css" />
         <link rel="stylesheet" type="text/css" href="~/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="~/css/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="~/css/pagination.css" />
     </environment>
     <environment exclude="Development">
@@ -50,30 +51,24 @@
                         <!-- Navbar -->
                         <div class="collapse navbar-collapse" id="worldNav">
                             <ul class="navbar-nav ml-auto">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                                </li>
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
+                                    <a class="nav-link dropdown-toggle text-white font-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">АДМИН</a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="index.html">Home</a>
-                                        <a class="dropdown-item" href="catagory.html">Catagory</a>
-                                        <a class="dropdown-item" href="single-blog.html">Single Blog</a>
-                                        <a class="dropdown-item" href="regular-page.html">Regular Page</a>
-                                        <a class="dropdown-item" href="contact.html">Contact</a>
+                                        <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Index">Новини</a>
+                                        <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Create">Добави новина</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Index">Интервюта</a>
+                                        <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Create">Добави интервю</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Index">Снимки</a>
+                                        <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимки</a>
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Gadgets</a>
+                                    <a class="nav-link" href="#">Новини</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Lifestyle</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Video</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Contact</a>
+                                    <a class="nav-link" href="#">Интервюта</a>
                                 </li>
                             </ul>
                             <!-- Search Form  -->
@@ -87,22 +82,6 @@
                         </div>
                     </nav>
                 </div>
-            </div>
-        </div>
-        <div class="btn-group col-md-1 ml-auto mr-3 mt-2 fixed-top">
-            <a class="btn btn-admin-twenty-first text-light" asp-area="Administration" asp-controller="Articles" asp-action="Index">АДМИН</a>
-            <a class="btn btn-admin-twenty-first text-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="sr-only">Toggle Dropdown</span>
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Index">Новини</a>
-                <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Create">Добави новина</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Index">Интервюта</a>
-                <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Create">Добави интервю</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Index">Снимки</a>
-                <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимки</a>
             </div>
         </div>
     </header>
@@ -120,7 +99,7 @@
             <div class="row">
                 <div class="col-12 col-md-4">
                     <div class="footer-single-widget">
-                        <a href="#"><img src="img/core-img/logo.png" alt=""></a>
+                        <a href="#"><img src="~/img/core-img/logo.png" alt=""></a>
                         <div class="copywrite-text mt-30">
                             <p>
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -157,16 +136,15 @@
     </footer>
     <!-- ***** Footer Area End ***** -->
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
-    <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="~/js/jquery/jquery-2.2.4.min.js"></script>
     <!-- Popper js -->
-    <script src="js/popper.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
     <!-- Bootstrap js -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
     <!-- Plugins js -->
-    <script src="js/plugins.js"></script>
+    <script src="~/js/plugins.js"></script>
     <!-- Active js -->
-    <script src="js/active.js"></script>
-
+    <script src="~/js/active.js"></script>
 </body>
 
 </html>

@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Добави новина";
-    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
@@ -68,7 +67,7 @@
 
             <!-- Large modal for images search-->
             <partial name="_ImageAddModalPartial" />
-            <p id="show-image"></p>
+            <p id="show-image">@Model.ImageId</p>
         </div>
 
         <div class="fixed-bottom bg-dark">

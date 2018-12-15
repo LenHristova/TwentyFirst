@@ -1,5 +1,7 @@
 ﻿namespace TwentyFirst.Web.Controllers
 {
+    using System.Threading.Tasks;
+    using Common.Models.Articles;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
 
@@ -17,9 +19,15 @@
             return this.View();
         }
 
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
-            return this.View();
+            var article = await this.articleService.GetAsync<ArticleDetailsViewModel>(id);
+            if (article == null)
+            {
+                //Log Error
+            }
+
+            return this.View(article);
         }
     }
 }

@@ -19,10 +19,10 @@
             this.userManager = userManager;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return this.View();
-        //}
+        public IActionResult Index()
+        {
+            return this.View();
+        }
 
         public IActionResult Create()
         {

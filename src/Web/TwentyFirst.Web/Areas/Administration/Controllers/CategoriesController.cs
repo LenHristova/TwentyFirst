@@ -40,9 +40,9 @@
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
-            var categoryToEdit = this.categoryService.Get<CategoryUpdateInputModel>(id);
+            var categoryToEdit = await this.categoryService.GetAsync<CategoryUpdateInputModel>(id);
             if (categoryToEdit == null)
             {
                 //TODO TempData
@@ -78,9 +78,9 @@
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Archive(string id)
+        public async Task<IActionResult> Archive(string id)
         {
-            var categoryToDelete = this.categoryService.Get<CategoryUpdateInputModel>(id);
+            var categoryToDelete = await this.categoryService.GetAsync<CategoryUpdateInputModel>(id);
             if (categoryToDelete == null)
             {
                 //TODO TempData
@@ -109,9 +109,9 @@
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Recover(string id)
+        public async Task<IActionResult> Recover(string id)
         {
-            var categoryToRecover = this.categoryService.GetArchived<CategoryUpdateInputModel>(id);
+            var categoryToRecover = await this.categoryService.GetArchivedAsync<CategoryUpdateInputModel>(id);
             if (categoryToRecover == null)
             {
                 //TODO TempData
