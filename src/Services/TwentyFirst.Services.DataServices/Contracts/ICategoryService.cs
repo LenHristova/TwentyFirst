@@ -7,18 +7,22 @@
 
     public interface ICategoryService
     { 
-        Task<IEnumerable<TModel>> All<TModel>();
+        Task<IEnumerable<TModel>> AllWithArchived<TModel>();
 
         Task<bool> CreateAsync(CategoryCreateInputModel categoryCreateInputModel);
 
-        Task<bool> DeleteAsync(string id);
-
         Task<bool> EditAsync(CategoryUpdateInputModel categoryUpdateInputModel);
+
+        Task<bool> ArchiveAsync(string id);
+
+        Task<bool> RecoverAsync(string id);
 
         bool Exists(string id);
 
         TModel Get<TModel>(string id);
 
         Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync();
+
+        TModel GetArchived<TModel>(string id);
     }
 }

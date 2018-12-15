@@ -8,11 +8,10 @@
         [Required]
         [MinLength(3), MaxLength(50)]
         public string Name { get; set; }
+        
+        public int? Order { get; set; }
 
-        //TODO Need it?
-        //public int? Order { get; set; }
-
-        //public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
 
         public virtual ICollection<ArticleCategory> Articles { get; set; } = new HashSet<ArticleCategory>();
     }

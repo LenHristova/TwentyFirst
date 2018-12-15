@@ -2,8 +2,8 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Common.Enums;
     using Common.Extensions;
+    using Common.Models.Enums;
     using Data;
     using Data.Models;
     using Microsoft.AspNetCore.Builder;

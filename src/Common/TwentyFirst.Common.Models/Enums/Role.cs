@@ -1,4 +1,4 @@
-﻿namespace TwentyFirst.Common.Enums
+﻿namespace TwentyFirst.Common.Models.Enums
 {
     using System.ComponentModel.DataAnnotations;
     using Constants;

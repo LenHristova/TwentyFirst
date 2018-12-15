@@ -1,9 +1,7 @@
-﻿@if (TempData.ContainsKey(nameof(AlertMessage)))
+﻿@if (TempData.ContainsKey("AlertMessage"))
 {
-    var alertMessage = this.TempData[nameof(AlertMessage)] as AlertMessage;
-
-    <div class="alert @alertMessage?.MessageLevelToShow alert-dismissible fade show" role="alert">
-        @alertMessage?.Message
+    <div class="alert @TempData["AlertLevelColor"] alert-dismissible fade show" role="alert">
+        @TempData["AlertMessage"]
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

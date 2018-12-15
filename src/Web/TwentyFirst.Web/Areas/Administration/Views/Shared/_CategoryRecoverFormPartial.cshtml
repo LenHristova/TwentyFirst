@@ -1,0 +1,21 @@
+﻿@model CategoryUpdateInputModel
+
+    <!-- Modal for recover category-->
+    <div class="modal show" id="recover-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center">
+                        Наистина ли искате да възстановите категория "@Model.Name"
+                    </h5>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <form asp-area="Administration" asp-controller="Categories" asp-action="Recover" method="post">
+                        <input asp-for="Id" type="hidden" />
+                        <button type="button" class="btn btn-secondary exit" data-dismiss="modal">Затвори</button>
+                        <button type="submit" class="btn btn-danger">Възстанови</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

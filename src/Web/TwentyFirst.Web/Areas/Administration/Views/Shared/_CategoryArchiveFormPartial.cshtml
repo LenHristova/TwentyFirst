@@ -1,6 +1,7 @@
 ﻿@model CategoryUpdateInputModel
-<!-- Modal for edit category-->
-<div class="modal show" id="delete-modal" role="dialog">
+
+<!-- Modal for archive category-->
+<div class="modal show" id="archive-modal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,10 +10,10 @@
                 </h5>
             </div>
             <div class="modal-footer justify-content-center">
-                <form asp-area="Administration" asp-controller="Categories" asp-action="Delete" method="post">
+                <form asp-area="Administration" asp-controller="Categories" asp-action="Archive" method="post">
                     <input asp-for="Id" type="hidden" />
                     <button type="button" class="btn btn-secondary exit" data-dismiss="modal">Затвори</button>
-                    <button type="submit" class="btn btn-danger">Изтрий</button>
+                    <button type="submit" class="btn btn-danger archive">Архивирай</button>
                 </form>
             </div>
         </div>

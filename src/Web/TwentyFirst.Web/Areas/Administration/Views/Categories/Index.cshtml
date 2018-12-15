@@ -8,24 +8,39 @@
     <h1 class="text-center">@ViewData["Title"]</h1>
     <table class="table table-striped">
         <thead>
-        <tr>
-            <th class="w-50 font-weight-bold">Наименование</th>
-            <th class="w-50 mx-auto">
-                <button type="button" class="btn btn-primary create">Добави категория</button>
-            </th>
-        </tr>
+            <tr>
+                <th class="w-50 font-weight-bold">Наименование</th>
+                <th class="w-50 mx-auto">
+                    <button type="button" class="btn btn-primary create">Добави категория</button>
+                </th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var category in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => category.Name)</td>
-                <td class="btn-group justify-content-center w-50 mx-auto">
-                    <button type="button" class="btn btn-warning edit" data-item-id="@category.Id">Редактирай</button>
-                    <button type="button" class="btn btn-danger delete" data-item-id="@category.Id">Изтрий</button>
-                </td>
-            </tr>
-        }
+            @foreach (var category in Model)
+            {
+                <tr>
+                    @if (category.IsDeleted)
+                    {
+                        <td class="text-muted">@Html.DisplayFor(modelItem => category.Name)</td>
+                    }
+                    else
+                    {
+                        <td class="text-dark">@Html.DisplayFor(modelItem => category.Name)</td>
+                    }
+
+                    <td class="btn-group justify-content-center w-50 mx-auto">
+                        <button type="button" class="btn btn-warning edit" data-item-id="@category.Id">Редактирай</button>
+                        @if (category.IsDeleted)
+                        {
+                            <button type="button" class="btn btn-success recover" data-item-id="@category.Id">Възстанови</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-danger archive" data-item-id="@category.Id">Архивирай</button>
+                        }
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
@@ -36,8 +51,11 @@
 <!-- Modal for edit category-->
 <div id="edit-container"></div>
 
-<!-- Modal for delete category-->
-<div id="delete-container"></div>
+<!-- Modal for archive category-->
+<div id="archive-container"></div>
+
+<!-- Modal for recover category-->
+<div id="recover-container"></div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -73,15 +91,27 @@
                 });
             });
 
-            $('.delete').click(function (e) {
+            $('.archive').click(function (e) {
                 var categoryId = $(e.target).attr("data-item-id");
-                $.get("/Administration/Categories/Delete/" + categoryId
+                $.get("/Administration/Categories/Archive/" + categoryId
                 ).done(function (data) {
-                    var container = document.getElementById("delete-container");
+                    var container = document.getElementById("archive-container");
                     $(container).html(data);
-                    $('#delete-modal').modal('show');
+                    $('#archive-modal').modal('show');
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ": Couldn't add delete form. " + errorThrown);
+                    alert(textStatus + ": Couldn't add archive form. " + errorThrown);
+                });
+            });
+
+            $('.recover').click(function (e) {
+                var categoryId = $(e.target).attr("data-item-id");
+                $.get("/Administration/Categories/Recover/" + categoryId
+                ).done(function (data) {
+                    var container = document.getElementById("recover-container");
+                    $(container).html(data);
+                    $('#recover-modal').modal('show');
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ": Couldn't add recover form. " + errorThrown);
                 });
             });
         });

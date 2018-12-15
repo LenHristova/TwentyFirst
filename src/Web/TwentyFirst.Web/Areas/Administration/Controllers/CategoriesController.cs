@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
     using System.Threading.Tasks;
+    using Common.Models.Enums;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class CategoriesController : AdministrationController
@@ -18,23 +19,21 @@
         }
 
         public async Task<IActionResult> Index()
-            => this.View(await this.categoryService.All<CategoryListViewModel>());
+            => this.View(await this.categoryService.AllWithArchived<CategoryListViewModel>());
 
         public IActionResult Create() => this.PartialView("_CategoryCreateFormPartial");
 
         [HttpPost]
         public async Task<IActionResult> Create(CategoryCreateInputModel categoryCreateInputModel)
         {
-            //TODO Configure TempData in hole project
-            //this.TempData[nameof(AlertMessage)] = new AlertMessage(AlertMessageLevel.Error, "Error");
-
+            this.SetAlertMessage(AlertMessageLevel.Error, "Error");
             if (this.ModelState.IsValid)
             {
                 var success = await this.categoryService.CreateAsync(categoryCreateInputModel);
 
                 if (success)
                 {
-                    //this.TempData[nameof(AlertMessage)] = new AlertMessage(AlertMessageLevel.Success, "Success");
+                    this.SetAlertMessage(AlertMessageLevel.Success, "Success");
                 }
             }
 
@@ -79,7 +78,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(string id)
+        public IActionResult Archive(string id)
         {
             var categoryToDelete = this.categoryService.Get<CategoryUpdateInputModel>(id);
             if (categoryToDelete == null)
@@ -87,20 +86,51 @@
                 //TODO TempData
             }
 
-            return this.PartialView("_CategoryDeleteFormPartial", categoryToDelete);
+            return this.PartialView("_CategoryArchiveFormPartial", categoryToDelete);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(CategoryUpdateInputModel categoryEditInputModel)
+        public async Task<IActionResult> Archive(CategoryUpdateInputModel categoryUpdateInputModel)
         {
-            var idExists = this.categoryService.Exists(categoryEditInputModel.Id);
+            var idExists = this.categoryService.Exists(categoryUpdateInputModel.Id);
 
             if (!idExists)
             {
                 //TODO TempData
             }
 
-            var success = await this.categoryService.DeleteAsync(categoryEditInputModel.Id);
+            var success = await this.categoryService.ArchiveAsync(categoryUpdateInputModel.Id);
+
+            if (!success)
+            {
+                //TODO TempData
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Recover(string id)
+        {
+            var categoryToRecover = this.categoryService.GetArchived<CategoryUpdateInputModel>(id);
+            if (categoryToRecover == null)
+            {
+                //TODO TempData
+            }
+
+            return this.PartialView("_CategoryRecoverFormPartial", categoryToRecover);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Recover(CategoryUpdateInputModel categoryUpdateInputModel)
+        {
+            var idExists = this.categoryService.Exists(categoryUpdateInputModel.Id);
+
+            if (!idExists)
+            {
+                //TODO TempData
+            }
+
+            var success = await this.categoryService.RecoverAsync(categoryUpdateInputModel.Id);
 
             if (!success)
             {
