@@ -5,7 +5,7 @@
     using Data.Models;
     using Mapping.Contracts;
 
-    public class AdministrationArticleListViewModel: IMapFrom<Article>
+    public class ArticleListViewModel: IMapFrom<Article>
     {
         public string Id { get; set; }
 

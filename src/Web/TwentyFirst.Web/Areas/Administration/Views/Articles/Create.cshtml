@@ -5,9 +5,7 @@
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
-
 <hr />
-
 <form asp-action="Create" method="post">
     <input asp-for="ImageId" class="image-id" type="hidden" />
     <input asp-for="ImageThumbUrl" class="image-url" type="hidden" />
@@ -73,7 +71,7 @@
 
             <!-- Large modal for images search-->
             <partial name="_ImageAddModalPartial" />
-            
+
             <p id="show-image">
                 @if (Model.ImageThumbUrl != null)
                 {
@@ -122,9 +120,8 @@
             $("#search-button").click(function (e) {
                 e.preventDefault();
                 var search = $(".search-term").val();
-                $.get("/Administration/Images/Search?search=" + search).done(function (data) {
+                $.get("/Administration/Images/Search?search=" + search).done(function Test(data) {
                     $("#results-table").html(data);
-
                     var rows = document.querySelector("#results-table").getElementsByClassName("selected-image");
                     for (i = 0; i < rows.length; i++) {
                         rows[i].onclick = function () {
@@ -133,10 +130,16 @@
                             var imageUrl = $(this).attr("data-item-url");
                             $(".image-url").val(imageUrl);
                             $('#show-image').html($('<img>', { src: imageUrl, class: "img-thumbnail" }));
-
                             $(".modal").modal("toggle");
                         }
                     }
+
+                    $(".pagination li a").click(function (e) {
+                        e.preventDefault();
+                        $.get(e.target).done(function(nextData) {
+                            Test(nextData);
+                        });
+                    });
                 });
             });
 

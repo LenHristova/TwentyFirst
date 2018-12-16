@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Services.DataSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Common.Models", "Common\TwentyFirst.Common.Models\TwentyFirst.Common.Models.csproj", "{1EA12F6E-1EA8-422D-9969-25C3C9E32F65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwentyFirst.Common.Mapping", "Common\TwentyFirst.Common.Mapping\TwentyFirst.Common.Mapping.csproj", "{CD14734C-D2B7-4DB9-AC8A-63FD38079332}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Common.Mapping", "Common\TwentyFirst.Common.Mapping\TwentyFirst.Common.Mapping.csproj", "{CD14734C-D2B7-4DB9-AC8A-63FD38079332}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

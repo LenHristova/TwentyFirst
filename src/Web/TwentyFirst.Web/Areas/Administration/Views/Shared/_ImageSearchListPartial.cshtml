@@ -1,24 +1,35 @@
-﻿@model IEnumerable<TwentyFirst.Common.Models.Images.ImageSearchListViewModel>
+﻿@model TwentyFirst.Common.Models.Images.ImageSearchViewModel
 
-<div class="container">
-    <div class="row">
-
-        @foreach (var image in Model)
-        {
-            <div class="card col-md-6 border-top">
-                <a href="#" class="selected-image" data-item-id="@image.Id" data-item-url="@image.ThumbUrl">
-                    <img class="card-img-top fixed-height-250" src="@image.ThumbUrl" alt="Card image cap">
-                    <div class="card-body p-0">
-                        <h6 data-toggle="tooltip" data-placement="top" title="@image.Description">
-                            @image.ShortDescription
-                        </h6>
+@if (Model.SearchResultImages.Any())
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var image in Model.SearchResultImages)
+            {
+                <div class="card col-md-6 border-top">
+                    <a href="#" class="selected-image" data-item-id="@image.Id" data-item-url="@image.ThumbUrl">
+                        <img class="card-img-top fixed-height-250" src="@image.ThumbUrl" alt="Card image cap">
+                        <div class="card-body p-0">
+                            <h6 data-toggle="tooltip" data-placement="top" title="@image.Description">
+                                @image.ShortDescription
+                            </h6>
+                        </div>
+                    </a>
+                    <div class="blockquote-footer">
+                        <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
+                        <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOn.ToShortDateString()</div>
                     </div>
-                </a>
-                <div class="blockquote-footer">
-                    <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
-                    <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOn.ToShortDateString()</div>
                 </div>
-            </div>
-        }
+            }
+        </div>
+        <div class="row justify-content-center py-3">
+            @Html.PagedListPager((IPagedList)Model.SearchResultImages,
+                pageNumber => Url.Action("Search", "Images", new { Model.SearchTerm, pageNumber }),
+                PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
+        </div>
     </div>
-</div>
+}
+else
+{
+    <p class="text-muted py-3">Няма снимки с такова описание...</p>
+}

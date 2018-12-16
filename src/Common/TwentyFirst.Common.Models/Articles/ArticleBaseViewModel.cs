@@ -21,7 +21,8 @@
             get
             {
                 var description = this.Title ?? string.Empty;
-                var symbolsToGet = Math.Min(description.Length, GlobalConstants.ImageShortDescriptionLength);
+                var symbolsToGet = Math.Min(
+                    description.Length, GlobalConstants.ConnectedArticleShortTitleMaxLength);
                 return this.Title?.Substring(0, symbolsToGet) + "...";
             }
         }

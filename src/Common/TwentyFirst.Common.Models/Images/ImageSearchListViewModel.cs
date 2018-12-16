@@ -18,7 +18,7 @@
             get
             {
                 var description = this.Description ?? string.Empty;
-                var symbolsToGet = Math.Min(description.Length, GlobalConstants.ImageShortDescriptionLength);
+                var symbolsToGet = Math.Min(description.Length, GlobalConstants.ImageShortDescriptionMaxLength);
                 return this.Description?.Substring(0, symbolsToGet) + "...";
             }
         }

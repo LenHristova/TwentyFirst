@@ -57,6 +57,9 @@
 <!-- Modal for recover category-->
 <div id="recover-container"></div>
 
+@Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }), 
+    PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 

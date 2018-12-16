@@ -1,12 +1,15 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
+    using Common.Constants;
     using Common.Models.Articles;
     using Data.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
+    using X.PagedList;
 
     public class ArticlesController : AdministrationController
     {
@@ -19,11 +22,15 @@
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-            var articles = await this.articleService.AllAsync<AdministrationArticleListViewModel>();
+            var articles = await this.articleService
+                .AllAsync<ArticleListViewModel>();
+ 
+            var onePageOfArticles = await articles.ToList()
+                .PaginateAsync(pageNumber, GlobalConstants.AdministrationArticlesOnPageCount);
 
-            return this.View(articles);
+            return this.View(onePageOfArticles);
         }
 
         public IActionResult Create()

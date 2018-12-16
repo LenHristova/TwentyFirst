@@ -1,11 +1,13 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
+    using System.Linq;
     using Common.Constants;
     using Common.Models.Categories;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
     using System.Threading.Tasks;
+    using Common.Models.Articles;
     using Common.Models.Enums;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
@@ -18,8 +20,17 @@
             this.categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index()
-            => this.View(await this.categoryService.AllWithArchived<CategoryListViewModel>());
+        public async Task<IActionResult> Index(int? pageNumber)
+        {
+            var categories = await this.categoryService
+                .AllWithArchived<CategoryListViewModel>();
+
+            var onePageOfCategories = await categories.ToList()
+                .PaginateAsync(pageNumber, GlobalConstants.AdministrationCategoriesOnPageCount);
+
+            return this.View(onePageOfCategories);
+        }
+        //=> this.View();
 
         public IActionResult Create() => this.PartialView("_CategoryCreateFormPartial");
 

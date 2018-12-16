@@ -1,5 +1,6 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
+    using System.Linq;
     using Common.Models.Images;
     using Data.Models;
     using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
     using System.Threading.Tasks;
+    using Common.Constants;
 
     public class ImagesController : AdministrationController
     {
@@ -62,11 +64,21 @@
 
         //}
 
-        public IActionResult Search(string search)
+        public async Task<IActionResult> Search(string search, int? pageNumber)
         {
+            search = search ?? string.Empty;
             var images = this.imageService.GetBySearchTerm<ImageSearchListViewModel>(search);
+  
+            var onePageOfImages = await images.ToList()
+                .PaginateAsync(pageNumber, 2);
 
-            return PartialView("_ImageSearchListPartial", images);
+            var imageSearchViewModel = new ImageSearchViewModel
+            {
+                SearchTerm = search,
+                SearchResultImages = onePageOfImages
+            };
+
+            return PartialView("_ImageSearchListPartial", imageSearchViewModel);
         }
 
         //public IActionResult Details()

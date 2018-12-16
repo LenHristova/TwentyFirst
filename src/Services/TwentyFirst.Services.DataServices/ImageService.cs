@@ -54,9 +54,10 @@
 
         public IEnumerable<TModel> GetBySearchTerm<TModel>(string searchTerm)
         {
-            searchTerm = searchTerm ?? string.Empty;
+            //TODO Extend search logic 
+            //TODO Add filtering
             return this.db.Images
-                .Where(i => i.Description.Contains(searchTerm))
+                .Where(i => i.Description.ToLower().Contains(searchTerm.ToLower().Trim()))
                 .To<TModel>()
                 .ToList();
         }
