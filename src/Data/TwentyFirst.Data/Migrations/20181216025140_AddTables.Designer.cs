@@ -10,14 +10,14 @@ using TwentyFirst.Data;
 namespace TwentyFirst.Data.Migrations
 {
     [DbContext(typeof(TwentyFirstDbContext))]
-    [Migration("20181125000824_AddTables")]
+    [Migration("20181216025140_AddTables")]
     partial class AddTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -131,7 +131,7 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.Article", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Article", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -145,8 +145,6 @@ namespace TwentyFirst.Data.Migrations
                     b.Property<string>("CreatorId")
                         .IsRequired();
 
-                    b.Property<DateTime?>("EditedOn");
-
                     b.Property<string>("ImageId");
 
                     b.Property<bool>("IsDeleted");
@@ -154,6 +152,10 @@ namespace TwentyFirst.Data.Migrations
                     b.Property<bool>("IsImportant");
 
                     b.Property<bool>("IsTop");
+
+                    b.Property<string>("Lead")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.Property<DateTime>("PublishedOn");
 
@@ -170,7 +172,7 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("Articles");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.ArticleCategory", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.ArticleCategory", b =>
                 {
                     b.Property<string>("ArticleId");
 
@@ -183,33 +185,29 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("ArticlesCategories");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.ArticleEditor", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.ArticleEdit", b =>
                 {
-                    b.Property<string>("ArticleId");
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("EditorId");
+                    b.Property<string>("ArticleId")
+                        .IsRequired();
 
-                    b.HasKey("ArticleId", "EditorId");
+                    b.Property<DateTime>("EditDateTime");
+
+                    b.Property<string>("EditorId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
 
                     b.HasIndex("EditorId");
 
-                    b.ToTable("ArticlesEditors");
+                    b.ToTable("ArticlesEdits");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.ArticleTag", b =>
-                {
-                    b.Property<string>("ArticleId");
-
-                    b.Property<string>("TagId");
-
-                    b.HasKey("ArticleId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ArticlesTags");
-                });
-
-            modelBuilder.Entity("TwentyFirst.Domain.ArticleToArticle", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.ArticleToArticle", b =>
                 {
                     b.Property<string>("ConnectedToId");
 
@@ -222,21 +220,25 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("ArticlesToArticles");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.Category", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Category", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50);
+
+                    b.Property<int?>("Order");
 
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.Image", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Image", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -272,20 +274,7 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.ImageEditor", b =>
-                {
-                    b.Property<string>("ImageId");
-
-                    b.Property<string>("EditorId");
-
-                    b.HasKey("ImageId", "EditorId");
-
-                    b.HasIndex("EditorId");
-
-                    b.ToTable("ImagesEditors");
-                });
-
-            modelBuilder.Entity("TwentyFirst.Domain.Interview", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Interview", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -322,31 +311,29 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("Interviews");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.InterviewEditor", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.InterviewEdit", b =>
                 {
-                    b.Property<string>("InterviewId");
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("EditorId");
+                    b.Property<DateTime>("EditDateTime");
 
-                    b.HasKey("InterviewId", "EditorId");
+                    b.Property<string>("EditorId")
+                        .IsRequired();
+
+                    b.Property<string>("InterviewId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
 
                     b.HasIndex("EditorId");
 
-                    b.ToTable("InterviewsEditors");
+                    b.HasIndex("InterviewId");
+
+                    b.ToTable("InterviewsEdits");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.InterviewTag", b =>
-                {
-                    b.Property<string>("InterviewId");
-
-                    b.Property<string>("TagId");
-
-                    b.HasKey("InterviewId", "TagId");
-
-                    b.ToTable("InterviewsTags");
-                });
-
-            modelBuilder.Entity("TwentyFirst.Domain.Log", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Log", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -366,7 +353,7 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.Poll", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Poll", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -387,7 +374,7 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("Polls");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.PollAnswer", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.PollAnswer", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -408,7 +395,7 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("PollAnswers");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.Subscriber", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Subscriber", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -422,23 +409,7 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("Subscribers");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.Tag", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(300);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
-                });
-
-            modelBuilder.Entity("TwentyFirst.Domain.User", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -501,7 +472,7 @@ namespace TwentyFirst.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.User")
+                    b.HasOne("TwentyFirst.Data.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -509,7 +480,7 @@ namespace TwentyFirst.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.User")
+                    b.HasOne("TwentyFirst.Data.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -522,7 +493,7 @@ namespace TwentyFirst.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TwentyFirst.Domain.User")
+                    b.HasOne("TwentyFirst.Data.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -530,148 +501,109 @@ namespace TwentyFirst.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.User")
+                    b.HasOne("TwentyFirst.Data.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.Article", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Article", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.User", "Creator")
+                    b.HasOne("TwentyFirst.Data.Models.User", "Creator")
                         .WithMany("CreatedArticles")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TwentyFirst.Domain.Image", "Image")
+                    b.HasOne("TwentyFirst.Data.Models.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.ArticleCategory", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.ArticleCategory", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.Article", "Article")
+                    b.HasOne("TwentyFirst.Data.Models.Article", "Article")
                         .WithMany("Categories")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TwentyFirst.Domain.Category", "Category")
+                    b.HasOne("TwentyFirst.Data.Models.Category", "Category")
                         .WithMany("Articles")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.ArticleEditor", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.ArticleEdit", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.Article", "Article")
-                        .WithMany("Editors")
+                    b.HasOne("TwentyFirst.Data.Models.Article", "Article")
+                        .WithMany("Edits")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TwentyFirst.Domain.User", "Editor")
+                    b.HasOne("TwentyFirst.Data.Models.User", "Editor")
                         .WithMany("EditedArticles")
                         .HasForeignKey("EditorId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.ArticleTag", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.ArticleToArticle", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.Article", "Article")
-                        .WithMany("Tags")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("TwentyFirst.Domain.Tag", "Tag")
-                        .WithMany("Articles")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("TwentyFirst.Domain.ArticleToArticle", b =>
-                {
-                    b.HasOne("TwentyFirst.Domain.Article", "ConnectedFrom")
+                    b.HasOne("TwentyFirst.Data.Models.Article", "ConnectedFrom")
                         .WithMany("ConnectedTo")
                         .HasForeignKey("ConnectedFromId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TwentyFirst.Domain.Article", "ConnectedTo")
-                        .WithMany("ConnectedFrom")
+                    b.HasOne("TwentyFirst.Data.Models.Article", "ConnectedTo")
+                        .WithMany()
                         .HasForeignKey("ConnectedToId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.Image", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Image", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.User", "Creator")
+                    b.HasOne("TwentyFirst.Data.Models.User", "Creator")
                         .WithMany("CreatedImages")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.ImageEditor", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Interview", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.User", "Editor")
-                        .WithMany("EditedImages")
-                        .HasForeignKey("EditorId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("TwentyFirst.Domain.Image", "Image")
-                        .WithMany("Editors")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("TwentyFirst.Domain.Interview", b =>
-                {
-                    b.HasOne("TwentyFirst.Domain.User", "Creator")
+                    b.HasOne("TwentyFirst.Data.Models.User", "Creator")
                         .WithMany("CreatedInterviews")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TwentyFirst.Domain.Image", "Image")
+                    b.HasOne("TwentyFirst.Data.Models.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.InterviewEditor", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.InterviewEdit", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.User", "Editor")
+                    b.HasOne("TwentyFirst.Data.Models.User", "Editor")
                         .WithMany("EditedInterviews")
                         .HasForeignKey("EditorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TwentyFirst.Domain.Interview", "Interview")
-                        .WithMany("Editors")
+                    b.HasOne("TwentyFirst.Data.Models.Interview", "Interview")
+                        .WithMany("Edits")
                         .HasForeignKey("InterviewId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.InterviewTag", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.Poll", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.Interview", "Interview")
-                        .WithMany("Tags")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("TwentyFirst.Domain.Tag", "Tag")
-                        .WithMany("Interviews")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("TwentyFirst.Domain.Poll", b =>
-                {
-                    b.HasOne("TwentyFirst.Domain.User", "Creator")
+                    b.HasOne("TwentyFirst.Data.Models.User", "Creator")
                         .WithMany("CreatedPolls")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Domain.PollAnswer", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.PollAnswer", b =>
                 {
-                    b.HasOne("TwentyFirst.Domain.Poll", "Poll")
+                    b.HasOne("TwentyFirst.Data.Models.Poll", "Poll")
                         .WithMany("Answers")
                         .HasForeignKey("PollId")
                         .OnDelete(DeleteBehavior.Restrict);

@@ -13,7 +13,7 @@
                 <div class="single-blog-post">
                     <!-- Post Thumbnail -->
                     <div class="post-thumbnail">
-                        <img src="@connectedArticle.Image.ThumbUrl" alt="@connectedArticle.Image.Title">
+                        <img class="img-thumbnail fixed-height-200" src="@connectedArticle.Image.ThumbUrl" alt="@connectedArticle.Image.Title">
                     </div>
                     <!-- Post Content -->
                     <div class="post-content">
@@ -22,14 +22,7 @@
                         </a>
                         <!-- Post Meta -->
                         <div class="row text-muted post-meta justify-content-around">
-                            <div class="d-inline">Източник:<em> @connectedArticle.Author</em></div>
-                            <div class="d-inline">Публикувано: @connectedArticle.PublishedOn.ToString("g")</div>
-                            <div class="d-inline">Обновено: @connectedArticle.PublishedOn.ToString("g")</div>
-
-                            @if (connectedArticle.EditedOn.HasValue)
-                            {
-                                <div class="d-inline text-danger">Обновено: @connectedArticle.EditedOn.Value.ToString("g")</div>
-                            }
+                            <div class="d-inline post-meta text-muted p-2 fa fa-calendar"> @connectedArticle.PublishedOn.ToString("g")</div>
                         </div>
                     </div>
                 </div>

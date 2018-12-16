@@ -31,8 +31,6 @@
         public string CreatorId { get; set; }
         public virtual User Creator { get; set; }
 
-        public virtual ICollection<InterviewEditor> Editors { get; set; } = new HashSet<InterviewEditor>();
-
-        public virtual ICollection<InterviewTag> Tags { get; set; } = new HashSet<InterviewTag>();
+        public virtual ICollection<InterviewEdit> Edits { get; set; } = new HashSet<InterviewEdit>();
     }
 }

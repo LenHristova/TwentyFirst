@@ -1,12 +1,12 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
-    using System;
-    using System.Threading.Tasks;
     using Common.Models.Articles;
     using Data.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
+    using System;
+    using System.Threading.Tasks;
 
     public class ArticlesController : AdministrationController
     {
@@ -19,13 +19,16 @@
             this.userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            var articles = await this.articleService.AllAsync<AdministrationArticleListViewModel>();
+
+            return this.View(articles);
         }
 
         public IActionResult Create()
         {
+            //TODO need article?
             return this.View(new ArticleCreateInputModel());
         }
 
@@ -46,6 +49,77 @@
             }
 
             return RedirectToAction("Details", "Articles", new { id });
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var article = await this.articleService.GetAsync<ArticleEditInputModel>(id);
+            if (id == null)
+            {
+                throw new Exception();
+                //TODO thr custom exception
+            }
+
+            return this.View(article);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ArticleEditInputModel articleUpdateInputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(articleUpdateInputModel);
+            }
+
+            var articleExists = this.articleService.Exists(articleUpdateInputModel.Id);
+            if (!articleExists)
+            {
+                throw new Exception();
+                //TODO thr custom exception
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+            var success = this.articleService.Edit(articleUpdateInputModel, userId);
+            if (!success)
+            {
+                throw new Exception();
+                //TODO thr custom exception
+            }
+
+            return RedirectToAction("Details", "Articles", new { articleUpdateInputModel.Id });
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            var article = await this.articleService.GetAsync<ArticleDeleteViewModel>(id);
+            if (id == null)
+            {
+                throw new Exception();
+                //TODO thr custom exception
+            }
+
+            return this.View(article);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(string id, string name)
+        {
+            var articleExists = this.articleService.Exists(id);
+            if (!articleExists)
+            {
+                throw new Exception();
+                //TODO thr custom exception
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+            var success = this.articleService.Delete(id, userId);
+            if (!success)
+            {
+                throw new Exception();
+                //TODO thr custom exception
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

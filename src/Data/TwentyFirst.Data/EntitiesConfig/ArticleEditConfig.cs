@@ -4,16 +4,13 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Models;
 
-    public class ArticleEditorConfig : IEntityTypeConfiguration<ArticleEditor>
+    public class ArticleEditConfig : IEntityTypeConfiguration<ArticleEdit>
     {
-        public void Configure(EntityTypeBuilder<ArticleEditor> builder)
+        public void Configure(EntityTypeBuilder<ArticleEdit> builder)
         {
             builder
-                .HasKey(ae => new { ae.ArticleId, ae.EditorId });
-
-            builder
                 .HasOne(ae => ae.Article)
-                .WithMany(a => a.Editors)
+                .WithMany(a => a.Edits)
                 .HasForeignKey(ae => ae.ArticleId)
                 .OnDelete(DeleteBehavior.Restrict);
 

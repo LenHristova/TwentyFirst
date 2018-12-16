@@ -46,7 +46,9 @@ namespace TwentyFirst.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 50, nullable: false)
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Order = table.Column<int>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -126,28 +128,15 @@ namespace TwentyFirst.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 300, nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Articles",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     Title = table.Column<string>(maxLength: 200, nullable: false),
+                    Lead = table.Column<string>(maxLength: 200, nullable: false),
                     Content = table.Column<string>(nullable: false),
                     Author = table.Column<string>(maxLength: 200, nullable: true),
                     PublishedOn = table.Column<DateTime>(nullable: false),
-                    EditedOn = table.Column<DateTime>(nullable: true),
                     ImageId = table.Column<string>(nullable: true),
                     IsTop = table.Column<bool>(nullable: false),
                     IsImportant = table.Column<bool>(nullable: false),
@@ -165,30 +154,6 @@ namespace TwentyFirst.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Articles_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ImagesEditors",
-                columns: table => new
-                {
-                    ImageId = table.Column<string>(nullable: false),
-                    EditorId = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ImagesEditors", x => new { x.ImageId, x.EditorId });
-                    table.ForeignKey(
-                        name: "FK_ImagesEditors_AspNetUsers_EditorId",
-                        column: x => x.EditorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ImagesEditors_Images_ImageId",
                         column: x => x.ImageId,
                         principalTable: "Images",
                         principalColumn: "Id",
@@ -271,49 +236,27 @@ namespace TwentyFirst.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ArticlesEditors",
+                name: "ArticlesEdits",
                 columns: table => new
                 {
+                    Id = table.Column<string>(nullable: false),
                     ArticleId = table.Column<string>(nullable: false),
-                    EditorId = table.Column<string>(nullable: false)
+                    EditorId = table.Column<string>(nullable: false),
+                    EditDateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ArticlesEditors", x => new { x.ArticleId, x.EditorId });
+                    table.PrimaryKey("PK_ArticlesEdits", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ArticlesEditors_Articles_ArticleId",
+                        name: "FK_ArticlesEdits_Articles_ArticleId",
                         column: x => x.ArticleId,
                         principalTable: "Articles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ArticlesEditors_AspNetUsers_EditorId",
+                        name: "FK_ArticlesEdits_AspNetUsers_EditorId",
                         column: x => x.EditorId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ArticlesTags",
-                columns: table => new
-                {
-                    ArticleId = table.Column<string>(nullable: false),
-                    TagId = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ArticlesTags", x => new { x.ArticleId, x.TagId });
-                    table.ForeignKey(
-                        name: "FK_ArticlesTags_Articles_ArticleId",
-                        column: x => x.ArticleId,
-                        principalTable: "Articles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ArticlesTags_Tags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -343,49 +286,27 @@ namespace TwentyFirst.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InterviewsEditors",
+                name: "InterviewsEdits",
                 columns: table => new
                 {
+                    Id = table.Column<string>(nullable: false),
                     InterviewId = table.Column<string>(nullable: false),
-                    EditorId = table.Column<string>(nullable: false)
+                    EditorId = table.Column<string>(nullable: false),
+                    EditDateTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InterviewsEditors", x => new { x.InterviewId, x.EditorId });
+                    table.PrimaryKey("PK_InterviewsEdits", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_InterviewsEditors_AspNetUsers_EditorId",
+                        name: "FK_InterviewsEdits_AspNetUsers_EditorId",
                         column: x => x.EditorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_InterviewsEditors_Interviews_InterviewId",
+                        name: "FK_InterviewsEdits_Interviews_InterviewId",
                         column: x => x.InterviewId,
                         principalTable: "Interviews",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InterviewsTags",
-                columns: table => new
-                {
-                    InterviewId = table.Column<string>(nullable: false),
-                    TagId = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InterviewsTags", x => new { x.InterviewId, x.TagId });
-                    table.ForeignKey(
-                        name: "FK_InterviewsTags_Interviews_InterviewId",
-                        column: x => x.InterviewId,
-                        principalTable: "Interviews",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_InterviewsTags_Tags_InterviewId",
-                        column: x => x.InterviewId,
-                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -406,14 +327,14 @@ namespace TwentyFirst.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArticlesEditors_EditorId",
-                table: "ArticlesEditors",
-                column: "EditorId");
+                name: "IX_ArticlesEdits_ArticleId",
+                table: "ArticlesEdits",
+                column: "ArticleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArticlesTags_TagId",
-                table: "ArticlesTags",
-                column: "TagId");
+                name: "IX_ArticlesEdits_EditorId",
+                table: "ArticlesEdits",
+                column: "EditorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ArticlesToArticles_ConnectedFromId",
@@ -426,11 +347,6 @@ namespace TwentyFirst.Data.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImagesEditors_EditorId",
-                table: "ImagesEditors",
-                column: "EditorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Interviews_CreatorId",
                 table: "Interviews",
                 column: "CreatorId");
@@ -441,9 +357,14 @@ namespace TwentyFirst.Data.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InterviewsEditors_EditorId",
-                table: "InterviewsEditors",
+                name: "IX_InterviewsEdits_EditorId",
+                table: "InterviewsEdits",
                 column: "EditorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InterviewsEdits_InterviewId",
+                table: "InterviewsEdits",
+                column: "InterviewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PollAnswers_PollId",
@@ -462,22 +383,13 @@ namespace TwentyFirst.Data.Migrations
                 name: "ArticlesCategories");
 
             migrationBuilder.DropTable(
-                name: "ArticlesEditors");
-
-            migrationBuilder.DropTable(
-                name: "ArticlesTags");
+                name: "ArticlesEdits");
 
             migrationBuilder.DropTable(
                 name: "ArticlesToArticles");
 
             migrationBuilder.DropTable(
-                name: "ImagesEditors");
-
-            migrationBuilder.DropTable(
-                name: "InterviewsEditors");
-
-            migrationBuilder.DropTable(
-                name: "InterviewsTags");
+                name: "InterviewsEdits");
 
             migrationBuilder.DropTable(
                 name: "Logs");
@@ -496,9 +408,6 @@ namespace TwentyFirst.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Interviews");
-
-            migrationBuilder.DropTable(
-                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Polls");

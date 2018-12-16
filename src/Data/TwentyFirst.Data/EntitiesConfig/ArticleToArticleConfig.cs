@@ -13,7 +13,7 @@
 
             builder
                 .HasOne(a => a.ConnectedTo)
-                .WithMany(a => a.ConnectedFrom)
+                .WithMany()
                 .HasForeignKey(a => a.ConnectedToId)
                 .OnDelete(DeleteBehavior.Restrict);
 

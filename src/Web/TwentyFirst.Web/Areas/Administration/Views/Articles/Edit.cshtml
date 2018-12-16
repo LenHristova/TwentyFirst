@@ -1,14 +1,14 @@
-﻿@model TwentyFirst.Common.Models.Articles.ArticleCreateInputModel
+﻿@model TwentyFirst.Common.Models.Articles.ArticleEditInputModel
 
 @{
-    ViewData["Title"] = "Добави новина";
+    ViewData["Title"] = "Редактирай новина";
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
 
 <hr />
 
-<form asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
     <input asp-for="ImageId" class="image-id" type="hidden" />
     <input asp-for="ImageThumbUrl" class="image-url" type="hidden" />
     <div class="row h5">
@@ -73,12 +73,9 @@
 
             <!-- Large modal for images search-->
             <partial name="_ImageAddModalPartial" />
-            
+
             <p id="show-image">
-                @if (Model.ImageThumbUrl != null)
-                {
-                    <img src="@Model.ImageThumbUrl" />
-                }
+                <img src="@Model.ImageThumbUrl" />
             </p>
         </div>
 

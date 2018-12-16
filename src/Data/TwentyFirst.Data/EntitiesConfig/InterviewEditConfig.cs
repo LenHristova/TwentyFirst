@@ -4,16 +4,13 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using Models;
 
-    public class InterviewEditorConfig : IEntityTypeConfiguration<InterviewEditor>
+    public class InterviewEditConfig : IEntityTypeConfiguration<InterviewEdit>
     {
-        public void Configure(EntityTypeBuilder<InterviewEditor> builder)
+        public void Configure(EntityTypeBuilder<InterviewEdit> builder)
         {
             builder
-                .HasKey(ie => new { ie.InterviewId, ie.EditorId });
-
-            builder
                 .HasOne(ie => ie.Interview)
-                .WithMany(a => a.Editors)
+                .WithMany(a => a.Edits)
                 .HasForeignKey(ie => ie.InterviewId)
                 .OnDelete(DeleteBehavior.Restrict);
 

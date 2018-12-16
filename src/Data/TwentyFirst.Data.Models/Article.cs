@@ -11,14 +11,16 @@
         public string Title { get; set; }
 
         [Required]
+        [MaxLength(200)]
+        public string Lead { get; set; }
+
+        [Required]
         public string Content { get; set; }
 
         [MaxLength(200)]
         public string Author { get; set; }
 
         public DateTime PublishedOn { get; set; }
-
-        public DateTime? EditedOn { get; set; }
 
         public string ImageId { get; set; }
         public virtual Image Image { get; set; }
@@ -33,14 +35,10 @@
         public string CreatorId { get; set; }
         public virtual User Creator { get; set; }
 
-        public virtual ICollection<ArticleEditor> Editors { get; set; } = new HashSet<ArticleEditor>();
+        public virtual ICollection<ArticleEdit> Edits { get; set; } = new HashSet<ArticleEdit>();
 
         public virtual ICollection<ArticleCategory> Categories { get; set; } = new HashSet<ArticleCategory>();
 
-        public virtual ICollection<ArticleTag> Tags { get; set; } = new HashSet<ArticleTag>();
-
         public virtual ICollection<ArticleToArticle> ConnectedTo { get; set; } = new HashSet<ArticleToArticle>();
-        //TODO Not needed?
-        public virtual ICollection<ArticleToArticle> ConnectedFrom { get; set; } = new HashSet<ArticleToArticle>();
     }
 }

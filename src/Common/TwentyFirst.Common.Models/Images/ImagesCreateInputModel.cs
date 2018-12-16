@@ -42,8 +42,7 @@
                 .ForMember(dest => dest.CreatedOn, x => x.Ignore())
                 .ForMember(dest => dest.IsDeleted, x => x.Ignore())
                 .ForMember(dest => dest.CreatorId, x => x.Ignore())
-                .ForMember(dest => dest.Creator, x => x.Ignore())
-                .ForMember(dest => dest.Editors, x => x.Ignore());
+                .ForMember(dest => dest.Creator, x => x.Ignore());
         }
     }
 }

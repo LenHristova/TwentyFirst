@@ -15,6 +15,8 @@
 
         public string Content { get; set; }
 
+        public string Lead { get; set; }
+
         public string HtmlContent 
             => this.Content.Insert(0, GlobalConstants.HtmlTab)
                 .Replace("\n", $"{GlobalConstants.HtmlNewLine}{GlobalConstants.HtmlTab}");
@@ -22,8 +24,6 @@
         public string Author { get; set; }
 
         public DateTime PublishedOn { get; set; }
-
-        public DateTime? EditedOn { get; set; }
 
         public string ImageUrl { get; set; }
 

@@ -16,8 +16,6 @@
 
         public DateTime PublishedOn { get; set; }
 
-        public DateTime? EditedOn { get; set; }
-
         public string ShortTitle
         {
             get

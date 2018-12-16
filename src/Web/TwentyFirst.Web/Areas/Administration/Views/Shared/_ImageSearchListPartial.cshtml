@@ -5,9 +5,9 @@
 
         @foreach (var image in Model)
         {
-            <div class="card col-md-6 border-top" style="width: 17rem;">
+            <div class="card col-md-6 border-top">
                 <a href="#" class="selected-image" data-item-id="@image.Id" data-item-url="@image.ThumbUrl">
-                    <img class="card-img-top" src="@image.ThumbUrl" alt="Card image cap">
+                    <img class="card-img-top fixed-height-250" src="@image.ThumbUrl" alt="Card image cap">
                     <div class="card-body p-0">
                         <h6 data-toggle="tooltip" data-placement="top" title="@image.Description">
                             @image.ShortDescription

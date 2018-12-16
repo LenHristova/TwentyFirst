@@ -26,7 +26,6 @@
             {
                 //Log Error
             }
-
             return this.View(article);
         }
     }

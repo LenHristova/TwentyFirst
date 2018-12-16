@@ -1,12 +1,19 @@
 ﻿@model TwentyFirst.Common.Models.Articles.ArticleDetailsViewModel
 
+@{
+    ViewData["Title"] = Model.Title;
+}
+
 <!-- ********** Hero Area Start ********** -->
 <div class="hero-area height-600 bg-img background-overlay" style="background-image: url(@Model.ImageUrl);"></div>
 <div class="container h-100 mt-5">
     <div class="single-blog-title text-center">
         <h1 class="display-4">@Model.Title</h1>
+        <hr />
+        <h5 class="text-muted">@Model.Lead</h5>
     </div>
 </div>
+
 <!-- ********** Hero Area End ********** -->
 
 <div class="main-content-wrapper section-padding-100">
@@ -16,15 +23,7 @@
             <div class="col-12 col-lg-8">
                 <div class="single-blog-content mb-100">
                     <!-- Post Meta -->
-                    <div class="row text-muted post-meta justify-content-around">
-                        <div class="d-inline">Източник:<em> @Model.Author</em></div>
-                        <div class="d-inline">Публикувано: @Model.PublishedOn.ToString("g")</div>
-
-                        @if (Model.EditedOn.HasValue)
-                        {
-                            <div class="d-inline text-danger">Обновено на: @Model.EditedOn.Value.ToString("g")</div>
-                        }
-                    </div>
+                    <div class="d-inline post-meta text-muted p-2 fa fa-calendar"> @Model.PublishedOn.ToString("g")</div>
                     <!-- Post Content -->
                     <div class="post-content">
                         <h6>@Html.Raw(Model.HtmlContent)</h6>
@@ -43,8 +42,9 @@
                             </ul>
                         }
                         <!-- Post Meta -->
-                        <div class="post-meta second-part">
-                            <p><a href="#" class="post-author">@Model.Author</a> on <a href="#" class="post-date">Sep 29, 2017 at 9:48 am</a></p>
+                        <div class="post-meta second-part text-muted p-2">
+                            <div class="post-author d-inline mx-3">Източник: @Model.Author</div> 
+                            <div class="d-inline fa fa-calendar mx-3"> @Model.PublishedOn.ToString("g")</div>
                         </div>
                     </div>
                 </div>

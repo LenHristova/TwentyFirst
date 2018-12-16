@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20181215000444_CategorySoftDelete.cs" />
+    <Compile Remove="Migrations\20181216021050_ModifyArticleAndInterviewRemoveTag.cs" />
+    <Compile Remove="Migrations\20181216024536_ModifyEntities.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
   </ItemGroup>

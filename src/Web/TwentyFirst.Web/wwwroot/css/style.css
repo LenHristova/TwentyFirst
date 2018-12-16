@@ -24,6 +24,21 @@ button:focus {
     width: 30%;
 }
 
+.fixed-height-250 {
+    height: 250px;
+    max-width: 100%;
+}
+
+.fixed-height-55 {
+    height: 55px;
+    max-width: 100%;
+}
+
+.fixed-height-200 {
+    height: 200px;
+    max-width: 100%;
+}
+
 .text-strong {
     color: rgba(0, 0, 0, 0.8);
     font-weight: bold;
@@ -53,12 +68,6 @@ button:focus {
 .hr-1 {
     height: 1px;
 }
-
-.table-hover > tbody > tr:hover {
-    background-color: #AFEEEE;
-    color: #F8F8FF;
-}
-
 
 /*checkbox*/
 .checkbox.checbox-switch {

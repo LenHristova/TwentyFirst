@@ -30,7 +30,5 @@
         [Required]
         public string CreatorId { get; set; }
         public virtual User Creator { get; set; }
-
-        public virtual ICollection<ImageEditor> Editors { get; set; } = new HashSet<ImageEditor>();
     }
 }

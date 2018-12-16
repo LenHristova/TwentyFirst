@@ -1,14 +1,18 @@
 ﻿namespace TwentyFirst.Common.Models.Articles
 {
+    using Attributes.ValidationAttributes;
     using Constants;
     using Data.Models;
     using Mapping.Contracts;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Attributes.ValidationAttributes;
+    using System.Linq;
+    using AutoMapper;
 
-    public class ArticleCreateInputModel : IMapTo<Article>
+    public class ArticleEditInputModel : IMapTo<Article>, IHaveCustomMappings
     {
+        public string Id { get; set; }
+
         [Required(ErrorMessage = ValidationErrorMessages.Required)]
         [MaxLength(200, ErrorMessage = ValidationErrorMessages.MaxLength)]
         [MinLength(3, ErrorMessage = ValidationErrorMessages.MinLength)]
@@ -49,5 +53,14 @@
         [Display(Name = "Свързани новини")]
         [MaxElementsCount(5, ErrorMessage = ValidationErrorMessages.MaxConnectedArticles)]
         public IEnumerable<string> ConnectedArticlesIds { get; set; }
+
+        public void CreateMappings(IMapperConfigurationExpression configuration)
+        {
+            configuration.CreateMap<Article, ArticleEditInputModel>()
+                .ForMember(dest => dest.CategoriesIds,
+                    x => x.MapFrom(src => src.Categories.Where(ca => !ca.Category.IsDeleted).Select(ac => ac.CategoryId)))
+                .ForMember(dest => dest.ConnectedArticlesIds,
+                    x => x.MapFrom(src => src.ConnectedTo.Where(ca => !ca.ConnectedTo.IsDeleted).Select(ac => ac.ConnectedToId)));
+        }
     }
 }
