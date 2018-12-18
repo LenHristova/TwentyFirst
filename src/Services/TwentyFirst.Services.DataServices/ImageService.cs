@@ -68,11 +68,11 @@
             ImageUploadResult uploadResult)
         {
             var thumbUrl = cloudinary.Api.UrlImgUp
-                .Transform(new Transformation().Height(200).Crop("scale"))
+                .Transform(new Transformation().Height(200).Crop("scale")).Secure(true)
                 .BuildUrl(uploadResult.PublicId);
 
             var imageToDb = Mapper.Map<Image>(imagesCreateInputModel);
-            imageToDb.Url = uploadResult.Uri.AbsoluteUri;
+            imageToDb.Url = uploadResult.SecureUri.AbsoluteUri;
             imageToDb.ThumbUrl = thumbUrl;
             imageToDb.CreatorId = creatorId;
             imageToDb.CreatedOn = DateTime.UtcNow;

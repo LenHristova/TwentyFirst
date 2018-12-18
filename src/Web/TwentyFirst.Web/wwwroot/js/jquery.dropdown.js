@@ -155,7 +155,7 @@
       var extendProps = matcher.replace(/data-(\w+)="?(.[^"]+)"?/g, function ($1) {
         extendAttr += $1 + ' '
       });
-      return '<li ' + (isDisabled ? ' disabled' : ' tabindex="0"') + ' data-value="' + (value || '') + '" class="dropdown-option ' + (isSelected ? 'dropdown-chose' : '') + '" ' + extendAttr + '>' + (name ? name[1] : '') + '</li>';
+      return '<li ' + (isDisabled ? ' disabled' : ' tabindex="0"') + ' data-value="' + (value || '') + '" class="dropdown-option border-bottom h6' + (isSelected ? 'dropdown-chose' : '') + '" ' + extendAttr + '>' + (name ? name[1] : '') + '</li>';
     });
 
     return result;

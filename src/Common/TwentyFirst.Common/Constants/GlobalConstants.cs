@@ -10,7 +10,9 @@
         public const string EditorRoleName = "Editor";
 
         //URL
-        public const string AdministrationHomePage = "~/Administration/Articles";
+        public const string AdministrationHomePage = "/Administration/Articles";
+
+        public const string AdministrationLoginPage = "/Identity/Account/Login";
 
         //HTML
         public const string HtmlTab = "&emsp;";

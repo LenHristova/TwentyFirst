@@ -1,13 +1,16 @@
 ﻿namespace TwentyFirst.Common.Models.Articles
 {
+    using Attributes.ValidationAttributes;
+    using AutoMapper;
     using Constants;
     using Data.Models;
+    using Images;
     using Mapping.Contracts;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Attributes.ValidationAttributes;
+    using System.Linq;
 
-    public class ArticleCreateInputModel : IMapTo<Article>
+    public class ArticleCreateInputModel : IMapTo<Article>, IHaveCustomMappings
     {
         [Required(ErrorMessage = ValidationErrorMessages.Required)]
         [MaxLength(200, ErrorMessage = ValidationErrorMessages.MaxLength)]
@@ -32,9 +35,11 @@
         public string Author { get; set; }
 
         [Display(Name = "Снимка")]
-        public string ImageId { get; set; }
+        public ImageForArticleInputModel Image { get; set; }
+        //[Display(Name = "Снимка")]
+        //public string ImageId { get; set; }
 
-        public string ImageThumbUrl { get; set; }
+        //public string ImageThumbUrl { get; set; }
 
         [Display(Name = "Топ новина?")]
         public bool IsTop { get; set; }
@@ -49,5 +54,16 @@
         [Display(Name = "Свързани новини")]
         [MaxElementsCount(5, ErrorMessage = ValidationErrorMessages.MaxConnectedArticles)]
         public IEnumerable<string> ConnectedArticlesIds { get; set; }
+
+        public void CreateMappings(IMapperConfigurationExpression configuration)
+        {
+            configuration.CreateMap<ArticleCreateInputModel, Article>()
+                .ForMember(dest => dest.ImageId, x => x.MapFrom(src => src.Image.Id))
+                .ForMember(dest => dest.PublishedOn, x => x.Ignore())
+                .ForMember(dest => dest.Image, x => x.Ignore())
+                .ForMember(dest => dest.IsDeleted, x => x.Ignore())
+                .ForMember(dest => dest.CreatorId, x => x.Ignore())
+                .ForMember(dest => dest.Creator, x => x.Ignore()); 
+        }
     }
 }

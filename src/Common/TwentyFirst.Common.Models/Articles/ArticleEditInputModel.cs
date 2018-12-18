@@ -8,6 +8,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using AutoMapper;
+    using Images;
 
     public class ArticleEditInputModel : IMapTo<Article>, IHaveCustomMappings
     {
@@ -36,9 +37,7 @@
         public string Author { get; set; }
 
         [Display(Name = "Снимка")]
-        public string ImageId { get; set; }
-
-        public string ImageThumbUrl { get; set; }
+        public ImageForArticleInputModel Image { get; set; }
 
         [Display(Name = "Топ новина?")]
         public bool IsTop { get; set; }

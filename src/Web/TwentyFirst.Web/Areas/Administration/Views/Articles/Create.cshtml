@@ -7,8 +7,8 @@
 <h1 class="text-center">@ViewData["Title"]</h1>
 <hr />
 <form asp-action="Create" method="post">
-    <input asp-for="ImageId" class="image-id" type="hidden" />
-    <input asp-for="ImageThumbUrl" class="image-url" type="hidden" />
+    <input asp-for="Image.Id" class="image-id" type="hidden" />
+    <input asp-for="Image.ThumbUrl" class="image-url" type="hidden" />
     <div class="row h5">
         <div class="col-md-8">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -64,18 +64,18 @@
             </div>
 
             <!-- Categories drоpdown component-->
-            @await Component.InvokeAsync("categories-add", Model.CategoriesIds)
+            @await Component.InvokeAsync("categories-add", Model?.CategoriesIds)
 
             <!-- Connected articles drоpdown component-->
-            @await Component.InvokeAsync("connected-articles", Model.ConnectedArticlesIds)
+            @await Component.InvokeAsync("connected-articles", Model?.ConnectedArticlesIds)
 
             <!-- Large modal for images search-->
             <partial name="_ImageAddModalPartial" />
 
             <p id="show-image">
-                @if (Model.ImageThumbUrl != null)
+                @if (Model?.Image?.ThumbUrl != null)
                 {
-                    <img src="@Model.ImageThumbUrl" />
+                    <img src="@Model.Image.ThumbUrl" />
                 }
             </p>
         </div>

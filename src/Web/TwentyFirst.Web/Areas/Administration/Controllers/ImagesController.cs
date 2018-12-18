@@ -68,7 +68,7 @@
         {
             search = search ?? string.Empty;
             var images = this.imageService.GetBySearchTerm<ImageSearchListViewModel>(search);
-  
+
             var onePageOfImages = await images.ToList()
                 .PaginateAsync(pageNumber, 2);
 

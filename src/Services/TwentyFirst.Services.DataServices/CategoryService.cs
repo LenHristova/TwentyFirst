@@ -12,6 +12,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Common;
+    using Common.Exceptions;
 
     public class CategoryService : ICategoryService
     {
@@ -123,11 +125,42 @@
         public bool Exists(string id)
             => this.db.Categories.Any(c => c.Id == id && c.IsDeleted == false);
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Get category by id and project it to given model.
+        /// Throw InvalidCategoryIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidCategoryIdException"></exception>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TModel> GetAsync<TModel>(string id)
-            => await this.db.Categories
+        {
+            var result = await this.db.Categories
                 .Where(c => c.Id == id && c.IsDeleted == false)
                 .To<TModel>()
                 .SingleOrDefaultAsync();
+
+            CoreValidator.ThrowIfNull(result, new InvalidCategoryIdException(id));
+            return result;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Get category by id
+        /// Throw InvalidCategoryIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidCategoryIdException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Category> GetAsync(string id)
+        {
+            var result = await this.db.Categories
+                .SingleOrDefaultAsync(c => c.Id == id && c.IsDeleted == false);
+
+            CoreValidator.ThrowIfNull(result, new InvalidCategoryIdException(id));
+            return result;
+        }
 
         public async Task<TModel> GetArchivedAsync<TModel>(string id)
             => await this.db.Categories

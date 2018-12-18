@@ -3,6 +3,18 @@
     height: 100%;
 }
 
+.sides {
+    background-image: linear-gradient(to bottom, #333335, #635e83);
+}
+
+.main {
+    background-color: white;
+}
+
+.footer-area {
+    background-color: #635e83;
+}
+
 textarea {
     resize: none;
 }
@@ -26,16 +38,25 @@ button:focus {
 
 .fixed-height-250 {
     height: 250px;
+    width: auto;
+    max-width: 100%;
+}
+
+.fixed-height-300 {
+    height: 350px;
+    width: auto;
     max-width: 100%;
 }
 
 .fixed-height-55 {
     height: 55px;
+    width: auto;
     max-width: 100%;
 }
 
 .fixed-height-200 {
     height: 200px;
+    width: auto;
     max-width: 100%;
 }
 
@@ -68,6 +89,31 @@ button:focus {
 .hr-1 {
     height: 1px;
 }
+
+.modal-lg {
+    max-width: 1200px;
+}
+
+.subscribe::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.subscribe:-moz-placeholder {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.subscribe::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.subscribe:-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.subscribe::-ms-input-placeholder {
+    color: rgba(255, 255, 255, 0.85);
+}
+
 
 /*checkbox*/
 .checkbox.checbox-switch {

@@ -2,3 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+function ToLocal(utcDate) {
+    var date = new Date(utcDate + " UTC");
+    var localDate = date.toLocaleString();
+    document.write(localDate);
+};

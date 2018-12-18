@@ -1,14 +1,13 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
-    using System.Linq;
     using Common.Constants;
     using Common.Models.Categories;
+    using Common.Models.Enums;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
+    using System.Linq;
     using System.Threading.Tasks;
-    using Common.Models.Articles;
-    using Common.Models.Enums;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class CategoriesController : AdministrationController
@@ -30,7 +29,6 @@
 
             return this.View(onePageOfCategories);
         }
-        //=> this.View();
 
         public IActionResult Create() => this.PartialView("_CategoryCreateFormPartial");
 

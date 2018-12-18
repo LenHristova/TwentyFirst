@@ -1,6 +1,8 @@
 ﻿namespace TwentyFirst.Services.DataServices
 {
     using AutoMapper;
+    using Common;
+    using Common.Exceptions;
     using Common.Mapping;
     using Common.Models.Articles;
     using Contracts;
@@ -26,156 +28,64 @@
             this.categoryService = categoryService;
         }
 
-        public async Task<string> CreateAsync(ArticleCreateInputModel articleCreateInputModel, string creatorId)
+        public async Task<Article> CreateAsync(ArticleCreateInputModel articleCreateInputModel, string creatorId)
         {
-            try
-            {
-                var article = Mapper.Map<Article>(articleCreateInputModel);
-                article.CreatorId = creatorId;
-                article.PublishedOn = DateTime.UtcNow;
-                article.IsDeleted = false;
+            var article = Mapper.Map<Article>(articleCreateInputModel);
 
-                foreach (var categoriesId in articleCreateInputModel.CategoriesIds)
-                {
-                    var categoryExists = this.categoryService.Exists(categoriesId);
-                    if (!categoryExists)
-                    {
-                        return null;
-                    }
+            await AddCategories(article, articleCreateInputModel.CategoriesIds);
+            await AddConnectedArticles(article, articleCreateInputModel.ConnectedArticlesIds);
+            article.CreatorId = creatorId;
+            article.PublishedOn = DateTime.UtcNow;
+            article.IsDeleted = false;
 
-                    article.Categories.Add(new ArticleCategory { CategoryId = categoriesId });
-                }
-
-                if (articleCreateInputModel.ConnectedArticlesIds != null)
-                {
-                    foreach (var connectedArticleId in articleCreateInputModel.ConnectedArticlesIds)
-                    {
-                        var connectedArticleExists = this.Exists(connectedArticleId);
-                        if (!connectedArticleExists)
-                        {
-                            return null;
-                        }
-
-                        article.ConnectedTo.Add(new ArticleToArticle { ConnectedToId = connectedArticleId });
-                    }
-                }
-
-                await this.db.Articles.AddAsync(article);
-                await this.db.SaveChangesAsync();
-                return article.Id;
-            }
-            catch (Exception e)
-            {
-                //TODO process
-                throw;
-            }
+            await this.db.Articles.AddAsync(article);
+            await this.db.SaveChangesAsync();
+            return article;
         }
 
-        public bool Edit(ArticleEditInputModel articleUpdateInputModel, string editorId)
+        public async Task<Article> Edit(ArticleEditInputModel articleUpdateInputModel, string editorId)
         {
-            try
+            var article = await this.GetAsync(articleUpdateInputModel.Id);
+            if (articleUpdateInputModel.CategoriesIds != null)
             {
-                var article = this.db.Articles
-                    .Include(c => c.Categories)
-                    .Include(c => c.ConnectedTo)
-                    .SingleOrDefault(a => a.Id == articleUpdateInputModel.Id);
-
-                if (article == null)
-                {
-                    return false;
-                }
-
-                article.Title = articleUpdateInputModel.Title;
-                article.Lead = articleUpdateInputModel.Lead;
-                article.Content = articleUpdateInputModel.Content;
-                article.Author = articleUpdateInputModel.Author;
-                article.ImageId = articleUpdateInputModel.ImageId;
-                article.IsTop = articleUpdateInputModel.IsTop;
-                article.IsImportant = articleUpdateInputModel.IsImportant;
-                article.Edits.Add(new ArticleEdit { EditorId = editorId, EditDateTime = DateTime.UtcNow });
-
-                var missingCategories = article.Categories
-                    .Where(c => !articleUpdateInputModel.CategoriesIds.Contains(c.CategoryId))
-                    .ToList();
-
-                if (missingCategories.Any())
-                {
-                    this.db.ArticlesCategories.RemoveRange(missingCategories);
-                }
-
-                var newCategories = articleUpdateInputModel.CategoriesIds
-                    .Where(c => !article.Categories.Select(ac => ac.CategoryId).Contains(c))
-                    .ToList();
-
-                foreach (var categoryId in newCategories)
-                {
-                    var categoryExists = this.categoryService.Exists(categoryId);
-                    if (!categoryExists)
-                    {
-                        return false;
-                    }
-
-                    article.Categories.Add(new ArticleCategory { CategoryId = categoryId });
-                }
-
-                if (articleUpdateInputModel.ConnectedArticlesIds != null)
-                {
-                    var missingConnectedArticles = article.ConnectedTo
-                        .Where(id => !articleUpdateInputModel.ConnectedArticlesIds.Contains(id.ConnectedToId))
-                        .ToList();
-
-                    if (missingConnectedArticles.Any())
-                    {
-                        this.db.ArticlesToArticles.RemoveRange(missingConnectedArticles);
-                    }
-
-                    var newConnectedArticles = articleUpdateInputModel.ConnectedArticlesIds
-                        .Where(id => !article.ConnectedTo.Select(aa => aa.ConnectedToId).Contains(id));
-
-                    foreach (var connectedArticleId in newConnectedArticles)
-                    {
-                        var connectedArticleExists = this.Exists(connectedArticleId);
-                        if (!connectedArticleExists)
-                        {
-                            return false;
-                        }
-
-                        article.ConnectedTo.Add(new ArticleToArticle { ConnectedToId = connectedArticleId });
-                    }
-                }
-                else if (article.ConnectedTo.Any())
-                {
-                    this.db.ArticlesToArticles.RemoveRange(article.ConnectedTo);
-                }
-
-                this.db.SaveChanges();
-                return true;
+                this.RemoveMissingCategories(articleUpdateInputModel, article);
+                await AddNewCategories(articleUpdateInputModel, article);
             }
-            catch (Exception e)
+            else if (article.ConnectedTo.Any())
             {
-                //TODO process
-                return false;
+                this.db.ArticlesCategories.RemoveRange(article.Categories);
             }
+
+            if (articleUpdateInputModel.ConnectedArticlesIds != null)
+            {
+                this.RemoveMissingConnectedArticles(articleUpdateInputModel, article);
+
+                await AddNewConnectedArticles(articleUpdateInputModel, article);
+            }
+            else if (article.ConnectedTo.Any())
+            {
+                this.db.ArticlesToArticles.RemoveRange(article.ConnectedTo);
+            }
+
+            article.Title = articleUpdateInputModel.Title;
+            article.Lead = articleUpdateInputModel.Lead;
+            article.Content = articleUpdateInputModel.Content;
+            article.Author = articleUpdateInputModel.Author;
+            article.ImageId = articleUpdateInputModel.Image.Id;
+            article.IsTop = articleUpdateInputModel.IsTop;
+            article.IsImportant = articleUpdateInputModel.IsImportant;
+            article.Edits.Add(new ArticleEdit { EditorId = editorId, EditDateTime = DateTime.UtcNow });
+
+            await this.db.SaveChangesAsync();
+            return article;
         }
 
-        public bool Exists(string id)
-            => this.db.Articles.Any(a => a.Id == id && !a.IsDeleted);
-
-        public bool Delete(string articleId, string editorId)
+        public async Task Delete(string articleId, string editorId)
         {
-            var article = this.db.Articles.Find(articleId);
+            var article = await this.GetAsync(articleId);
             article.IsDeleted = true;
             article.Edits.Add(new ArticleEdit { EditorId = editorId, EditDateTime = DateTime.UtcNow });
-            try
-            {
-                this.db.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                //TODO process
-                return false;
-            }
+            await this.db.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync()
@@ -188,11 +98,44 @@
                 })
                 .ToListAsync();
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets article by id and project it to given model.
+        /// Throw InvalidArticleIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidArticleIdException"></exception>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TModel> GetAsync<TModel>(string id)
-            => await this.db.Articles
+        {
+            var article = await this.db.Articles
                 .Where(c => c.Id == id && !c.IsDeleted)
                 .To<TModel>()
                 .SingleOrDefaultAsync();
+
+            CoreValidator.ThrowIfNull(article, new InvalidArticleIdException(id));
+            return article;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets article by id.
+        /// Throw InvalidArticleIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidArticleIdException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Article> GetAsync(string id)
+        {
+            var article = await this.db.Articles
+                .Include(c => c.Categories)
+                .Include(c => c.ConnectedTo)
+                .SingleOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+
+            CoreValidator.ThrowIfNull(article, new InvalidArticleIdException(id));
+            return article;
+        }
 
         public async Task<IEnumerable<TModel>> GetLastAddedFromCategoriesAsync<TModel>(IEnumerable<string> ids, int count)
             => await this.db.Articles
@@ -209,5 +152,77 @@
                 .OrderByDescending(a => a.PublishedOn)
                 .To<TModel>()
                 .ToListAsync();
+
+        private async Task AddNewConnectedArticles(ArticleEditInputModel articleUpdateInputModel, Article article)
+        {
+            var newConnectedArticles = articleUpdateInputModel.ConnectedArticlesIds
+                .Where(id => !article.ConnectedTo.Select(aa => aa.ConnectedToId).Contains(id))
+                .ToList();
+
+            if (newConnectedArticles.Any())
+            {
+                await AddConnectedArticles(article, newConnectedArticles);
+            }
+        }
+
+        private void RemoveMissingConnectedArticles(ArticleEditInputModel articleUpdateInputModel, Article article)
+        {
+            var missingConnectedArticles = article.ConnectedTo
+                .Where(id => !articleUpdateInputModel.ConnectedArticlesIds.Contains(id.ConnectedToId))
+                .ToList();
+
+            if (missingConnectedArticles.Any())
+            {
+                this.db.ArticlesToArticles.RemoveRange(missingConnectedArticles);
+            }
+        }
+
+        private async Task AddNewCategories(ArticleEditInputModel articleUpdateInputModel, Article article)
+        {
+            var newCategories = articleUpdateInputModel.CategoriesIds
+                .Where(c => !article.Categories.Select(ac => ac.CategoryId).Contains(c))
+                .ToList();
+
+            if (newCategories.Any())
+            {
+                await AddCategories(article, newCategories);
+            }
+        }
+
+        private void RemoveMissingCategories(ArticleEditInputModel articleUpdateInputModel, Article article)
+        {
+            var missingCategories = article.Categories
+                .Where(c => !articleUpdateInputModel.CategoriesIds.Contains(c.CategoryId))
+                .ToList();
+
+            if (missingCategories.Any())
+            {
+                this.db.ArticlesCategories.RemoveRange(missingCategories);
+            }
+        }
+
+        private async Task AddConnectedArticles(Article article, IEnumerable<string> newConnectedArticles)
+        {
+            if (newConnectedArticles != null)
+            {
+                foreach (var connectedArticleId in newConnectedArticles)
+                {
+                    var connectedArticle = await this.GetAsync(connectedArticleId);
+                    article.ConnectedTo.Add(new ArticleToArticle { ConnectedTo = connectedArticle });
+                }
+            }
+        }
+
+        private async Task AddCategories(Article article, IEnumerable<string> newCategories)
+        {
+            if (newCategories != null)
+            {
+                foreach (var categoryId in newCategories)
+                {
+                    var category = await this.categoryService.GetAsync(categoryId);
+                    article.Categories.Add(new ArticleCategory { Category = category });
+                }
+            }
+        }
     }
 }
