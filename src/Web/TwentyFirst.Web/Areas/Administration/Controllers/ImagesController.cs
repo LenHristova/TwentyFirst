@@ -9,6 +9,7 @@
     using Services.DataServices.Contracts;
     using System.Threading.Tasks;
     using Common.Constants;
+    using Filters;
 
     public class ImagesController : AdministrationController
     {
@@ -26,10 +27,11 @@
         //    return this.View();
         //}
 
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public IActionResult Upload() => this.View();
 
         [HttpPost]
-        [Authorize]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Upload(ImagesCreateInputModel imageCreateInputModel)
         {
             if (!ModelState.IsValid)
@@ -49,28 +51,19 @@
             return this.RedirectToAction(nameof(Upload));
         }
 
-        //public IActionResult Edit()
-        //{
-
-        //}
-
-        //public IActionResult Edit()
-        //{
-
-        //}
-
         //public IActionResult Delete()
         //{
 
         //}
 
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Search(string search, int? pageNumber)
         {
             search = search ?? string.Empty;
             var images = this.imageService.GetBySearchTerm<ImageSearchListViewModel>(search);
 
             var onePageOfImages = await images.ToList()
-                .PaginateAsync(pageNumber, 2);
+                .PaginateAsync(pageNumber, GlobalConstants.ImagesOnSearchPageCount);
 
             var imageSearchViewModel = new ImageSearchViewModel
             {
@@ -80,10 +73,5 @@
 
             return PartialView("_ImageSearchListPartial", imageSearchViewModel);
         }
-
-        //public IActionResult Details()
-        //{
-
-        //}
     }
 }

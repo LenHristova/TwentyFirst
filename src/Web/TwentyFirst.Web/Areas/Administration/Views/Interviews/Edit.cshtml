@@ -1,0 +1,96 @@
+﻿@model TwentyFirst.Common.Models.Interviews.InterviewEditInputModel
+
+@{
+    ViewData["Title"] = "Редактирай интервю";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+<hr />
+<form asp-action="Edit" method="post">
+    <input asp-for="Image.Id" class="image-id" type="hidden" />
+    <input asp-for="Image.ThumbUrl" class="image-url" type="hidden" />
+    <div class="row h5">
+        <div class="col-md-8">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Interviewed" class="control-label"></label>
+                <input asp-for="Interviewed" class="form-control" />
+                <span asp-validation-for="Interviewed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea asp-for="Content" class="form-control" rows="20"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Large modal for images search-->
+            <partial name="_ImageAddModalPartial" />
+
+            <p id="show-image">
+                @if (Model?.Image?.ThumbUrl != null)
+                {
+                    <img src="@Model.Image.ThumbUrl" />
+                }
+            </p>
+        </div>
+
+        <div class="fixed-bottom bg-dark">
+            <div class="form-group w-25 mx-auto my-1">
+                <input type="submit" value="Запази" class="btn btn-lg btn-admin-twenty-first text-light" />
+                <a asp-action="Index" class="btn btn-lg btn-secondary">Излез</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $('document').ready(function () {
+            $("#search-button").click(function (e) {
+                e.preventDefault();
+                var search = $(".search-term").val();
+                $.get("/Administration/Images/Search?search=" + search).done(function Test(data) {
+                    $("#results-table").html(data);
+                    var rows = document.querySelector("#results-table").getElementsByClassName("selected-image");
+                    for (i = 0; i < rows.length; i++) {
+                        rows[i].onclick = function () {
+                            var imageId = $(this).attr("data-item-id");
+                            $(".image-id").val(imageId);
+                            var imageUrl = $(this).attr("data-item-url");
+                            $(".image-url").val(imageUrl);
+                            $('#show-image').html($('<img>', { src: imageUrl, class: "img-thumbnail" }));
+                            $(".modal").modal("toggle");
+                        }
+                    }
+
+                    $(".pagination li a").click(function (e) {
+                        e.preventDefault();
+                        $.get(e.target).done(function(nextData) {
+                            Test(nextData);
+                        });
+                    });
+                });
+            });
+
+            $(".search-term").keypress(function (e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                    $("#search-button").click();
+                }
+            });
+        });
+    </script>
+}

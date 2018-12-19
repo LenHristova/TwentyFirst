@@ -58,21 +58,18 @@
         <!-- Categories -->
         @if (Model.Categories.Any())
         {
-        <div class="card bg-light  mb-3">
-            <div class="card-header">Категории</div>
-            @foreach (var category in Model.Categories)
+            <div class="card bg-light  mb-3">
+                <div class="card-header">Категории</div>
+                @foreach (var category in Model.Categories)
                 {
-            <div class="card-body">
-                <p class="card-text">@category</p>
-            </div>
+                    <div class="card-body">
+                        <p class="card-text">@category</p>
+                    </div>
                 }
-        </div>
+            </div>
         }
 
-
-        <p id="show-image">
-            <img src="@Model.ImageThumbUrl" />
-        </p>
+        <div><img src="@Model?.ImageThumbUrl" /></div>
     </div>
     <form asp-action="Delete" method="post" asp-route-id="@Model.Id">
         <div class="fixed-bottom bg-dark">

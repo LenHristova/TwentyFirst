@@ -8,7 +8,6 @@
     using Mapping.Contracts;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
 
     public class ArticleCreateInputModel : IMapTo<Article>, IHaveCustomMappings
     {
@@ -36,10 +35,6 @@
 
         [Display(Name = "Снимка")]
         public ImageForArticleInputModel Image { get; set; }
-        //[Display(Name = "Снимка")]
-        //public string ImageId { get; set; }
-
-        //public string ImageThumbUrl { get; set; }
 
         [Display(Name = "Топ новина?")]
         public bool IsTop { get; set; }
@@ -63,7 +58,7 @@
                 .ForMember(dest => dest.Image, x => x.Ignore())
                 .ForMember(dest => dest.IsDeleted, x => x.Ignore())
                 .ForMember(dest => dest.CreatorId, x => x.Ignore())
-                .ForMember(dest => dest.Creator, x => x.Ignore()); 
+                .ForMember(dest => dest.Creator, x => x.Ignore());
         }
     }
 }

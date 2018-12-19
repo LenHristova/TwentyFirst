@@ -11,7 +11,7 @@
     {
         Task<Article> CreateAsync(ArticleCreateInputModel articleCreateInputModel, string creatorId);
 
-        Task<Article> Edit(ArticleEditInputModel articleUpdateInputModel, string editorId);
+        Task<Article> Edit(ArticleEditInputModel articleEditInputModel, string editorId);
 
         Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync();
 

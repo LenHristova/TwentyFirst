@@ -43,37 +43,37 @@
             return article;
         }
 
-        public async Task<Article> Edit(ArticleEditInputModel articleUpdateInputModel, string editorId)
+        public async Task<Article> Edit(ArticleEditInputModel articleEditInputModel, string editorId)
         {
-            var article = await this.GetAsync(articleUpdateInputModel.Id);
-            if (articleUpdateInputModel.CategoriesIds != null)
+            var article = await this.GetAsync(articleEditInputModel.Id);
+            if (articleEditInputModel.CategoriesIds != null)
             {
-                this.RemoveMissingCategories(articleUpdateInputModel, article);
-                await AddNewCategories(articleUpdateInputModel, article);
+                this.RemoveMissingCategories(articleEditInputModel, article);
+                await AddNewCategories(articleEditInputModel, article);
             }
             else if (article.ConnectedTo.Any())
             {
                 this.db.ArticlesCategories.RemoveRange(article.Categories);
             }
 
-            if (articleUpdateInputModel.ConnectedArticlesIds != null)
+            if (articleEditInputModel.ConnectedArticlesIds != null)
             {
-                this.RemoveMissingConnectedArticles(articleUpdateInputModel, article);
+                this.RemoveMissingConnectedArticles(articleEditInputModel, article);
 
-                await AddNewConnectedArticles(articleUpdateInputModel, article);
+                await AddNewConnectedArticles(articleEditInputModel, article);
             }
             else if (article.ConnectedTo.Any())
             {
                 this.db.ArticlesToArticles.RemoveRange(article.ConnectedTo);
             }
 
-            article.Title = articleUpdateInputModel.Title;
-            article.Lead = articleUpdateInputModel.Lead;
-            article.Content = articleUpdateInputModel.Content;
-            article.Author = articleUpdateInputModel.Author;
-            article.ImageId = articleUpdateInputModel.Image.Id;
-            article.IsTop = articleUpdateInputModel.IsTop;
-            article.IsImportant = articleUpdateInputModel.IsImportant;
+            article.Title = articleEditInputModel.Title;
+            article.Lead = articleEditInputModel.Lead;
+            article.Content = articleEditInputModel.Content;
+            article.Author = articleEditInputModel.Author;
+            article.ImageId = articleEditInputModel.Image.Id;
+            article.IsTop = articleEditInputModel.IsTop;
+            article.IsImportant = articleEditInputModel.IsImportant;
             article.Edits.Add(new ArticleEdit { EditorId = editorId, EditDateTime = DateTime.UtcNow });
 
             await this.db.SaveChangesAsync();

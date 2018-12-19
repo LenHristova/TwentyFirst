@@ -1,0 +1,41 @@
+﻿@model TwentyFirst.Common.Models.Interviews.InterviewDeleteViewModel
+
+@{
+    ViewData["Title"] = "Изтрий интервю";
+}
+
+<h1 class="text-center text-danger">Наистина ли искате да изтриете това интервю?</h1>
+
+<hr />
+
+<div class="row h5">
+    <div class="col-md-8">
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label asp-for="Interviewed" class="control-label"></label>
+            <input asp-for="Interviewed" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label asp-for="Author" class="control-label"></label>
+            <input asp-for="Author" class="form-control" disabled />
+        </div>
+        <div class="form-group">
+            <label asp-for="Content" class="control-label"></label>
+            <textarea asp-for="Content" class="form-control" rows="20" disabled ></textarea>
+        </div>
+    </div>
+
+    <div class="col-md-4"><img src="@Model.ImageThumbUrl" /></div>
+
+    <form asp-action="Delete" method="post" asp-route-id="@Model.Id">
+        <div class="fixed-bottom bg-dark">
+            <div class="form-group w-25 mx-auto my-1">
+                <input type="submit" value="Изтрий" class="btn btn-lg btn-danger text-light" />
+                <a asp-action="Index" class="btn btn-lg btn-secondary">Излез</a>
+            </div>
+        </div>
+    </form>
+</div>

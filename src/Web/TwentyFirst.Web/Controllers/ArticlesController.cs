@@ -2,9 +2,11 @@
 {
     using System.Threading.Tasks;
     using Common.Models.Articles;
+    using Filters;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
 
+    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class ArticlesController : BaseController
     {
         private readonly IArticleService articleService;
@@ -22,10 +24,6 @@
         public async Task<IActionResult> Details(string id)
         {
             var article = await this.articleService.GetAsync<ArticleDetailsViewModel>(id);
-            if (article == null)
-            {
-                //Log Error
-            }
             return this.View(article);
         }
     }
