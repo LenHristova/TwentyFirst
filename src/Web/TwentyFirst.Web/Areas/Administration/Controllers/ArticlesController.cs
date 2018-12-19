@@ -3,13 +3,14 @@
     using Common.Constants;
     using Common.Models.Articles;
     using Data.Models;
+    using Filters;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
+    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class ArticlesController : AdministrationController
     {
         private readonly IArticleService articleService;

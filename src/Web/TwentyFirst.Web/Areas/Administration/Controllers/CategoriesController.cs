@@ -8,6 +8,7 @@
     using Services.DataServices.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
+    using Filters;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class CategoriesController : AdministrationController
@@ -19,6 +20,7 @@
             this.categoryService = categoryService;
         }
 
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Index(int? pageNumber)
         {
             var categories = await this.categoryService
@@ -30,121 +32,100 @@
             return this.View(onePageOfCategories);
         }
 
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public IActionResult Create() => this.PartialView("_CategoryCreateFormPartial");
 
         [HttpPost]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Create(CategoryCreateInputModel categoryCreateInputModel)
         {
-            this.SetAlertMessage(AlertMessageLevel.Error, "Error");
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                var success = await this.categoryService.CreateAsync(categoryCreateInputModel);
+                var errors = string.Join(GlobalConstants.HtmlNewLine, this.ModelState.Values);
+                this.SetAlertMessage(AlertMessageLevel.Error, errors);
 
-                if (success)
-                {
-                    this.SetAlertMessage(AlertMessageLevel.Success, "Success");
-                }
+                return RedirectToAction(nameof(Index));
             }
+
+           var createdCategory = await this.categoryService
+               .CreateAsync(categoryCreateInputModel);
+
+            var alertMessage = $"Категорията \"{createdCategory.Name}\" беше добавена успешно.";
+            this.SetAlertMessage(AlertMessageLevel.Success, alertMessage);
 
             return RedirectToAction(nameof(Index));
         }
 
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Edit(string id)
         {
-            var categoryToEdit = await this.categoryService.GetAsync<CategoryUpdateInputModel>(id);
-            if (categoryToEdit == null)
-            {
-                //TODO TempData
-            }
+            var categoryToEdit = await this.categoryService
+                .GetAsync<CategoryUpdateInputModel>(id);
 
             return this.PartialView("_CategoryEditFormPartial", categoryToEdit);
         }
 
         [HttpPost]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Edit(CategoryUpdateInputModel categoryUpdateInputModel)
         {
-            var idExists = this.categoryService.Exists(categoryUpdateInputModel.Id);
-
-            if (!idExists)
+            if (!this.ModelState.IsValid)
             {
-                //TODO TempData
+                var errors = string.Join(GlobalConstants.HtmlNewLine, this.ModelState.Values);
+                this.SetAlertMessage(AlertMessageLevel.Error, errors);
+
                 return RedirectToAction(nameof(Index));
             }
 
-            if (!this.ModelState.IsValid)
-            {
-                //TODO TempData
-                return this.View(nameof(Index));
-            }
+            var categoryToEdit = await this.categoryService
+                .EditAsync(categoryUpdateInputModel);
 
-            var success = await this.categoryService.EditAsync(categoryUpdateInputModel);
-
-            if (!success)
-            {
-                //TODO TempData
-            }
+            var alertMessage = $"Категорията \"{categoryToEdit.Name}\" беше успешно променена успешно.";
+            this.SetAlertMessage(AlertMessageLevel.Success, alertMessage);
 
             return RedirectToAction(nameof(Index));
         }
 
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Archive(string id)
         {
-            var categoryToDelete = await this.categoryService.GetAsync<CategoryUpdateInputModel>(id);
-            if (categoryToDelete == null)
-            {
-                //TODO TempData
-            }
+            var categoryToArchive = await this.categoryService
+                .GetAsync<CategoryUpdateInputModel>(id);
 
-            return this.PartialView("_CategoryArchiveFormPartial", categoryToDelete);
+            return this.PartialView("_CategoryArchiveFormPartial", categoryToArchive);
         }
 
         [HttpPost]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Archive(CategoryUpdateInputModel categoryUpdateInputModel)
         {
-            var idExists = this.categoryService.Exists(categoryUpdateInputModel.Id);
+            var archivedCategory = await this.categoryService
+                .ArchiveAsync(categoryUpdateInputModel.Id);
 
-            if (!idExists)
-            {
-                //TODO TempData
-            }
-
-            var success = await this.categoryService.ArchiveAsync(categoryUpdateInputModel.Id);
-
-            if (!success)
-            {
-                //TODO TempData
-            }
+            var alertMessage = $"Категорията \"{archivedCategory.Name}\" беше архивирана успешно.";
+            this.SetAlertMessage(AlertMessageLevel.Success, alertMessage);
 
             return RedirectToAction(nameof(Index));
         }
 
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Recover(string id)
         {
-            var categoryToRecover = await this.categoryService.GetArchivedAsync<CategoryUpdateInputModel>(id);
-            if (categoryToRecover == null)
-            {
-                //TODO TempData
-            }
+            var categoryToRecover = await this.categoryService
+                .GetArchivedAsync<CategoryUpdateInputModel>(id);
 
             return this.PartialView("_CategoryRecoverFormPartial", categoryToRecover);
         }
 
         [HttpPost]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Recover(CategoryUpdateInputModel categoryUpdateInputModel)
         {
-            var idExists = this.categoryService.Exists(categoryUpdateInputModel.Id);
+            var archivedCategory = await this.categoryService
+                .RecoverAsync(categoryUpdateInputModel.Id);
 
-            if (!idExists)
-            {
-                //TODO TempData
-            }
-
-            var success = await this.categoryService.RecoverAsync(categoryUpdateInputModel.Id);
-
-            if (!success)
-            {
-                //TODO TempData
-            }
+            var alertMessage = $"Категорията \"{archivedCategory.Name}\" беше възстановена успешно.";
+            this.SetAlertMessage(AlertMessageLevel.Success, alertMessage);
 
             return RedirectToAction(nameof(Index));
         }

@@ -4,14 +4,28 @@
     ViewData["Title"] = "Всички категории";
 }
 
+<!-- Modal for add category-->
+<div id="create-container"></div>
+
+<!-- Modal for edit category-->
+<div id="edit-container"></div>
+
+<!-- Modal for archive category-->
+<div id="archive-container"></div>
+
+<!-- Modal for recover category-->
+<div id="recover-container"></div>
+
 <div class="container">
     <h1 class="text-center">@ViewData["Title"]</h1>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th class="w-50 font-weight-bold">Наименование</th>
-                <th class="w-50 mx-auto">
-                    <button type="button" class="btn btn-primary create">Добави категория</button>
+                <th>
+                    <div class="btn-group justify-content-center w-50 mx-auto">
+                        <button type="button" class="btn btn-primary create">Добави категория</button>
+                    </div>                       
                 </th>
             </tr>
         </thead>
@@ -27,37 +41,24 @@
                     {
                         <td class="text-dark">@Html.DisplayFor(modelItem => category.Name)</td>
                     }
-
-                    <td class="btn-group justify-content-center w-50 mx-auto">
-                        <button type="button" class="btn btn-warning edit" data-item-id="@category.Id">Редактирай</button>
-                        @if (category.IsDeleted)
-                        {
-                            <button type="button" class="btn btn-success recover" data-item-id="@category.Id">Възстанови</button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-danger archive" data-item-id="@category.Id">Архивирай</button>
-                        }
-                    </td>
+                        <td class="btn-group justify-content-center w-50 mx-auto">
+                            @if (category.IsDeleted)
+                            {
+                                <button type="button" class="btn btn-default recover" data-item-id="@category.Id">Възстанови</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-warning edit" data-item-id="@category.Id">Редактирай</button>
+                                <button type="button" class="btn btn-danger archive" data-item-id="@category.Id">Архивирай</button>
+                            }
+                        </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
-<!-- Modal for add category-->
-<div id="create-container"></div>
-
-<!-- Modal for edit category-->
-<div id="edit-container"></div>
-
-<!-- Modal for archive category-->
-<div id="archive-container"></div>
-
-<!-- Modal for recover category-->
-<div id="recover-container"></div>
-
-@Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }), 
+@Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }),
     PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
 
 @section Scripts {
@@ -75,7 +76,7 @@
                     $.validator.unobtrusive.parse(newForm);
                     $('#create-modal').modal('show');
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ": Couldn't add create form. " + errorThrown);
+                    alert(textStatus + ": Изникна проблем при зареждането на формата. " + errorThrown);
                 });
             });
 
@@ -90,7 +91,7 @@
                     $.validator.unobtrusive.parse(newForm);
                     $('#edit-modal').modal('show');
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ": Couldn't add edit form. " + errorThrown);
+                    alert(textStatus + ": Изникна проблем при зареждането на формата. " + errorThrown);
                 });
             });
 
@@ -102,7 +103,7 @@
                     $(container).html(data);
                     $('#archive-modal').modal('show');
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ": Couldn't add archive form. " + errorThrown);
+                    alert(textStatus + ": Изникна проблем при зареждането на формата. " + errorThrown);
                 });
             });
 
@@ -114,7 +115,7 @@
                     $(container).html(data);
                     $('#recover-modal').modal('show');
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ": Couldn't add recover form. " + errorThrown);
+                    alert(textStatus + ": Изникна проблем при зареждането на формата. " + errorThrown);
                 });
             });
         });

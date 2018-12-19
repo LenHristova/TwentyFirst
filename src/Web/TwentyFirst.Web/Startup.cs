@@ -75,7 +75,8 @@
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                //TODO uncomment
+                //options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
                 options.LoginPath = "/Identity/Account/Login";
                 options.LogoutPath = "/Identity/Account/Logout";
@@ -93,10 +94,13 @@
                     Configuration["CloudinaryAccount:apiSecret"]
                     )));
 
-            services.AddMvc(options =>
-            {
-                options.Filters.Add<GlobalExceptionFilter>();
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //services.AddMvc(options =>
+            //{
+            //    options.Filters.Add<GlobalExceptionFilter>();
+            //}).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
