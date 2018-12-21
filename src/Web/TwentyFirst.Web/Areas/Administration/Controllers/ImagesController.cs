@@ -10,6 +10,7 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using Filters;
+    using Infrastructure.Extensions;
 
     public class ImagesController : AdministrationController
     {

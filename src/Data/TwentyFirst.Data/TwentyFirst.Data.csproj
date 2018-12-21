@@ -8,6 +8,9 @@
     <Compile Remove="Migrations\20181215000444_CategorySoftDelete.cs" />
     <Compile Remove="Migrations\20181216021050_ModifyArticleAndInterviewRemoveTag.cs" />
     <Compile Remove="Migrations\20181216024536_ModifyEntities.cs" />
+    <Compile Remove="Migrations\20181219161515_ExtendSubscriberTable.cs" />
+    <Compile Remove="Migrations\20181219161627_ExtendSubscriberTable.cs" />
+    <Compile Remove="Migrations\20181219164443_ExtendSubscriberTable.cs" />
   </ItemGroup>
 
   <ItemGroup>

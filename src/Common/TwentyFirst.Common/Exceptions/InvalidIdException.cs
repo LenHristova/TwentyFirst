@@ -1,8 +1,6 @@
 ﻿namespace TwentyFirst.Common.Exceptions
 {
-    using System;
-
-    public class InvalidIdException : Exception, ITwentyFirstException
+    public class InvalidIdException : BaseTwentyFirstException
     {
         private readonly string givenId;
         protected readonly string message;

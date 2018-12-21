@@ -58,6 +58,7 @@
             //TODO Add filtering
             return this.db.Images
                 .Where(i => i.Description.ToLower().Contains(searchTerm.ToLower().Trim()))
+                .OrderByDescending(a => a.CreatedOn)
                 .To<TModel>()
                 .ToList();
         }

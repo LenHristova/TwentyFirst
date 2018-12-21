@@ -1,4 +1,4 @@
-﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
+﻿namespace TwentyFirst.Web.Infrastructure.Extensions
 {
     using System;
     using System.Collections.Generic;

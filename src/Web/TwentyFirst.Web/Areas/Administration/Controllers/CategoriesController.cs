@@ -9,6 +9,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Filters;
+    using Infrastructure.Extensions;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class CategoriesController : AdministrationController

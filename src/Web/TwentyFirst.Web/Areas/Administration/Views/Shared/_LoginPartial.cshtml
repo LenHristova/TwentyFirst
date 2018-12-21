@@ -29,12 +29,14 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle" asp-area="Administration" asp-controller="Images" asp-action="Index"
+                    <a class="nav-link dropdown-toggle" asp-area="Administration" asp-controller="Images" asp-action="Upload"
                        id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Снимки</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Index">Всички снимки</a>
                         <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимки</a>
                     </div>
+                </li>
+                <li>
+                    <a class="nav-link" asp-area="Administration" asp-controller="Subscribers" asp-action="ConfirmArticlesSend">Изпрати абонамент</a>
                 </li>
             </ul>
             @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))

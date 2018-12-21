@@ -9,6 +9,7 @@
     using Services.DataServices.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
+    using Infrastructure.Extensions;
 
     [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class ArticlesController : AdministrationController
@@ -63,7 +64,7 @@
             }
 
             var userId = this.userManager.GetUserId(this.User);
-            var article = await this.articleService.Edit(articleUpdateInputModel, userId);
+            var article = await this.articleService.EditAsync(articleUpdateInputModel, userId);
             return RedirectToAction("Details", "Articles", new { article.Id });
         }
 
@@ -77,7 +78,7 @@
         public async Task<IActionResult> Delete(string id, string name)
         {
             var userId = this.userManager.GetUserId(this.User);
-            await this.articleService.Delete(id, userId);
+            await this.articleService.DeleteAsync(id, userId);
 
             return RedirectToAction(nameof(Index));
         }

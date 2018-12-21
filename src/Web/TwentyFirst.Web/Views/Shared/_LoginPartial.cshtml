@@ -1,23 +1,17 @@
-﻿@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
-
-@if (SignInManager.IsSignedIn(User))
+﻿@if (this.User.Identity.IsAuthenticated)
 {
-    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
-            </li>
-        </ul>
-    </form>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+    <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white font-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">АДМИН</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Index">Новини</a>
+                <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Create">Добави новина</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Index">Интервюта</a>
+                <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Create">Добави интервю</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимки</a>
+            </div>
+        </li>
     </ul>
 }

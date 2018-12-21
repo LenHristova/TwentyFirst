@@ -1,0 +1,10 @@
+﻿<div class="col-12 col-md-4">
+    <div class="footer-single-widget">
+        <h5>Получавайте новини по имейл</h5>
+        <form asp-area="" asp-controller="Subscribers" asp-action="Subscribe" method="post" class="text-light" id="subscribe-form">
+            <input class="subscribe text-light" type="email" name="email" id="subscriber-email" placeholder="Въведете вашия имейл">
+            <button type="button" id="subscribe-button"><i class="fa fa-arrow-right"></i></button>
+        </form>
+        <p class="text-light" id="subscribe-result"></p>       
+    </div>
+</div>

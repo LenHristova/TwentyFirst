@@ -12,6 +12,7 @@
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	</PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.1.1" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="7.6.0" />
   </ItemGroup>
 
@@ -20,6 +21,7 @@
     <ProjectReference Include="..\..\Common\TwentyFirst.Common\TwentyFirst.Common.csproj" />
     <ProjectReference Include="..\..\Data\TwentyFirst.Data.Models\TwentyFirst.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\TwentyFirst.Data\TwentyFirst.Data.csproj" />
+    <ProjectReference Include="..\..\Services\TwentyFirst.Services.AuthMessageSender\TwentyFirst.Services.AuthMessageSender.csproj" />
     <ProjectReference Include="..\..\Services\TwentyFirst.Services.DataServices\TwentyFirst.Services.DataServices.csproj" />
   </ItemGroup>
 

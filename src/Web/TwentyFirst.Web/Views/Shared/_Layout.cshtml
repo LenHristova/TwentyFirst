@@ -31,122 +31,124 @@
 </head>
 <body>
     <script src="~/js/style.js"></script>
-<!-- Preloader Start -->
-<div id="preloader">
-    <div class="preload-content">
-        <div id="world-load"></div>
+    <!-- Preloader Start -->
+    <div id="preloader">
+        <div class="preload-content">
+            <div id="world-load"></div>
+        </div>
     </div>
-</div>
-<!-- Preloader End -->
-<!-- ***** Header Area Start ***** -->
-<header class="header-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav class="navbar navbar-expand-lg background-overlay">
-                    <!-- Logo -->
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" alt="Logo"></a>
-                    <!-- Navbar Toggler -->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#worldNav" aria-controls="worldNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                    <!-- Navbar -->
-                    <div class="collapse navbar-collapse" id="worldNav">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white font-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">АДМИН</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Index">Новини</a>
-                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Articles" asp-action="Create">Добави новина</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Index">Интервюта</a>
-                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Create">Добави интервю</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Index">Снимки</a>
-                                    <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимки</a>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Новини</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Интервюта</a>
-                            </li>
-                        </ul>
-                        <!-- Search Form  -->
-                        <div id="search-wrapper">
-                            <form action="#">
-                                <input type="text" id="search" placeholder="Search something...">
-                                <div id="close-icon"></div>
-                                <input class="d-none" type="submit" value="">
-                            </form>
+    <!-- Preloader End -->
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav class="navbar navbar-expand-lg background-overlay">
+                        <!-- Logo -->
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" alt="Logo"></a>
+                        <!-- Navbar Toggler -->
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#worldNav" aria-controls="worldNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                        <!-- Navbar -->
+                        <div class="collapse navbar-collapse" id="worldNav">
+                            <partial name="_LoginPartial" />
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Новини</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Интервюта</a>
+                                </li>
+                            </ul>
+                            <!-- Search Form  -->
+                            <div id="search-wrapper">
+                                <form action="#">
+                                    <input type="text" id="search" placeholder="Search something...">
+                                    <div id="close-icon"></div>
+                                    <input class="d-none" type="submit" value="">
+                                </form>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <div class="sides">
+        <div class="container main p-0">
+            <partial name="_CookieConsentPartial" />
+            @RenderBody()
+        </div>
+    </div>
+
+
+    <!-- ***** Footer Area Start ***** -->
+    <footer class="footer-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="footer-single-widget">
+                        <a href="#"><img src="~/images/logo.png" alt="Logo"></a>
+                        <div class="copywrite-text mt-30">
+                            <p>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                Copyright &copy;
+                                <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </p>
                         </div>
                     </div>
-                </nav>
-            </div>
-        </div>
-    </div>
-</header>
-<!-- ***** Header Area End ***** -->
-
-<div class="sides">
-    <div class="container main p-0">
-        <partial name="_CookieConsentPartial"/>
-        @RenderBody()
-    </div>
-</div>
-
-
-<!-- ***** Footer Area Start ***** -->
-<footer class="footer-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-4">
-                <div class="footer-single-widget">
-                    <a href="#"><img src="~/images/logo.png" alt="Logo"></a>
-                    <div class="copywrite-text mt-30">
-                        <p>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                            Copyright &copy;
-                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        </p>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="footer-single-widget">
+                        <ul class="footer-menu d-flex justify-content-between">
+                            <li><a class="text-light" href="#">Home</a></li>
+                            <li><a class="text-light" href="#">Fashion</a></li>
+                            <li><a class="text-light" href="#">Lifestyle</a></li>
+                            <li><a class="text-light" href="#">Contact</a></li>
+                            <li><a class="text-light" href="#">Gadgets</a></li>
+                            <li><a class="text-light" href="#">Video</a></li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="footer-single-widget">
-                    <ul class="footer-menu d-flex justify-content-between">
-                        <li><a class="text-light" href="#">Home</a></li>
-                        <li><a class="text-light" href="#">Fashion</a></li>
-                        <li><a class="text-light" href="#">Lifestyle</a></li>
-                        <li><a class="text-light" href="#">Contact</a></li>
-                        <li><a class="text-light" href="#">Gadgets</a></li>
-                        <li><a class="text-light" href="#">Video</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="footer-single-widget">
-                    <h5>Получавайте новини по имейл</h5>
-                    <form action="#" method="post" class="text-light">
-                        <input class="subscribe text-light" type="email" name="email" id="email" placeholder="Въведете вашия имейл">
-                        <button type="button"><i class="fa fa-arrow-right"></i></button>
-                    </form>
-                </div>
+                <partial name="_SubscribePartial" />
             </div>
         </div>
-    </div>
-</footer>
-<!-- ***** Footer Area End ***** -->
-<!-- jQuery (Necessary for All JavaScript Plugins) -->
-<script src="~/js/jquery/jquery-2.2.4.min.js"></script>
-<!-- Popper js -->
-<script src="~/js/popper.min.js"></script>
-<!-- Bootstrap js -->
-<script src="~/js/bootstrap.min.js"></script>
-<!-- Plugins js -->
-<script src="~/js/plugins.js"></script>
-<!-- Active js -->
-<script src="~/js/active.js"></script>
+    </footer>
+    <!-- ***** Footer Area End ***** -->
+    <!-- jQuery (Necessary for All JavaScript Plugins) -->
+    <script src="~/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="~/js/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="~/js/bootstrap.min.js"></script>
+    <!-- Plugins js -->
+    <script src="~/js/plugins.js"></script>
+    <!-- Active js -->
+    <script src="~/js/active.js"></script>
+
+    <script>
+        $('document').ready(function () {
+            $("#subscribe-button").click(function (e) {
+                e.preventDefault();
+                var email = $("#subscriber-email").val();
+                $.post("/Subscribers/Subscribe", { email: email })
+                    .done(function (data) {
+                        $("#subscribe-result").html(data);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus + ": Изникна проблем при зареждането на формата. " + errorThrown);
+                    });
+            });
+
+            $("#subscriber-email").keypress(function (e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                    $("#subscribe-button").click();
+                }
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
 </body>
-@RenderSection("Scripts", required: false)
 </html>

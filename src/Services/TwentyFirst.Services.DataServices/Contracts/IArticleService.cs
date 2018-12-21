@@ -11,7 +11,7 @@
     {
         Task<Article> CreateAsync(ArticleCreateInputModel articleCreateInputModel, string creatorId);
 
-        Task<Article> Edit(ArticleEditInputModel articleEditInputModel, string editorId);
+        Task<Article> EditAsync(ArticleEditInputModel articleEditInputModel, string editorId);
 
         Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync();
 
@@ -38,6 +38,12 @@
 
         Task<IEnumerable<TModel>> AllAsync<TModel>();
 
-        Task Delete(string articleId, string editorId);
+        Task DeleteAsync(string articleId, string editorId);
+
+        /// <summary>
+        /// Returns collection of important articles' ids for the day
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<TModel>> GetAllImportantForTheDay<TModel>();
     }
 }

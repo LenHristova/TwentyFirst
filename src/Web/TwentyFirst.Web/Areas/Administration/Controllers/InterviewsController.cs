@@ -7,6 +7,7 @@
     using Common.Models.Interviews;
     using Data.Models;
     using Filters;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;

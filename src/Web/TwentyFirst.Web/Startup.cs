@@ -6,7 +6,6 @@
     using Common.Models.Articles;
     using Data;
     using Data.Models;
-    using Filters;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -17,6 +16,10 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using System;
+    using Microsoft.AspNetCore.Authentication.Google;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using reCAPTCHA.AspNetCore;
+    using Services.AuthMessageSender;
 
     public class Startup
     {
@@ -94,13 +97,13 @@
                     Configuration["CloudinaryAccount:apiSecret"]
                     )));
 
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            //services.AddMvc(options =>
-            //{
-            //    options.Filters.Add<GlobalExceptionFilter>();
-            //}).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSingleton<IEmailSender, SendGridEmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration.GetSection("SendGridAccount"));
+
+            services.AddTransient<IRecaptchaService, RecaptchaService>();
+            services.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

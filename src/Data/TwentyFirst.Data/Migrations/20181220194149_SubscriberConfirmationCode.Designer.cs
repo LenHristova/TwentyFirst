@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TwentyFirst.Data;
 
 namespace TwentyFirst.Data.Migrations
 {
     [DbContext(typeof(TwentyFirstDbContext))]
-    partial class TwentyFirstDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181220194149_SubscriberConfirmationCode")]
+    partial class SubscriberConfirmationCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

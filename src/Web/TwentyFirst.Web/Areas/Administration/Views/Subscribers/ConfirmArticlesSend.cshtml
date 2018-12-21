@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Потвърждение за изпращане на новини";
+}
+
+<div class="container p-5 bg-admin-twenty-first">
+    <div class="container my-5 p-5 w-50 mx-auto rounded bg-white">
+        <h2 class="text-center">Потвърждавате ли изпращането на важни новини до абонираните потребители?</h2>
+
+        <div class="btn-group-lg my-3 w-50 mx-auto">
+            <a asp-area="Administration" asp-controller="Subscribers" asp-action="SendImportantArticles"
+               class="btn btn-admin-twenty-first text-white">Изпрати</a>
+        </div>
+    </div>
+</div>

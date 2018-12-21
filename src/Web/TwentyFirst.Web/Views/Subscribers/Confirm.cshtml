@@ -1,0 +1,25 @@
+﻿@model TwentyFirst.Common.Models.Subscribers.SubscriberModel
+@{
+    ViewData["Title"] = "Потвърждение на абонамент";
+}
+@inject IOptions<RecaptchaSettings> recaptchaSettings
+
+<div class="container p-5 bg-admin-twenty-first">
+    <div class="container my-5 p-5 w-50 mx-auto rounded bg-white">
+        <h2 class="text-center">@ViewData["Title"]</h2>
+        <p class="text-center">Абонаментът ви все още не е потвърден, това ще се случи само след кликане върху бутона "Потвърждавам абонамент".</p>
+        <p class="text-center">Ако не потвърдите, няма да получавате новини по имейл от 21st.</p>
+        <p class="text-center">Преди да изберете трябва да потвърдите, че сте човек</p>
+        <form asp-action="Confirm" method="post">
+            <div asp-validation-summary="All" class="text-danger text-center"></div>
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="ConfirmationCode" type="hidden" />
+            <div class="form-group w-75 mx-auto">
+                @Html.Recaptcha(recaptchaSettings?.Value)
+            </div>
+            <div class="btn-group-lg my-3 w-75 mx-auto">
+                <button type="submit" class="btn btn-admin-twenty-first text-white">Потвърждавам абонамент</button>
+            </div>
+        </form>
+    </div>
+</div>

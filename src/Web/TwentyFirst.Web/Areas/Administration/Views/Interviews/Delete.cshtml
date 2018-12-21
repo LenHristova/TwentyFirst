@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div class="col-md-4"><img src="@Model.ImageThumbUrl" /></div>
+    <div class="col-md-4"><img src="@Model?.ImageThumbUrl" /></div>
 
     <form asp-action="Delete" method="post" asp-route-id="@Model.Id">
         <div class="fixed-bottom bg-dark">

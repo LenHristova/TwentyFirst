@@ -43,7 +43,7 @@
             return article;
         }
 
-        public async Task<Article> Edit(ArticleEditInputModel articleEditInputModel, string editorId)
+        public async Task<Article> EditAsync(ArticleEditInputModel articleEditInputModel, string editorId)
         {
             var article = await this.GetAsync(articleEditInputModel.Id);
             if (articleEditInputModel.CategoriesIds != null)
@@ -80,7 +80,7 @@
             return article;
         }
 
-        public async Task Delete(string articleId, string editorId)
+        public async Task DeleteAsync(string articleId, string editorId)
         {
             var article = await this.GetAsync(articleId);
             article.IsDeleted = true;
@@ -88,9 +88,22 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<TModel>> GetAllImportantForTheDay<TModel>()
+        {
+            var now = DateTime.UtcNow;
+            var untilDateTime = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+
+            return await this.db.Articles
+                 .Where(a => a.IsImportant && !a.IsDeleted && a.PublishedOn > untilDateTime)
+                 .OrderByDescending(a => a.PublishedOn)
+                 .To<TModel>()
+                 .ToListAsync();
+        }
+
         public async Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync()
             => await this.db.Articles
                 .Where(a => !a.IsDeleted)
+                .OrderByDescending(a => a.PublishedOn)
                 .Select(a => new SelectListItem
                 {
                     Value = a.Id,
