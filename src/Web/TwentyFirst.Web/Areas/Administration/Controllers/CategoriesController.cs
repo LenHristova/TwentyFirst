@@ -10,15 +10,19 @@
     using System.Threading.Tasks;
     using Filters;
     using Infrastructure.Extensions;
+    using Logging;
+    using Microsoft.Extensions.Logging;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class CategoriesController : AdministrationController
     {
         private readonly ICategoryService categoryService;
+        private readonly ILogger logger;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoriesController(ICategoryService categoryService, ILogger<CategoriesController> logger)
         {
             this.categoryService = categoryService;
+            this.logger = logger;
         }
 
         [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
@@ -51,8 +55,9 @@
            var createdCategory = await this.categoryService
                .CreateAsync(categoryCreateInputModel);
 
-            var alertMessage = $"Категорията \"{createdCategory.Name}\" беше добавена успешно.";
-            this.SetAlertMessage(AlertMessageLevel.Success, alertMessage);
+            var message = $"Категорията \"{createdCategory.Name}\" беше добавена успешно.";
+            this.logger.LogInformation((int)LoggingEvents.InsertItem, message);
+            this.SetAlertMessage(AlertMessageLevel.Success, message);
 
             return RedirectToAction(nameof(Index));
         }
@@ -81,8 +86,9 @@
             var categoryToEdit = await this.categoryService
                 .EditAsync(categoryUpdateInputModel);
 
-            var alertMessage = $"Категорията \"{categoryToEdit.Name}\" беше успешно променена успешно.";
-            this.SetAlertMessage(AlertMessageLevel.Success, alertMessage);
+            var message = $"Категорията \"{categoryToEdit.Name}\" беше променена успешно.";
+            this.logger.LogInformation((int)LoggingEvents.UpdateItem, message);
+            this.SetAlertMessage(AlertMessageLevel.Success, message);
 
             return RedirectToAction(nameof(Index));
         }
@@ -103,8 +109,9 @@
             var archivedCategory = await this.categoryService
                 .ArchiveAsync(categoryUpdateInputModel.Id);
 
-            var alertMessage = $"Категорията \"{archivedCategory.Name}\" беше архивирана успешно.";
-            this.SetAlertMessage(AlertMessageLevel.Success, alertMessage);
+            var message = $"Категорията \"{archivedCategory.Name}\" беше архивирана успешно.";
+            this.logger.LogInformation((int)LoggingEvents.DeleteItem, message);
+            this.SetAlertMessage(AlertMessageLevel.Success, message);
 
             return RedirectToAction(nameof(Index));
         }
@@ -125,8 +132,9 @@
             var archivedCategory = await this.categoryService
                 .RecoverAsync(categoryUpdateInputModel.Id);
 
-            var alertMessage = $"Категорията \"{archivedCategory.Name}\" беше възстановена успешно.";
-            this.SetAlertMessage(AlertMessageLevel.Success, alertMessage);
+            var message = $"Категорията \"{archivedCategory.Name}\" беше възстановена успешно.";
+            this.logger.LogInformation((int)LoggingEvents.RecoverItem, message);
+            this.SetAlertMessage(AlertMessageLevel.Success, message);
 
             return RedirectToAction(nameof(Index));
         }

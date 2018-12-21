@@ -7,19 +7,21 @@
     using Data;
     using Data.Models;
     using Infrastructure.Extensions;
+    using Logging;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
-    using Microsoft.AspNetCore.Authentication.Google;
-    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.Extensions.Logging;
     using reCAPTCHA.AspNetCore;
     using Services.AuthMessageSender;
+    using System;
+    using Services.DataServices.Contracts;
 
     public class Startup
     {
@@ -32,7 +34,6 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //TODO Get correct Assembly
             AutoMapperConfig.RegisterMappings(typeof(ArticleCreateInputModel).Assembly);
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -106,7 +107,7 @@
             services.Configure<RecaptchaSettings>(Configuration.GetSection("RecaptchaSettings"));
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -127,6 +128,8 @@
 
             app.UpdateDatabase();
             app.SeedDatabaseAsync();
+
+            loggerFactory.AddContext(app, LogLevel.Error);
 
             app.UseMvc(routes =>
             {
