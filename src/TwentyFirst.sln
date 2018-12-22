@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Common.Models",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Common.Mapping", "Common\TwentyFirst.Common.Mapping\TwentyFirst.Common.Mapping.csproj", "{CD14734C-D2B7-4DB9-AC8A-63FD38079332}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwentyFirst.Services.AuthMessageSender", "Services\TwentyFirst.Services.AuthMessageSender\TwentyFirst.Services.AuthMessageSender.csproj", "{9B7AB4D1-B062-492A-A8DE-0877239D6320}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwentyFirst.Services.AuthMessageSender", "Services\TwentyFirst.Services.AuthMessageSender\TwentyFirst.Services.AuthMessageSender.csproj", "{9B7AB4D1-B062-492A-A8DE-0877239D6320}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -72,7 +72,19 @@
             @await Component.InvokeAsync("connected-articles", Model.ConnectedArticlesIds)
 
             <!-- Large modal for images search-->
-            <partial name="_ImageAddModalPartial" />
+            <div class="row my-4">
+                <button type="button" class="btn btn-lg upload-btn w-50 mx-auto" data-toggle="modal" data-target=".bd-example-modal-lg">
+                    Избери снимка
+                </button>
+
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <partial name="_ImageSearchInputPartial" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <p id="show-image">
                 <img src="@Model.Image?.ThumbUrl" />
@@ -91,58 +103,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/jquery.dropdown.js"></script>
-    <script>
-        $('.drop-search').dropdown({
-            multipleMode: 'label',
-            // read only
-            readOnly: false,
-            // min count
-            minCount: 1,
-            // error message
-            minCountErrorMessage: 'Изберете категория',
-            // the maximum number of options allowed to be selected
-            limitCount: Infinity,
-            // search field
-            input: '<input type="text" maxLength="20" placeholder="Търсене">',
-            // is search able?
-            searchable: true,
-            // when there's no result
-            searchNoData: '<li style="color:#ddd">Няма резултати</li>',
-            // callback
-            choice: function () { },
-            // custom props
-            extendProps: []
-        });
-    </script>
-    <script>
-        $('document').ready(function () {
-            $("#search-button").click(function (e) {
-                e.preventDefault();
-                var search = $(".search-term").val();
-                $.get("/Administration/Images/Search?search=" + search).done(function (data) {
-                    $("#results-table").html(data);
-
-                    var rows = document.querySelector("#results-table").getElementsByClassName("selected-image");
-                    for (i = 0; i < rows.length; i++) {
-                        rows[i].onclick = function () {
-                            var imageId = $(this).attr("data-item-id");
-                            $(".image-id").val(imageId);
-                            var imageUrl = $(this).attr("data-item-url");
-                            $(".image-url").val(imageUrl);
-                            $('#show-image').html($('<img>', { src: imageUrl, class: "img-thumbnail" }));
-
-                            $(".modal").modal("toggle");
-                        }
-                    }
-                });
-            });
-
-            $(".search-term").keypress(function (e) {
-                if (e.which == 13) {
-                    e.preventDefault();
-                    $("#search-button").click();
-                }
-            });
-        });
-    </script>
+    <script src="~/js/image.search.js"></script>
 }

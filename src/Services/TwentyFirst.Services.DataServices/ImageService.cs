@@ -12,7 +12,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Common;
+    using Common.Exceptions;
     using Common.Mapping;
+    using Microsoft.EntityFrameworkCore;
 
     public class ImageService : IImageService
     {
@@ -52,15 +55,74 @@
             return corruptedImages;
         }
 
-        public IEnumerable<TModel> GetBySearchTerm<TModel>(string searchTerm)
+        public async Task<IEnumerable<TModel>> GetBySearchTermAsync<TModel>(string searchTerm)
         {
             //TODO Extend search logic 
             //TODO Add filtering
-            return this.db.Images
+            return await this.db.Images
+                .Where(i => i.Description.ToLower().Contains(searchTerm.ToLower().Trim()) && !i.IsDeleted)
+                .OrderByDescending(a => a.CreatedOn)
+                .To<TModel>()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TModel>> GetBySearchTermWithDeletedAsync<TModel>(string searchTerm)
+        {
+            //TODO Extend search logic 
+            //TODO Add filtering
+            return await this.db.Images
                 .Where(i => i.Description.ToLower().Contains(searchTerm.ToLower().Trim()))
                 .OrderByDescending(a => a.CreatedOn)
                 .To<TModel>()
-                .ToList();
+                .ToListAsync();
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var image = await this.GetAsync(id);
+            image.IsDeleted = true;
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task RecoverAsync(string id)
+        {
+            var image = await this.GetDeletedAsync(id);
+            image.IsDeleted = false;
+            await this.db.SaveChangesAsync();
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets image by id.
+        /// Throw InvalidImageIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidImageIdException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Image> GetAsync(string id)
+        {
+            var image = await this.db.Images
+                .SingleOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+
+            CoreValidator.ThrowIfNull(image, new InvalidImageIdException(id));
+            return image;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets marked as deleted image by id.
+        /// Throw InvalidImageIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidImageIdException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Image> GetDeletedAsync(string id)
+        {
+            var image = await this.db.Images
+                .SingleOrDefaultAsync(c => c.Id == id && c.IsDeleted);
+
+            CoreValidator.ThrowIfNull(image, new InvalidImageIdException(id));
+            return image;
         }
 
         private async Task SaveToDatabaseAsync(

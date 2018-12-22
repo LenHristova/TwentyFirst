@@ -21,7 +21,6 @@
     using reCAPTCHA.AspNetCore;
     using Services.AuthMessageSender;
     using System;
-    using Services.DataServices.Contracts;
 
     public class Startup
     {
@@ -47,7 +46,6 @@
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>()
-                //.AddDefaultUI()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<TwentyFirstDbContext>();
 
@@ -71,7 +69,7 @@
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
 
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.SignIn.RequireConfirmedPhoneNumber = false;
             });
 

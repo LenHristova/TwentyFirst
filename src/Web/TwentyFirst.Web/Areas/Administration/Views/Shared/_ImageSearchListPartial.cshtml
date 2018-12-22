@@ -1,4 +1,5 @@
-﻿@model TwentyFirst.Common.Models.Images.ImageSearchViewModel
+﻿@using TwentyFirst.Common.Constants
+@model TwentyFirst.Common.Models.Images.ImageSearchViewModel
 
 @if (Model.SearchResultImages.Any())
 {
@@ -6,20 +7,53 @@
         <div class="row">
             @foreach (var image in Model.SearchResultImages)
             {
-                <div class="card col-md-6 border-top">
-                    <a href="#" class="selected-image" data-item-id="@image.Id" data-item-url="@image.ThumbUrl">
-                        <img class="card-img-top fixed-height-300 img-thumbnail" src="@image.ThumbUrl" alt="Card image cap">
-                        <div class="card-body p-0">
-                            <h6 data-toggle="tooltip" data-placement="top" title="@image.Description">
-                                @image.ShortDescription
-                            </h6>
+                if (!image.IsDeleted)
+                {
+                    <div class="card col-md-6 border-top">
+                        <a href="#" class="selected-image" data-item-id="@image.Id" data-item-url="@image.ThumbUrl">
+                            <img class="card-img-top fixed-height-300 img-thumbnail" src="@image.ThumbUrl" alt="Card image cap">
+                            <div class="card-body p-0">
+                                <h6 data-toggle="tooltip" data-placement="top" title="@image.Description">
+                                    @image.ShortDescription
+                                </h6>
+                            </div>
+                        </a>
+                        <div class="blockquote-footer">
+                            <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
+                            <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOn.ToShortDateString()</div>
                         </div>
-                    </a>
-                    <div class="blockquote-footer">
-                        <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
-                        <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOn.ToShortDateString()</div>
+                        @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+                        {
+                            <form asp-area="Administration" asp-controller="Images" asp-action="Delete" method="post" asp-route-id="@image.Id">
+                                <div class="btn-group my-3">
+                                    <button type="submit" class="btn btn-sm btn-danger">Изтрий</button>
+                                </div>
+                            </form>
+                        }
                     </div>
-                </div>
+                }
+                else if (image.IsDeleted && this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+                {
+                    <div class="card col-md-6 border-top">
+                        <a href="#" class="selected-image" data-item-id="@image.Id" data-item-url="@image.ThumbUrl">
+                            <img class="card-img-top fixed-height-300 img-thumbnail" src="@image.ThumbUrl" alt="Card image cap">
+                            <div class="card-body p-0">
+                                <h6 data-toggle="tooltip" data-placement="top" title="@image.Description">
+                                    @image.ShortDescription
+                                </h6>
+                            </div>
+                        </a>
+                        <div class="blockquote-footer">
+                            <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
+                            <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOn.ToShortDateString()</div>
+                        </div>
+                        <form asp-area="Administration" asp-controller="Images" asp-action="Recover" method="post" asp-route-id="@image.Id">
+                            <div class="btn-group my-3">
+                                <button type="submit" class="btn btn-sm btn-success">Възстанови</button>
+                            </div>
+                        </form>
+                    </div>
+                }
             }
         </div>
         <div class="row justify-content-center py-3">

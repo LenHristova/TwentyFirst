@@ -8,7 +8,7 @@
 
         public const string MaxLength = "Въведете не повече от {1} символа.";
 
-        public const string ValidEmailFormat = "Невалиден емайл формат.";
+        public const string InvalidEmailFormat = "Невалиден емайл формат.";
 
         public const string PasswordConfirmation = "Паролите не съвпадат.";
 

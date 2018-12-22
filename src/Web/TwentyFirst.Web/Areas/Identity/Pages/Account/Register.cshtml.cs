@@ -1,36 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using TwentyFirst.Data.Models;
-
-namespace TwentyFirst.Web.Areas.Identity.Pages.Account
+﻿namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    using Common.Constants;
+    using Logging;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Logging;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+    using TwentyFirst.Data.Models;
+
+    [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
-        private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly UserManager<User> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly ILogger<RegisterModel> logger;
+        private readonly IEmailSender emailSender;
+        private readonly IConfiguration configuration;
 
         public RegisterModel(
             UserManager<User> userManager,
-            SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
-            _emailSender = emailSender;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
+            this.logger = logger;
+            this.emailSender = emailSender;
+            this.configuration = configuration;
         }
 
         [BindProperty]
@@ -40,20 +45,22 @@ namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
-            public string Email { get; set; }
+            [Required(ErrorMessage = ValidationErrorMessages.Required)]
+            [MinLength(6, ErrorMessage = ValidationErrorMessages.MinLength)]
+            [MaxLength(50, ErrorMessage = ValidationErrorMessages.MaxLength)]
+            [Display(Name = "Потребителско име")]
+            public string Username { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = ValidationErrorMessages.Required)]
+            [MinLength(6, ErrorMessage = ValidationErrorMessages.MinLength)]
+            [MaxLength(100, ErrorMessage = ValidationErrorMessages.MaxLength)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Потвърждение на парола")]
+            [Compare("Password", ErrorMessage = ValidationErrorMessages.PasswordConfirmation)]
             public string ConfirmPassword { get; set; }
         }
 
@@ -64,27 +71,28 @@ namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content(GlobalConstants.AdministrationHomePage);
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var user = new User { UserName = Input.Username };
+                var result = await userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    await userManager.AddToRoleAsync(user, GlobalConstants.EditorRoleName);
+                    logger.LogInformation((int)LoggingEvents.InsertItem, $"Беше регистриран нов акаунт с ID \"{user.Id}\".");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    var masterAdminUsername = this.configuration["MasterAdministratorAccount:Username"];
+                    var masterAdminUser = await this.userManager.Users.SingleOrDefaultAsync(u => u.UserName == masterAdminUsername);
 
-                    // TODO Prevent newly registered users from being automatically logged on by commenting out the following line:
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    await emailSender.SendEmailAsync(masterAdminUser.Email, "Потвърждение на новорегистриран акаунт",
+                        $"Моля потвърдете новорегистрирания акаунт с username: \"{user.UserName}\" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>кликайки тук</a>.");
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

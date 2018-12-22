@@ -1,7 +1,29 @@
 ;
 (function ($) {
-  'use strict';
-
+    'use strict';
+    $('document').ready(function() {
+        $('.drop-search').dropdown({
+            multipleMode: 'label',
+            // read only
+            readOnly: false,
+            // min count
+            minCount: 1,
+            // error message
+            minCountErrorMessage: 'Изберете категория',
+            // the maximum number of options allowed to be selected
+            limitCount: Infinity,
+            // search field
+            input: '<input type="text" maxLength="20" placeholder="Търсене">',
+            // is search able?
+            searchable: true,
+            // when there's no result
+            searchNoData: '<li style="color:#ddd">Няма резултати</li>',
+            // callback
+            choice: function() {},
+            // custom props
+            extendProps: []
+        });
+    });
   function noop() { }
 
   function throttle(func, wait, options) {

@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using TwentyFirst.Data.Models;
-
-namespace TwentyFirst.Web.Areas.Identity.Pages.Account
+﻿namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using System;
+    using System.Threading.Tasks;
+    using Common.Exceptions;
+    using TwentyFirst.Data.Models;
+
     [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> userManager;
 
         public ConfirmEmailModel(UserManager<User> userManager)
         {
-            _userManager = userManager;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> OnGetAsync(string userId, string code)
@@ -27,16 +26,16 @@ namespace TwentyFirst.Web.Areas.Identity.Pages.Account
                 return RedirectToPage("/Index");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                throw new InvalidAccountIdException(userId);
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, code);
+            var result = await userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
+                throw new InvalidOperationException($"Възникна грешка при потвърждаването по емайл на акаунт с ID \"{userId}\":");
             }
 
             return Page();

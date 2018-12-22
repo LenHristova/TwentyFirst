@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace TwentyFirst.Web.Areas.Identity.Pages.Account
+﻿namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+
     [AllowAnonymous]
     public class ResetPasswordConfirmationModel : PageModel
     {
-        public void OnGet()
-        {
-
-        }
+        public void OnGet() { }
     }
 }

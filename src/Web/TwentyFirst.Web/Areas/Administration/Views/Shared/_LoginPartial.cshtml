@@ -29,9 +29,10 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown active">
-                    <a class="nav-link dropdown-toggle" asp-area="Administration" asp-controller="Images" asp-action="Upload"
+                    <a class="nav-link dropdown-toggle" asp-area="Administration" asp-controller="Images" asp-action="Index"
                        id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Снимки</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Index">Всички снимки</a>
                         <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимки</a>
                     </div>
                 </li>
@@ -43,7 +44,20 @@
             {
                 <ul class="nav navbar-nav navbar-right font-weight-bold">
                     <li>
-                        <a class="nav-link" asp-area="Administration" asp-controller="Categories" asp-action="Index">Категории</a>
+                        <a class="nav-link text-white" asp-area="Administration" asp-controller="Categories" asp-action="Index">Категории</a>
+                    </li>
+                </ul>
+            }
+            @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName) ||
+                 this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                <ul class="nav navbar-nav navbar-right font-weight-bold">
+                    <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" asp-area="Identity" asp-controller="Images" asp-action="Upload"
+                           id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Акаунти</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Регистриране</a>
+                        </div>
                     </li>
                 </ul>
             }
