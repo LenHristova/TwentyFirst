@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace TwentyFirst.Web.Areas.Identity.Pages.Account
+﻿namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
+    using Common.Constants;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+
     [AllowAnonymous]
     public class ForgotPasswordConfirmation : PageModel
     {
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (!this.User.IsInRole(GlobalConstants.MasterAdministratorOrAdministrator))
+            {
+                return RedirectToPage("./AccessDenied");
+            }
+
+            return this.Page();
         }
     }
 }

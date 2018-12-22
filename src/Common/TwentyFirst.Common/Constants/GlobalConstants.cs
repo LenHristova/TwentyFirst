@@ -3,16 +3,22 @@
     public static class GlobalConstants
     {
         //Role Constants
+        public const string MasterAdministratorOrAdministrator = "Master Administrator, Administrator";
+
         public const string MasterAdministratorRoleName = "Master Administrator";
 
         public const string AdministratorRoleName = "Administrator";
 
         public const string EditorRoleName = "Editor";
 
+        public const string MasterAdministratorUsernameConfiguration = "MasterAdministratorAccount:Username";
+
         //URL
         public const string AdministrationHomePage = "/Administration/Articles";
 
         public const string AdministrationLoginPage = "/Identity/Account/Login";
+
+        public const string AdministrationAccountsPage = "/Identity/Account/Index";
 
         //HTML
         public const string HtmlTab = "&emsp;";
@@ -22,6 +28,15 @@
         public const string AlreadySubscribedEmail = "Този имейл вече е абониран за новини.";
 
         public const string ConfirmationEmailSend = "Изпратихме ви имейл за потвърждение";
+
+        //Validation constants
+        public const int MinPasswordLength = 6;
+
+        public const int MaxPasswordLength = 100;
+
+        public const int MinUsernameLength = 6;
+
+        public const int MaxUsernameLength = 50;
         
         //Pagination Constants
         public const int AdministrationArticlesOnPageCount = 10;
@@ -29,6 +44,8 @@
         public const int AdministrationInterviewsOnPageCount = 10;
 
         public const int AdministrationCategoriesOnPageCount = 10;
+
+        public const int AdministrationUsersOnPageCount = 2;
 
         //Image Constants
         public const int ImageShortDescriptionMaxLength = 50;

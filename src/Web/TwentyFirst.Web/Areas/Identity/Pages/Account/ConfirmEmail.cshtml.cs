@@ -1,16 +1,13 @@
 ﻿namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
-    using Microsoft.AspNetCore.Authorization;
+    using Common.Exceptions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
     using System;
     using System.Threading.Tasks;
-    using Common.Exceptions;
     using TwentyFirst.Data.Models;
 
-    [AllowAnonymous]
-    public class ConfirmEmailModel : PageModel
+    public class ConfirmEmailModel : IdentityAdministrationBasePageModel<ConfirmEmailModel>
     {
         private readonly UserManager<User> userManager;
 

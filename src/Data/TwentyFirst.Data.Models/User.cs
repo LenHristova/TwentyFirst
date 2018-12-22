@@ -5,8 +5,6 @@
 
     public class User : IdentityUser
     {
-        public bool IsDeleted { get; set; }
-
         public virtual ICollection<Article> CreatedArticles { get; set; } = new HashSet<Article>();
 
         public virtual ICollection<ArticleEdit> EditedArticles { get; set; } = new HashSet<ArticleEdit>();

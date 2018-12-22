@@ -1,63 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using TwentyFirst.Data.Models;
-
-namespace TwentyFirst.Web.Areas.Identity.Pages.Account
+﻿namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
-    public class ForgotPasswordModel : PageModel
-    {
-        private readonly UserManager<User> _userManager;
-        private readonly IEmailSender _emailSender;
+    using Common.Constants;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using System.ComponentModel.DataAnnotations;
+    using System.Threading.Tasks;
+    using TwentyFirst.Data.Models;
 
-        public ForgotPasswordModel(UserManager<User> userManager, IEmailSender emailSender)
-        {
-            _userManager = userManager;
-            _emailSender = emailSender;
-        }
+    public class ForgotPasswordModel : IdentityAdministrationEmailConfirmationPageModel<ForgotPasswordModel>
+    {
+        public ForgotPasswordModel(
+            UserManager<User> userManager,
+            IEmailSender emailSender,
+            IConfiguration configuration)
+            : base(userManager, emailSender, configuration)
+        { }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [Required(ErrorMessage = ValidationErrorMessages.Required)]
+            [Display(Name = "Потребителско име")]
+            public string Username { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                var user = await userManager.FindByNameAsync(Input.Username);
+
+                if (user == null || !(await userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please 
-                // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Page(
-                    "/Account/ResetPassword",
-                    pageHandler: null,
-                    values: new { code },
-                    protocol: Request.Scheme);
+                var code = await userManager.GeneratePasswordResetTokenAsync(user);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                await this.SendConfirmationEmail(
+                    user.Id,
+                    code,
+                    callBackPageName: "/Account/ResetPassword",
+                    subject: "Възстановяване на парола",
+                    content: $"Моля възстановете паролата на акаунт \"{user.UserName}\"");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

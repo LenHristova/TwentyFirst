@@ -42,8 +42,8 @@
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = ValidationErrorMessages.Required)]
+            [EmailAddress(ErrorMessage = ValidationErrorMessages.InvalidEmailFormat)]
             [Display(Name = "Фирмен имейл")]
             public string Email { get; set; }
         }

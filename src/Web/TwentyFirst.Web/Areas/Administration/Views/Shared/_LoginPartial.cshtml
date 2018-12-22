@@ -1,8 +1,4 @@
-﻿@using TwentyFirst.Common.Constants
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
-
-@if (SignInManager.IsSignedIn(User))
+﻿@if (this.User.Identity.IsAuthenticated)
 {
     <nav class="navbar navbar-expand-lg navbar-dark bg-admin-twenty-first py-0">
         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" alt="Logo"></a>
@@ -56,22 +52,30 @@
                         <a class="nav-link dropdown-toggle" asp-area="Identity" asp-controller="Images" asp-action="Upload"
                            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Акаунти</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+                            {
+                                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Index">Всички акаунти</a>
+                            }
                             <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Регистриране</a>
                         </div>
                     </li>
                 </ul>
+                if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+                {
+                    <ul class="nav navbar-nav navbar-right font-weight-bold">
+                        <li>
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Профил</a>
+                        </li>
+                    </ul>
+                }
             }
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Identity" })" method="post" id="logoutForm" class="navbar-right">
+                <ul class="nav navbar-nav navbar-right font-weight-bold">
+                    <li>
+                        <button type="submit" class="nav-link bg-admin-twenty-first font-weight-bold">Изход</button>
+                    </li>
+                </ul>
+            </form>
         </div>
-
-        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Identity" })" method="post" id="logoutForm" class="navbar-right">
-            <ul class="nav navbar-nav navbar-right font-weight-bold">
-                <li>
-                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Профил</a>
-                </li>
-                <li>
-                    <button type="submit" class="nav-link bg-admin-twenty-first font-weight-bold">Изход</button>
-                </li>
-            </ul>
-        </form>
     </nav>
 }

@@ -1,0 +1,79 @@
+﻿@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Всички акаунти";
+}
+
+<h1 class="text-center pt-3">@ViewData["Title"]</h1>
+<hr />
+<table class="table">
+    <thead>
+        <tr class="text-strong">
+            <th scope="col" class="w-25 border-top-0">Акаунт</th>
+            <th scope="col" class="w-25 border-top-0">Роля</th>
+            <th scope="col" class="w-25 border-top-0"></th>
+            <th scope="col" class="w-25 border-top-0"></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var user in Model.UsersListWrapper.Users)
+        {
+            var userId = user.Id;
+            var currentRole = user.Role;
+            string newRole = null;
+            var userRoleTextColor = currentRole == GlobalConstants.AdministratorRoleName ? "warning" : "secondary";
+            <tr>
+                <td>@user.Username</td>
+                <td class="text-@userRoleTextColor">@user.Role</td>
+                <td class="text-center">
+                    <form method="post" id="@userId">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <input asp-for="@userId" hidden />
+                        <input asp-for="@currentRole" hidden />
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            @foreach (var role in Model.AllRoles)
+                            {
+                                if (user.Role == role)
+                                {
+                                    <label asp-for="@newRole" class="btn btn-dark active">
+                                        <input asp-for="@newRole" type="radio" value="@role" onchange="changeRole('@userId')" checked> @role
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label asp-for="@newRole" class="btn btn-outline-secondary">
+                                        <input asp-for="@newRole" type="radio" value="@role" onchange="changeRole('@userId')"> @role
+                                    </label>
+                                }
+                            }
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    @if (user.IsLocked)
+                    {
+                        <a asp-page="./Unlock" asp-route-userId="@user.Id" class="btn btn-sm btn-secondary">Отключи</a>
+                    }
+                    else
+                    {
+                        <a asp-page="./Lock" asp-route-userId="@user.Id" class="btn btn-sm btn-warning">Заключи</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+@Html.PagedListPager(Model.UsersListWrapper.Users, pageNumber => Url.Page("Index", new { pageNumber }),
+    PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
+
+@section Scripts {
+    <script>
+        function changeRole(formId) {
+            document.getElementById(formId).submit();
+        }
+    </script>
+}
