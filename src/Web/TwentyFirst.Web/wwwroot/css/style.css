@@ -36,6 +36,18 @@ button:focus {
     width: 30%;
 }
 
+.fixed-height-150 {
+    height: 150px;
+    width: auto;
+    max-width: 100%;
+}
+
+.fixed-height-200 {
+    height: 200px;
+    width: auto;
+    max-width: 100%;
+}
+
 .fixed-height-250 {
     height: 250px;
     width: auto;
@@ -54,11 +66,7 @@ button:focus {
     max-width: 100%;
 }
 
-.fixed-height-200 {
-    height: 200px;
-    width: auto;
-    max-width: 100%;
-}
+
 
 .text-strong {
     color: rgba(0, 0, 0, 0.8);

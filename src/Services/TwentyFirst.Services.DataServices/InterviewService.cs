@@ -101,5 +101,17 @@
             CoreValidator.ThrowIfNull(interview, new InvalidArticleIdException(id));
             return interview;
         }
+
+        public async Task<IEnumerable<TModel>> LatestAsync<TModel>(int count)
+        {
+            var interviews = await this.db.Interviews
+                .Where(a => !a.IsDeleted)
+                .OrderByDescending(a => a.PublishedOn)
+                .Take(count)
+                .To<TModel>()
+                .ToListAsync();
+
+            return interviews;
+        }
     }
 }

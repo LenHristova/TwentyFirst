@@ -42,8 +42,7 @@
             });
 
             services.AddDbContext<TwentyFirstDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>()
                 .AddDefaultTokenProviders()

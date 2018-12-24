@@ -4,12 +4,12 @@
     using Common.Models.Articles;
     using Data.Models;
     using Filters;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
-    using Infrastructure.Extensions;
 
     [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class ArticlesController : AdministrationController
@@ -25,7 +25,7 @@
 
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var articles = await this.articleService.AllAsync<ArticleListViewModel>();
+            var articles = await this.articleService.AllAsync<ArticleAdminListViewModel>();
 
             var onePageOfArticles = await articles.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.AdministrationArticlesOnPageCount);
@@ -81,6 +81,21 @@
             await this.articleService.DeleteAsync(id, userId);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AllEdits(string id, int? pageNumber)
+        {
+            var articleEdits = await this.articleService.GetAsync<ArticleAllEditsViewModel>(id);
+
+            if (articleEdits.Edits != null && articleEdits.Edits.Any())
+            {
+                articleEdits.Edits = await articleEdits.Edits
+                    .OrderByDescending(ae => ae.EditDateTime)
+                    .ToList()
+                    .PaginateAsync(pageNumber, GlobalConstants.AdministrationArticleEditsOnPageCount);
+            }
+
+            return this.View(articleEdits);
         }
     }
 }

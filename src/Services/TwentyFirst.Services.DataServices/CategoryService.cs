@@ -48,11 +48,12 @@
                 .To<TModel>()
                 .ToListAsync();
 
-        //public async Task<IEnumerable<TModel>> All<TModel>()
-        //    => await this.db.Categories
-        //        .Where(c => c.IsDeleted == false)
-        //        .To<TModel>()
-        //        .ToListAsync();
+        public async Task<IEnumerable<TModel>> All<TModel>()
+            => await this.db.Categories
+                .Where(c => !c.IsDeleted)
+                .OrderBy(c => c.Order)
+                .To<TModel>()
+                .ToListAsync();
 
         public async Task<Category> ArchiveAsync(string id)
         {

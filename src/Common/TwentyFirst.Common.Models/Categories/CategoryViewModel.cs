@@ -1,12 +1,11 @@
 ﻿namespace TwentyFirst.Common.Models.Categories
 {
-    using Data.Models;
-    using Mapping.Contracts;
-
-    public class CategoryBaseViewModel : IMapFrom<Category>
+    public class CategoryViewModel
     {
         public string Id { get; set; }
 
         public string Name { get; set; }
+
+        public int? Order { get; set; }
     }
 }

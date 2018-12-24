@@ -39,7 +39,7 @@
                                 @foreach (var category in Model.Categories)
                                 {
                                     <li>
-                                        <a asp-area="" asp-controller="Articles" asp-action="ByCategory" asp-route-categoryId="@category.Id">
+                                        <a asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">
                                             @category.Name
                                         </a>
                                     </li>
@@ -58,8 +58,13 @@
             <!-- ========== Sidebar Area ========== -->
             <div class="col-12 col-md-8 col-lg-4">
                 <div class="post-sidebar-area mb-100">
-                    @await Component.InvokeAsync("articles-by-categories", Model.CategoriesIds)
-                    @*<vc:articles-by-categories ids="@Model.ActualCategoriesIds"></vc:articles-by-categories>*@
+                    <!-- Widget Area -->
+                    <div class="sidebar-widget-area">
+                        <h5 class="title">Четете още</h5>
+                        <div class="widget-content">
+                            @await Component.InvokeAsync("important-articles-by-categories", Model.CategoriesIds)
+                        </div>
+                    </div>
                 </div>
 
                 <!-- ============== Stay Connected ============== -->

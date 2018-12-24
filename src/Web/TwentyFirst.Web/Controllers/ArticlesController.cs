@@ -1,10 +1,13 @@
 ﻿namespace TwentyFirst.Web.Controllers
 {
-    using System.Threading.Tasks;
+    using Common.Constants;
     using Common.Models.Articles;
     using Filters;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class ArticlesController : BaseController
@@ -16,9 +19,16 @@
             this.articleService = articleService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? pageNumber, string categoryId = null)
         {
-            return this.View();
+            var articles = categoryId == null
+                ? await this.articleService.AllAsync<ArticleListViewModel>()
+                : await this.articleService.ByCategoryAsync<ArticleListViewModel>(categoryId);
+
+            var onePageOfArticles = await articles.ToList()
+                .PaginateAsync(pageNumber, GlobalConstants.ArticlesOnPageCount);
+
+            return this.View(onePageOfArticles);
         }
 
         public async Task<IActionResult> Details(string id)

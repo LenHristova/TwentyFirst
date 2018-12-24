@@ -1,0 +1,21 @@
+﻿@model IEnumerable<TwentyFirst.Common.Models.Articles.ArticleBaseViewModel>
+
+@if (Model.Any())
+{
+    @foreach (var article in Model)
+    {
+        <!-- Single Blog Post -->
+        <div class="single-blog-post post-style-2 d-flex align-items-center widget-post">
+            <!-- Post Thumbnail -->
+            <div class="post-thumbnail">
+                <img class="img-thumbnail fixed-height-55" src="@article.Image?.ThumbUrl" alt="@article.Image?.Title">
+            </div>
+            <!-- Post Content -->
+            <div class="post-content">
+                <a asp-area="" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="headline">
+                    <h5 class="mb-0">@article.ShortTitle</h5>
+                </a>
+            </div>
+        </div>
+    }
+}

@@ -490,15 +490,18 @@ img {
   padding-top: 30px; }
 
 .single-blog-post {
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  margin-bottom: 5px; }
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-bottom: 5px;
+}
   .single-blog-post .post-thumbnail {
     position: relative;
     z-index: 1; }
     .single-blog-post .post-thumbnail img {
-      width: 100%; }
+        width: 100%;
+       max-height: 200px;
+    }
     .single-blog-post .post-thumbnail .post-cta {
       position: absolute;
       top: 15px;

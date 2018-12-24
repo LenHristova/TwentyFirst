@@ -36,7 +36,19 @@
 
         <div class="col-md-4">
             <!-- Large modal for images search-->
-            <partial name="_ImageAddModalPartial" />
+            <div class="row my-4">
+                <button type="button" class="btn btn-lg upload-btn w-50 mx-auto" data-toggle="modal" data-target=".bd-example-modal-lg">
+                    Избери снимка
+                </button>
+
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <partial name="_ImageSearchInputPartial" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <p id="show-image">
                 @if (Model?.Image?.ThumbUrl != null)
@@ -57,40 +69,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        $('document').ready(function () {
-            $("#search-button").click(function (e) {
-                e.preventDefault();
-                var search = $(".search-term").val();
-                $.get("/Administration/Images/Search?search=" + search).done(function Test(data) {
-                    $("#results-table").html(data);
-                    var rows = document.querySelector("#results-table").getElementsByClassName("selected-image");
-                    for (i = 0; i < rows.length; i++) {
-                        rows[i].onclick = function () {
-                            var imageId = $(this).attr("data-item-id");
-                            $(".image-id").val(imageId);
-                            var imageUrl = $(this).attr("data-item-url");
-                            $(".image-url").val(imageUrl);
-                            $('#show-image').html($('<img>', { src: imageUrl, class: "img-thumbnail" }));
-                            $(".modal").modal("toggle");
-                        }
-                    }
-
-                    $(".pagination li a").click(function (e) {
-                        e.preventDefault();
-                        $.get(e.target).done(function(nextData) {
-                            Test(nextData);
-                        });
-                    });
-                });
-            });
-
-            $(".search-term").keypress(function (e) {
-                if (e.which == 13) {
-                    e.preventDefault();
-                    $("#search-button").click();
-                }
-            });
-        });
-    </script>
+    <script src="~/js/image.search.js"></script>
 }

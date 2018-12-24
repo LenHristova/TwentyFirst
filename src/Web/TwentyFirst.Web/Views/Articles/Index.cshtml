@@ -1,0 +1,80 @@
+﻿@model IEnumerable<TwentyFirst.Common.Models.Articles.ArticleListViewModel>
+@{
+    ViewData["Title"] = "Всички новини";
+}
+
+@if (Model.Any())
+{
+
+    <div class="main-content-wrapper section-padding-100">
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- ============= Post Content Area Start ============= -->
+                <div class="col-12 col-lg-8">
+                    <div class="post-content-area mb-100">
+                        <!-- Catagory Area -->
+                        <div class="world-catagory-area">
+                            @await Component.InvokeAsync("categories")
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="world-tab-1" role="tabpanel" aria-labelledby="tab1">
+                                    @foreach (var article in Model)
+                                    {
+                                        <!-- Single Blog Post -->
+                                        <div class="single-blog-post post-style-4 d-flex align-items-center">
+                                            <!-- Post Thumbnail -->
+                                            <div class="post-thumbnail">
+                                                <img src="@article.Image?.ThumbUrl" alt="@article.Image?.Title">
+                                            </div>
+                                            <!-- Post Content -->
+                                            <div class="post-content">
+                                                <a asp-area="" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="headline">
+                                                    <h5>@article.Title</h5>
+                                                </a>
+                                                <p>@article.Lead</p>
+                                                <!-- Post Meta -->
+                                                <div class="post-meta">
+                                                    <p><a href="#" class="post-author">@article.Author</a> на <a href="#" class="post-date">@article.PublishedOn</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ========== Sidebar Area ========== -->
+                <div class="col-12 col-md-8 col-lg-4">
+                    <div class="post-sidebar-area mb-3">
+                        @await Component.InvokeAsync("important-articles-by-categories")
+                    </div>
+
+                    <!-- ============== Stay Connected ============== -->
+                    <partial name="_StayConnectedPartial" />
+                </div>
+            </div>
+            <hr />
+            @Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }),
+                PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
+        </div>
+    </div>
+}
+else
+{
+    <p>Все още няма добавени новини.</p>
+}
+
+@section Scripts {
+    <script>
+        $('document').ready(function () {
+            var loc = window.location.href;
+
+            $("a").each(function () {
+                if (this.href == loc) {
+                    $(this).addClass("text-admin-twenty-first font-weight-bold");
+                }
+            });
+        });
+    </script>
+}

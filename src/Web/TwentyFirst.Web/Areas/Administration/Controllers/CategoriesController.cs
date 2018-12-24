@@ -28,8 +28,7 @@
         [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var categories = await this.categoryService
-                .AllWithArchived<CategoryListViewModel>();
+            var categories = await this.categoryService.AllWithArchived<CategoryListViewModel>();
 
             var onePageOfCategories = await categories.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.AdministrationCategoriesOnPageCount);
@@ -83,8 +82,7 @@
                 return RedirectToAction(nameof(Index));
             }
 
-            var categoryToEdit = await this.categoryService
-                .EditAsync(categoryUpdateInputModel);
+            var categoryToEdit = await this.categoryService.EditAsync(categoryUpdateInputModel);
 
             var message = $"Категорията \"{categoryToEdit.Name}\" беше променена успешно.";
             this.logger.LogInformation((int)LoggingEvents.UpdateItem, message);

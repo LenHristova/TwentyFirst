@@ -1,0 +1,30 @@
+﻿@model List<TwentyFirst.Common.Models.Interviews.InterviewListViewModel>
+
+@if (Model.Any())
+{
+    <div class="row justify-content-center">
+        @foreach (var interview in Model)
+        {
+            <div class="col-12 col-md-4">
+                <!-- Single Blog Post -->
+                <div class="single-blog-post wow fadeInUpBig" data-wow-delay="0.2s">
+                    <!-- Post Thumbnail -->
+                    <div class="post-thumbnail p-3">
+                        <img class="img-thumbnail" src="@interview.Image?.ThumbUrl" alt="@interview.Image?.Title">
+                    </div>
+                    <!-- Post Content -->
+                    <div class="post-content">
+                        <a asp-area="" asp-controller="Interviews" asp-action="Details" asp-route-id="@interview.Id" class="headline">
+                            <h5 class="mb-0">@interview.Title</h5>
+                        </a>
+                        <p>@interview.Interviewed</p>
+                        <!-- Post Meta -->
+                        <div class="post-meta">
+                            <p><a href="#" class="post-author">@interview.Author</a> на <a href="#" class="post-date">@interview.PublishedOn</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

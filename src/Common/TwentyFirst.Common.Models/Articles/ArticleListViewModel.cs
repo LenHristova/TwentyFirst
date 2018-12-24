@@ -1,27 +1,22 @@
 ﻿namespace TwentyFirst.Common.Models.Articles
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
     using Data.Models;
+    using Images;
     using Mapping.Contracts;
 
-    public class ArticleListViewModel: IMapFrom<Article>
+    public class ArticleListViewModel : IMapFrom<Article>
     {
         public string Id { get; set; }
 
-        [Display(Name = "Заглавие")]
         public string Title { get; set; }
 
-        [Display(Name = "Публикувана")]
+        public string Lead { get; set; }
+
+        public string Author { get; set; }
+
         public DateTime PublishedOn { get; set; }
 
-        [Display(Name = "Топ")]
-        public bool IsTop { get; set; }
-
-        [Display(Name = "Важна")]
-        public bool IsImportant { get; set; }
-
-        [Display(Name = "Добавил")]
-        public string CreatorUserName { get; set; }
+        public ImageThumbBaseViewModel Image { get; set; }
     }
 }

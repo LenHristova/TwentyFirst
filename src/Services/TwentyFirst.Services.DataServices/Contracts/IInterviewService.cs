@@ -34,5 +34,7 @@
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Interview> GetAsync(string id);
+
+        Task<IEnumerable<TModel>> LatestAsync<TModel>(int count);
     }
 }

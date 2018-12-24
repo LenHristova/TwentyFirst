@@ -43,7 +43,7 @@
 
         public async Task<IActionResult> SendImportantArticles()
         {
-            var articlesToSend = await this.articleService.GetAllImportantForTheDay<ArticleForEmailViewModel>();
+            var articlesToSend = await this.articleService.AllImportantForTheDay<ArticleForEmailViewModel>();
 
             var stringBuilder = new StringBuilder();
             var singleArticleFilePath = this.GetHtmlTemplateFilePath(GlobalConstants.HtmlSingleArticleFilePath);

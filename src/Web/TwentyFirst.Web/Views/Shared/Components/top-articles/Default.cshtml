@@ -1,0 +1,45 @@
+﻿@model List<TwentyFirst.Common.Models.Articles.TopArticleViewModel>
+
+@if (Model.Any())
+{
+    <!-- ********** Hero Area Start ********** -->
+    <div class="hero-area">
+
+        <!-- Hero Slides Area -->
+        <div class="hero-slides owl-carousel">
+            @foreach (var article in Model)
+            {
+                <!-- Single Slide -->
+                <div class="single-hero-slide bg-img <!--background-overlay-->" style="background-image: url(@article.ImageUrl);"></div>
+            }
+        </div>
+
+        <!-- Hero Post Slide -->
+        <div class="hero-post-area">
+            <div class="w-100">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="hero-post-slide background-overlay">
+                            @for (var i = 0; i < Model.Count(); i++)
+                            {
+                                var article = Model[i];
+                                <!-- Single Slide -->
+                                <div class="single-slide d-flex align-items-center">
+                                    <div class="post-number">
+                                        <p>@(i+1)</p>
+                                    </div>
+                                    <div class="post-title">
+                                        <a asp-area="" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id">
+                                            @article.ShortTitle
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ********** Hero Area End ********** -->
+}

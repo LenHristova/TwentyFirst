@@ -40,12 +40,19 @@
         
         //Pagination Constants
         public const int AdministrationArticlesOnPageCount = 10;
+        public const int ArticlesOnPageCount = 6;
 
         public const int AdministrationInterviewsOnPageCount = 10;
+        public const int InterviewsOnPageCount = 6;
 
         public const int AdministrationCategoriesOnPageCount = 10;
 
-        public const int AdministrationUsersOnPageCount = 2;
+        public const int AdministrationArticleEditsOnPageCount = 10;
+
+        public const int AdministrationUsersOnPageCount = 3;
+
+        //Category Constants
+        public const int MainCategoriesCount = 5;
 
         //Image Constants
         public const int ImageShortDescriptionMaxLength = 50;
@@ -55,7 +62,13 @@
         //Article Constants
         public const int ConnectedArticleShortTitleMaxLength = 50;
 
+        public const int TopArticlesCount = 4;
+
         public const int ArticlesCountForFromCategoriesSection = 10;
+
+        public const int ArticlesCountForLatestSection = 10;
+
+        public const int InterviewsCountForLatestSection = 9;
 
         //Static html files
         public const string HtmlTemplatesFolderPath = "html-templates";

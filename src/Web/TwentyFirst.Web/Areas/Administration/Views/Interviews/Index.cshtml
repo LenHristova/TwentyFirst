@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TwentyFirst.Common.Models.Interviews.InterviewListViewModel>
+﻿@model IEnumerable<TwentyFirst.Common.Models.Interviews.InterviewAdminListViewModel>
 @{
     ViewData["Title"] = "Всички интервюта";
 }
@@ -7,46 +7,52 @@
 {
     <table class="table table-hover">
         <thead class="thead-light">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Title)</th>
-            <th>@Html.DisplayNameFor(model => model.PublishedOn)</th>
-            <th>@Html.DisplayNameFor(model => model.Interviewed)</th>
-            <th>@Html.DisplayNameFor(model => model.CreatorUserName)</th>
-            <th></th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                <th>@Html.DisplayNameFor(model => model.PublishedOn)</th>
+                <th>@Html.DisplayNameFor(model => model.Interviewed)</th>
+                <th>@Html.DisplayNameFor(model => model.CreatorUserName)</th>
+                <th></th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var interview in Model)
-        {
-            <tr>
-                <td scope="col">
-                    <div class="post-content text-admin-twenty-first">
-                        <a asp-area="Administration" asp-controller="Interviews" asp-action="Edit" asp-route-id="@interview.Id" class="headline">
-                            <h5 class="mb-0">@interview.Title</h5>
-                        </a>
-                    </div>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => interview.PublishedOn)
-                </td>
-                <td>@interview.Interviewed</td>
-                <td>@interview.CreatorUserName</td>
-                <td>
-                    <a asp-area="" asp-controller="Interviews" asp-action="Details" asp-route-id="@interview.Id"
-                       class="btn btn-admin-twenty-first text-light">Виж</a>
-                </td>
-                <td>
-                    <a asp-area="Administration" asp-controller="Interviews" asp-action="Delete" asp-route-id="@interview.Id"
-                       class="btn btn-danger text-light">Изтрий</a>
-                </td>
-            </tr>
-        }
+            @foreach (var interview in Model)
+            {
+                <tr>
+                    <td scope="col">
+                        <div class="post-content text-admin-twenty-first">
+                            <a asp-area="Administration" asp-controller="Interviews" asp-action="Edit" asp-route-id="@interview.Id" class="headline">
+                                <h5 class="mb-0">@interview.Title</h5>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => interview.PublishedOn)
+                    </td>
+                    <td>@interview.Interviewed</td>
+                    <td>@interview.CreatorUserName</td>
+                    <td>
+                        <div class="row">
+                            <a asp-area="" asp-controller="Interviews" asp-action="Details" asp-route-id="@interview.Id"
+                               class="btn btn-sm btn-admin-twenty-first text-light w-100">Виж</a>
+                            @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName) ||
+                               this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <a asp-area="Administration" asp-controller="Interviews" asp-action="AllEdits" asp-route-id="@interview.Id"
+                                   class="btn btn-sm btn-primary text-light w-100">Редакции</a>
+                            }
+                            <a asp-area="Administration" asp-controller="Interviews" asp-action="Delete" asp-route-id="@interview.Id"
+                               class="btn btn-sm btn-danger text-light w-100">Изтрий</a>
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 
-    <hr/>
-    @Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }), 
+    <hr />
+    @Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }),
         PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
 }
 

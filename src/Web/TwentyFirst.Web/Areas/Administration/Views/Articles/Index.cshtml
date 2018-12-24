@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TwentyFirst.Common.Models.Articles.ArticleListViewModel>
+﻿@model IEnumerable<TwentyFirst.Common.Models.Articles.ArticleAdminListViewModel>
 @{
     ViewData["Title"] = "Всички новини";
 }
@@ -7,71 +7,73 @@
 {
     <table class="table table-hover">
         <thead class="thead-light">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Title)</th>
-            <th>@Html.DisplayNameFor(model => model.PublishedOn)</th>
-            <th>@Html.DisplayNameFor(model => model.IsTop)</th>
-            <th>@Html.DisplayNameFor(model => model.IsImportant)</th>
-            <th>@Html.DisplayNameFor(model => model.CreatorUserName)</th>
-            <th></th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                <th>@Html.DisplayNameFor(model => model.PublishedOn)</th>
+                <th>@Html.DisplayNameFor(model => model.IsTop)</th>
+                <th>@Html.DisplayNameFor(model => model.IsImportant)</th>
+                <th>@Html.DisplayNameFor(model => model.CreatorUserName)</th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var article in Model)
-        {
-            <tr>
-                <td scope="col">
-                    <div class="post-content text-admin-twenty-first">
-                        <a asp-area="Administration" asp-controller="Articles" asp-action="Edit" asp-route-id="@article.Id" class="headline">
-                            <h5 class="mb-0">@article.Title</h5>
-                        </a>
-                    </div>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => article.PublishedOn)
-                </td>
-                <td>
-                    @if (article.IsTop)
-                    {
-                        <span>&#10004;</span>
-                    }
-                    else
-                    {
-                        <span>&#10008;</span>
-                    }
-
-                </td>
-                <td>
-                    @if (article.IsImportant)
-                    {
-                        <span>&#10004;</span>
-                    }
-                    else
-                    {
-                        <span>&#10008;</span>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => article.CreatorUserName)
-                </td>
-                <td>
-                    <a asp-area="" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"
-                       class="btn btn-admin-twenty-first text-light">Виж</a>
-                </td>
-                <td>
-
-                    <a asp-area="Administration" asp-controller="Articles" asp-action="Delete" asp-route-id="@article.Id"
-                       class="btn btn-danger text-light">Изтрий</a>
-
-                </td>
-            </tr>
-        }
+            @foreach (var article in Model)
+            {
+                <tr>
+                    <td scope="col">
+                        <div class="post-content text-admin-twenty-first">
+                            <a asp-area="Administration" asp-controller="Articles" asp-action="Edit" asp-route-id="@article.Id" class="headline">
+                                <h5 class="mb-0">@article.Title</h5>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => article.PublishedOn)
+                    </td>
+                    <td>
+                        @if (article.IsTop)
+                        {
+                            <span>&#10004;</span>
+                        }
+                        else
+                        {
+                            <span>&#10008;</span>
+                        }
+                    </td>
+                    <td>
+                        @if (article.IsImportant)
+                        {
+                            <span>&#10004;</span>
+                        }
+                        else
+                        {
+                            <span>&#10008;</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => article.CreatorUserName)
+                    </td>
+                    <td>
+                        <div class="row">
+                            <a asp-area="" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"
+                               class="btn btn-sm btn-admin-twenty-first text-light w-100">Виж</a>
+                            @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName) ||
+                           this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <a asp-area="Administration" asp-controller="Articles" asp-action="AllEdits" asp-route-id="@article.Id"
+                                   class="btn btn-sm btn-primary text-light w-100">Редакции</a>
+                            }
+                            <a asp-area="Administration" asp-controller="Articles" asp-action="Delete" asp-route-id="@article.Id"
+                               class="btn btn-sm btn-danger text-light w-100">Изтрий</a>
+                        </div>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 
-    <hr/>
-    @Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }), 
+    <hr />
+    @Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }),
         PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
 }
 

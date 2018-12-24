@@ -1,11 +1,11 @@
 ﻿namespace TwentyFirst.Services.DataServices.Contracts
 {
+    using Common.Exceptions;
     using Common.Models.Articles;
+    using Data.Models;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Common.Exceptions;
-    using Data.Models;
 
     public interface IArticleService
     {
@@ -34,7 +34,9 @@
         /// <returns></returns>
         Task<Article> GetAsync(string id);
 
-        Task<IEnumerable<TModel>> GetLastAddedFromCategoriesAsync<TModel>(IEnumerable<string> ids, int count);
+        Task<IEnumerable<TModel>> ImportantFromCategoriesAsync<TModel>(IEnumerable<string> ids, int count);
+
+        Task<IEnumerable<TModel>> LatestAsync<TModel>(int count);
 
         Task<IEnumerable<TModel>> AllAsync<TModel>();
 
@@ -44,6 +46,10 @@
         /// Returns collection of important articles' ids for the day
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<TModel>> GetAllImportantForTheDay<TModel>();
+        Task<IEnumerable<TModel>> AllImportantForTheDay<TModel>();
+
+        Task<IEnumerable<TModel>> LatestTopAsync<TModel>(int count);
+
+        Task<IEnumerable<TModel>> ByCategoryAsync<TModel>(string id);
     }
 }

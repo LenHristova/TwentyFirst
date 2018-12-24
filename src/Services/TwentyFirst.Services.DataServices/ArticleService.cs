@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -88,7 +89,7 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TModel>> GetAllImportantForTheDay<TModel>()
+        public async Task<IEnumerable<TModel>> AllImportantForTheDay<TModel>()
         {
             var now = DateTime.UtcNow;
             var untilDateTime = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
@@ -99,6 +100,21 @@
                  .To<TModel>()
                  .ToListAsync();
         }
+
+        public async Task<IEnumerable<TModel>> LatestTopAsync<TModel>(int count)
+            => await this.db.Articles
+                .Where(a => a.IsTop && !a.IsDeleted)
+                .Take(count)
+                .OrderByDescending(a => a.PublishedOn)
+                .To<TModel>()
+                .ToListAsync();
+
+        public async Task<IEnumerable<TModel>> ByCategoryAsync<TModel>(string id)
+            => await this.db.Articles
+                .Where(a => !a.IsDeleted && a.Categories.Any(c => c.CategoryId == id))
+                .OrderByDescending(a => a.PublishedOn)
+                .To<TModel>()
+                .ToListAsync();
 
         public async Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync()
             => await this.db.Articles
@@ -150,14 +166,30 @@
             return article;
         }
 
-        public async Task<IEnumerable<TModel>> GetLastAddedFromCategoriesAsync<TModel>(IEnumerable<string> ids, int count)
-            => await this.db.Articles
-                .Where(a => !a.IsDeleted &&
-                            a.Categories.Any(c => !c.Category.IsDeleted && ids.Contains(c.Category.Id)))
+        public async Task<IEnumerable<TModel>> ImportantFromCategoriesAsync<TModel>(IEnumerable<string> ids, int count)
+        {
+            var articles = await this.db.Articles
+                .Where(a => !a.IsDeleted && a.IsImportant && 
+                            (ids == null || a.Categories.Any(c => !c.Category.IsDeleted && ids.Contains(c.Category.Id))))
                 .OrderByDescending(a => a.PublishedOn)
                 .Take(count)
                 .To<TModel>()
                 .ToListAsync();
+
+            return articles;
+        }
+
+        public async Task<IEnumerable<TModel>> LatestAsync<TModel>(int count)
+        {
+            var articles = await this.db.Articles
+                .Where(a => !a.IsDeleted)
+                .OrderByDescending(a => a.PublishedOn)
+                .Take(count)
+                .To<TModel>()
+                .ToListAsync();
+
+            return articles;
+        }
 
         public async Task<IEnumerable<TModel>> AllAsync<TModel>()
             => await this.db.Articles

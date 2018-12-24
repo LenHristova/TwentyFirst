@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Common.Constants;
     using Common.Models.Articles;
+    using Common.Models.Categories;
     using Common.Models.Interviews;
     using Data.Models;
     using Filters;
@@ -27,7 +28,7 @@
 
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var interviews = await this.interviewService.AllAsync<InterviewListViewModel>();
+            var interviews = await this.interviewService.AllAsync<InterviewAdminListViewModel>();
 
             var onePageOfInterviews = await interviews.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.AdministrationInterviewsOnPageCount);
@@ -83,6 +84,21 @@
             await this.interviewService.Delete(id, userId);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AllEdits(string id, int? pageNumber)
+        {
+            var interviewEdits = await this.interviewService.GetAsync<InterviewAllEditsViewModel>(id);
+
+            if (interviewEdits.Edits != null && interviewEdits.Edits.Any())
+            {
+                interviewEdits.Edits = await interviewEdits.Edits
+                    .OrderByDescending(ae => ae.EditDateTime)
+                    .ToList()
+                    .PaginateAsync(pageNumber, GlobalConstants.AdministrationArticleEditsOnPageCount);
+            }
+
+            return this.View(interviewEdits);
         }
     }
 }

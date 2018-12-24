@@ -56,6 +56,8 @@
         /// <returns></returns>
         Task<Category> GetArchivedAsync(string id);
 
+        Task<IEnumerable<TModel>> All<TModel>();
+
         Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync();
     }
 }
