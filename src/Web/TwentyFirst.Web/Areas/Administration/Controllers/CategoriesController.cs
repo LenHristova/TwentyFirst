@@ -136,5 +136,18 @@
 
             return RedirectToAction(nameof(Index));
         }
+
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
+        public async Task<IActionResult> Order(string id, bool up, bool down)
+        {
+            var category = await this.categoryService.OrderAsync(id, up, down);
+
+            var direction = up ? "предна" : "задна";
+            var message = $"Категорията \"{category.Name}\" беше поставена на по-{direction} позиция.";
+            this.logger.LogInformation((int)LoggingEvents.UpdateItem, message);
+            this.SetAlertMessage(AlertMessageLevel.Success, message);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

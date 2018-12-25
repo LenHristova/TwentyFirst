@@ -59,5 +59,7 @@
         Task<IEnumerable<TModel>> All<TModel>();
 
         Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync();
+
+        Task<Category> OrderAsync(string id, bool up, bool down);
     }
 }

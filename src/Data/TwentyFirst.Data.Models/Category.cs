@@ -9,7 +9,7 @@
         [MinLength(3), MaxLength(50)]
         public string Name { get; set; }
         
-        public int? Order { get; set; }
+        public int Order { get; set; }
 
         public bool IsDeleted { get; set; }
 
