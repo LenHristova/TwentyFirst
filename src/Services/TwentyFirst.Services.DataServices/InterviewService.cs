@@ -68,9 +68,9 @@
         /// <inheritdoc />
         /// <summary>
         /// Gets interview by id and project it to given model.
-        /// Throw InvalidInterviewIdException if id is not present.
+        /// Throw InvalidInterviewException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidInterviewIdException"></exception>
+        /// <exception cref="InvalidInterviewException"></exception>
         /// <typeparam name="TModel"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -81,16 +81,16 @@
                 .To<TModel>()
                 .SingleOrDefaultAsync();
 
-            CoreValidator.ThrowIfNull(interview, new InvalidArticleIdException(id));
+            CoreValidator.ThrowIfNull(interview, new InvalidArticleException());
             return interview;
         }
 
         /// <inheritdoc />
         /// <summary>
         /// Gets interview by id.
-        /// Throw InvalidInterviewIdException if id is not present.
+        /// Throw InvalidInterviewException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidInterviewIdException"></exception>
+        /// <exception cref="InvalidInterviewException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<Interview> GetAsync(string id)
@@ -98,7 +98,7 @@
             var interview = await this.db.Interviews
                 .SingleOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
 
-            CoreValidator.ThrowIfNull(interview, new InvalidArticleIdException(id));
+            CoreValidator.ThrowIfNull(interview, new InvalidArticleException());
             return interview;
         }
 

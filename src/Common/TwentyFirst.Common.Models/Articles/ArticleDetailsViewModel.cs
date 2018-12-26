@@ -29,7 +29,7 @@
 
         public virtual IEnumerable<CategoryBaseViewModel> Categories { get; set; }
 
-        public virtual IEnumerable<ArticleBaseViewModel> ConnectedArticles { get; set; }
+        public virtual IEnumerable<ArticleViewModel> ConnectedArticles { get; set; }
 
         public virtual IEnumerable<string> CategoriesIds
             => this.Categories.Select(c => c.Id).ToList();

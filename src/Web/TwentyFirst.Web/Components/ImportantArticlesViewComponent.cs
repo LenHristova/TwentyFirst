@@ -7,22 +7,20 @@
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
 
-    [ViewComponent(Name = "important-articles-by-categories")]
-    public class ImportantArticlesByCategoriesViewComponent : ViewComponent
+    [ViewComponent(Name = "important-articles")]
+    public class ImportantArticlesViewComponent : ViewComponent
     {
         private readonly IArticleService articleService;
 
-        public ImportantArticlesByCategoriesViewComponent(IArticleService articleService)
+        public ImportantArticlesViewComponent(IArticleService articleService)
         {
             this.articleService = articleService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(IEnumerable<string> ids)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var connectedArticleViewModels = await this.articleService
-                .LatestImportantFromCategoriesAsync<ArticleViewModel>(
-                    ids,
-                    GlobalConstants.ArticlesCountForFromCategoriesSection);
+                .LatestImportantAsync<ArticleViewModel>(GlobalConstants.ArticlesCountForFromCategoriesSection);
             return this.View(connectedArticleViewModels);
         }
     }

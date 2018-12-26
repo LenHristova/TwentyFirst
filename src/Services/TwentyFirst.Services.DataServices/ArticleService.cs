@@ -8,10 +8,8 @@
     using Contracts;
     using Data;
     using Data.Models;
-    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -29,12 +27,131 @@
             this.categoryService = categoryService;
         }
 
+        public async Task<IEnumerable<TModel>> LatestAsync<TModel>(int count)
+        {
+            var articles = await this.db.Articles
+                .Where(a => !a.IsDeleted)
+                .OrderByDescending(a => a.PublishedOn)
+                .Take(count)
+                .To<TModel>()
+                .ToListAsync();
+
+            return articles;
+        }
+
+        public async Task<IEnumerable<TModel>> LatestTopAsync<TModel>(int count)
+            => await this.db.Articles
+                .Where(a => a.IsTop && !a.IsDeleted)
+                .OrderByDescending(a => a.PublishedOn)
+                .Take(count)
+                .To<TModel>()
+                .ToListAsync();
+
+        public async Task<IEnumerable<TModel>> LatestFromCategoryAsync<TModel>(string categoryId, int count)
+        {
+            this.categoryService.VerifyExistent(categoryId);
+
+            return await this.db.Articles
+                .Where(a => !a.IsDeleted && a.Categories.Any(c => c.CategoryId == categoryId))
+                .OrderByDescending(a => a.PublishedOn)
+                .Take(count)
+                .To<TModel>()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<TModel>> LatestImportantAsync<TModel>(int count)
+        {
+            var articles = await this.db.Articles
+                .Where(a => !a.IsDeleted && a.IsImportant)
+                .OrderByDescending(a => a.PublishedOn)
+                .Take(count)
+                .To<TModel>()
+                .ToListAsync();
+
+            return articles;
+        }
+
+        public async Task<IEnumerable<TModel>> LatestImportantFromCategoriesAsync<TModel>(
+            IEnumerable<string> ids, int count)
+        {
+            if (ids == null)
+            {
+                return new List<TModel>();
+            }
+
+            var articles = await this.db.Articles
+                .Where(a => !a.IsDeleted &&
+                            a.IsImportant &&
+                            a.Categories.Any(c => !c.Category.IsDeleted && ids.Contains(c.Category.Id)))
+                .OrderByDescending(a => a.PublishedOn)
+                .Take(count)
+                .To<TModel>()
+                .ToListAsync();
+
+            return articles;
+        }
+
+        public async Task<IEnumerable<TModel>> AllImportantForTheDayAsync<TModel>()
+        {
+            var now = DateTime.UtcNow;
+            var untilDateTime = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+
+            return await this.db.Articles
+                 .Where(a => a.IsImportant && !a.IsDeleted && a.PublishedOn > untilDateTime)
+                 .OrderByDescending(a => a.PublishedOn)
+                 .To<TModel>()
+                 .ToListAsync();
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets article by id and project it to given model.
+        /// Throw InvalidArticleIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidArticleException"></exception>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<TModel> GetAsync<TModel>(string id)
+        {
+            var article = await this.db.Articles
+                .Where(c => c.Id == id && !c.IsDeleted)
+                .To<TModel>()
+                .SingleOrDefaultAsync();
+
+            CoreValidator.ThrowIfNull(article, new InvalidArticleException());
+            return article;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets article by id.
+        /// Throw InvalidArticleIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidArticleException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Article> GetAsync(string id)
+        {
+            var article = await this.db.Articles
+                .Include(c => c.Categories)
+                .Include(c => c.ConnectedTo)
+                .SingleOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+
+            CoreValidator.ThrowIfNull(article, new InvalidArticleException());
+            return article;
+        }
+
         public async Task<Article> CreateAsync(ArticleCreateInputModel articleCreateInputModel, string creatorId)
         {
             var article = Mapper.Map<Article>(articleCreateInputModel);
 
-            await AddCategories(article, articleCreateInputModel.CategoriesIds);
-            await AddConnectedArticles(article, articleCreateInputModel.ConnectedArticlesIds);
+            this.categoryService.VerifyExistent(articleCreateInputModel.CategoriesIds);
+            this.VerifyExistent(articleCreateInputModel.ConnectedArticlesIds);
+
+            UpdateCategories(article.Categories, articleCreateInputModel.CategoriesIds?.ToList());
+            UpdateConnectedArticles(article.ConnectedTo, articleCreateInputModel.ConnectedArticlesIds?.ToList());
+
             article.CreatorId = creatorId;
             article.PublishedOn = DateTime.UtcNow;
             article.IsDeleted = false;
@@ -47,32 +164,18 @@
         public async Task<Article> EditAsync(ArticleEditInputModel articleEditInputModel, string editorId)
         {
             var article = await this.GetAsync(articleEditInputModel.Id);
-            if (articleEditInputModel.CategoriesIds != null)
-            {
-                this.RemoveMissingCategories(articleEditInputModel, article);
-                await AddNewCategories(articleEditInputModel, article);
-            }
-            else if (article.ConnectedTo.Any())
-            {
-                this.db.ArticlesCategories.RemoveRange(article.Categories);
-            }
 
-            if (articleEditInputModel.ConnectedArticlesIds != null)
-            {
-                this.RemoveMissingConnectedArticles(articleEditInputModel, article);
+            this.categoryService.VerifyExistent(articleEditInputModel.CategoriesIds);
+            this.VerifyExistent(articleEditInputModel.ConnectedArticlesIds);
 
-                await AddNewConnectedArticles(articleEditInputModel, article);
-            }
-            else if (article.ConnectedTo.Any())
-            {
-                this.db.ArticlesToArticles.RemoveRange(article.ConnectedTo);
-            }
+            UpdateCategories(article.Categories, articleEditInputModel.CategoriesIds?.ToList());
+            UpdateConnectedArticles(article.ConnectedTo, articleEditInputModel.ConnectedArticlesIds?.ToList());
 
             article.Title = articleEditInputModel.Title;
             article.Lead = articleEditInputModel.Lead;
             article.Content = articleEditInputModel.Content;
             article.Author = articleEditInputModel.Author;
-            article.ImageId = articleEditInputModel.Image.Id;
+            article.ImageId = articleEditInputModel.Image?.Id;
             article.IsTop = articleEditInputModel.IsTop;
             article.IsImportant = articleEditInputModel.IsImportant;
             article.Edits.Add(new ArticleEdit { EditorId = editorId, EditDateTime = DateTime.UtcNow });
@@ -89,183 +192,59 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TModel>> AllImportantForTheDay<TModel>()
+        private void UpdateCategories(ICollection<ArticleCategory> currentCategories, ICollection<string> newCategoriesIds)
         {
-            var now = DateTime.UtcNow;
-            var untilDateTime = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+            newCategoriesIds = newCategoriesIds ?? new List<string>();
 
-            return await this.db.Articles
-                 .Where(a => a.IsImportant && !a.IsDeleted && a.PublishedOn > untilDateTime)
-                 .OrderByDescending(a => a.PublishedOn)
-                 .To<TModel>()
-                 .ToListAsync();
-        }
-
-        public async Task<IEnumerable<TModel>> LatestTopAsync<TModel>(int count)
-            => await this.db.Articles
-                .Where(a => a.IsTop && !a.IsDeleted)
-                .Take(count)
-                .OrderByDescending(a => a.PublishedOn)
-                .To<TModel>()
-                .ToListAsync();
-
-        public async Task<IEnumerable<TModel>> ByCategoryAsync<TModel>(string id)
-            => await this.db.Articles
-                .Where(a => !a.IsDeleted && a.Categories.Any(c => c.CategoryId == id))
-                .OrderByDescending(a => a.PublishedOn)
-                .To<TModel>()
-                .ToListAsync();
-
-        public async Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync()
-            => await this.db.Articles
-                .Where(a => !a.IsDeleted)
-                .OrderByDescending(a => a.PublishedOn)
-                .Select(a => new SelectListItem
+            foreach (var category in currentCategories)
+            {
+                if (!newCategoriesIds.Contains(category.CategoryId))
                 {
-                    Value = a.Id,
-                    Text = a.Title
-                })
-                .ToListAsync();
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Gets article by id and project it to given model.
-        /// Throw InvalidArticleIdException if id is not present.
-        /// </summary>
-        /// <exception cref="InvalidArticleIdException"></exception>
-        /// <typeparam name="TModel"></typeparam>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<TModel> GetAsync<TModel>(string id)
-        {
-            var article = await this.db.Articles
-                .Where(c => c.Id == id && !c.IsDeleted)
-                .To<TModel>()
-                .SingleOrDefaultAsync();
-
-            CoreValidator.ThrowIfNull(article, new InvalidArticleIdException(id));
-            return article;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Gets article by id.
-        /// Throw InvalidArticleIdException if id is not present.
-        /// </summary>
-        /// <exception cref="InvalidArticleIdException"></exception>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public async Task<Article> GetAsync(string id)
-        {
-            var article = await this.db.Articles
-                .Include(c => c.Categories)
-                .Include(c => c.ConnectedTo)
-                .SingleOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
-
-            CoreValidator.ThrowIfNull(article, new InvalidArticleIdException(id));
-            return article;
-        }
-
-        public async Task<IEnumerable<TModel>> ImportantFromCategoriesAsync<TModel>(IEnumerable<string> ids, int count)
-        {
-            var articles = await this.db.Articles
-                .Where(a => !a.IsDeleted && a.IsImportant && 
-                            (ids == null || a.Categories.Any(c => !c.Category.IsDeleted && ids.Contains(c.Category.Id))))
-                .OrderByDescending(a => a.PublishedOn)
-                .Take(count)
-                .To<TModel>()
-                .ToListAsync();
-
-            return articles;
-        }
-
-        public async Task<IEnumerable<TModel>> LatestAsync<TModel>(int count)
-        {
-            var articles = await this.db.Articles
-                .Where(a => !a.IsDeleted)
-                .OrderByDescending(a => a.PublishedOn)
-                .Take(count)
-                .To<TModel>()
-                .ToListAsync();
-
-            return articles;
-        }
-
-        public async Task<IEnumerable<TModel>> AllAsync<TModel>()
-            => await this.db.Articles
-                .Where(a => !a.IsDeleted)
-                .OrderByDescending(a => a.PublishedOn)
-                .To<TModel>()
-                .ToListAsync();
-
-        private async Task AddNewConnectedArticles(ArticleEditInputModel articleUpdateInputModel, Article article)
-        {
-            var newConnectedArticles = articleUpdateInputModel.ConnectedArticlesIds
-                .Where(id => !article.ConnectedTo.Select(aa => aa.ConnectedToId).Contains(id))
-                .ToList();
-
-            if (newConnectedArticles.Any())
-            {
-                await AddConnectedArticles(article, newConnectedArticles);
-            }
-        }
-
-        private void RemoveMissingConnectedArticles(ArticleEditInputModel articleUpdateInputModel, Article article)
-        {
-            var missingConnectedArticles = article.ConnectedTo
-                .Where(id => !articleUpdateInputModel.ConnectedArticlesIds.Contains(id.ConnectedToId))
-                .ToList();
-
-            if (missingConnectedArticles.Any())
-            {
-                this.db.ArticlesToArticles.RemoveRange(missingConnectedArticles);
-            }
-        }
-
-        private async Task AddNewCategories(ArticleEditInputModel articleUpdateInputModel, Article article)
-        {
-            var newCategories = articleUpdateInputModel.CategoriesIds
-                .Where(c => !article.Categories.Select(ac => ac.CategoryId).Contains(c))
-                .ToList();
-
-            if (newCategories.Any())
-            {
-                await AddCategories(article, newCategories);
-            }
-        }
-
-        private void RemoveMissingCategories(ArticleEditInputModel articleUpdateInputModel, Article article)
-        {
-            var missingCategories = article.Categories
-                .Where(c => !articleUpdateInputModel.CategoriesIds.Contains(c.CategoryId))
-                .ToList();
-
-            if (missingCategories.Any())
-            {
-                this.db.ArticlesCategories.RemoveRange(missingCategories);
-            }
-        }
-
-        private async Task AddConnectedArticles(Article article, IEnumerable<string> newConnectedArticles)
-        {
-            if (newConnectedArticles != null)
-            {
-                foreach (var connectedArticleId in newConnectedArticles)
+                    this.db.Remove(category);
+                }
+                else
                 {
-                    var connectedArticle = await this.GetAsync(connectedArticleId);
-                    article.ConnectedTo.Add(new ArticleToArticle { ConnectedTo = connectedArticle });
+                    newCategoriesIds.Remove(category.CategoryId);
                 }
             }
+
+            foreach (var categoriesId in newCategoriesIds)
+            {
+                currentCategories.Add(new ArticleCategory { CategoryId = categoriesId });
+            }
         }
 
-        private async Task AddCategories(Article article, IEnumerable<string> newCategories)
+        private void UpdateConnectedArticles(ICollection<ArticleToArticle> currentConnectedArticles, ICollection<string> newConnectedArticlesIds)
         {
-            if (newCategories != null)
+            newConnectedArticlesIds = newConnectedArticlesIds ?? new List<string>();
+
+            foreach (var connectedArticle in currentConnectedArticles)
             {
-                foreach (var categoryId in newCategories)
+                if (!newConnectedArticlesIds.Contains(connectedArticle.ConnectedToId))
                 {
-                    var category = await this.categoryService.GetAsync(categoryId);
-                    article.Categories.Add(new ArticleCategory { Category = category });
+                    this.db.Remove(connectedArticle);
+                }
+                else
+                {
+                    newConnectedArticlesIds.Remove(connectedArticle.ConnectedToId);
+                }
+            }
+
+            foreach (var connectedArticleI in newConnectedArticlesIds)
+            {
+                currentConnectedArticles.Add(new ArticleToArticle { ConnectedToId = connectedArticleI });
+            }
+        }
+
+        public void VerifyExistent(IEnumerable<string> ids)
+        {
+            if (ids != null)
+            {
+                var foundArticles = this.db.Articles.Where(a => ids.Contains(a.Id)).ToList();
+
+                if (foundArticles.Count != ids.Count())
+                {
+                    throw new InvalidArticleException();
                 }
             }
         }

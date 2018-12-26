@@ -60,7 +60,7 @@
             var user = await userManager.GetUserAsync(User);
             if (user == null)
             {
-                throw new InvalidAccountIdException(userManager.GetUserId(User));
+                throw new InvalidAccountException();
             }
 
             return Page();
@@ -76,7 +76,7 @@
             var user = await userManager.GetUserAsync(User);
             if (user == null)
             {
-                throw new InvalidAccountIdException(userManager.GetUserId(User));
+                throw new InvalidAccountException();
             }
 
             var changePasswordResult = await userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);

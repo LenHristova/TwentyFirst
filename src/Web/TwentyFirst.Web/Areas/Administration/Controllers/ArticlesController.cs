@@ -25,7 +25,8 @@
 
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var articles = await this.articleService.AllAsync<ArticleAdminListViewModel>();
+            var articles = await this.articleService
+                .LatestAsync<ArticleAdminListViewModel>(GlobalConstants.AdminMaxArticlesCountToGet);
 
             var onePageOfArticles = await articles.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.AdministrationArticlesOnPageCount);

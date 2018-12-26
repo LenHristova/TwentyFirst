@@ -18,9 +18,9 @@
 
         /// <summary>
         /// Gets interview by id and project it to given model.
-        /// Throw InvalidInterviewIdException if id is not present.
+        /// Throw InvalidInterviewException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidInterviewIdException"></exception>
+        /// <exception cref="InvalidInterviewException"></exception>
         /// <typeparam name="TModel"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -28,9 +28,9 @@
 
         /// <summary>
         /// Gets interview by id.
-        /// Throw InvalidInterviewIdException if id is not present.
+        /// Throw InvalidInterviewException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidInterviewIdException"></exception>
+        /// <exception cref="InvalidInterviewException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Interview> GetAsync(string id);

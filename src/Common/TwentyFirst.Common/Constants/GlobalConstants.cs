@@ -60,6 +60,10 @@
         public const int ImagesOnSearchPageCount = 2;
 
         //Article Constants
+        public const int MaxArticlesCountToGet = 3000;
+
+        public const int AdminMaxArticlesCountToGet = int.MaxValue;
+
         public const int ConnectedArticleShortTitleMaxLength = 50;
 
         public const int TopArticlesCount = 4;

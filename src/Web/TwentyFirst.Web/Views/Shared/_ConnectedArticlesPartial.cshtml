@@ -1,9 +1,9 @@
-﻿@model IEnumerable<TwentyFirst.Common.Models.Articles.ArticleBaseViewModel>
+﻿@model IEnumerable<TwentyFirst.Common.Models.Articles.ArticleViewModel>
 
 @if (Model.Any())
 {
     <!-- ============== Related Post ============== -->
-    <h5 class="title">Още по темата</h5>
+    <h5 class="title">Свързани публикации</h5>
     <hr />
     <div class="row mb-3">
         @foreach (var connectedArticle in Model)

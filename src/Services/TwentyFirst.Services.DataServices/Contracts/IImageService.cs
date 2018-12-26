@@ -34,7 +34,7 @@
         /// Gets image by id.
         /// Throw InvalidImageIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidImageIdException"></exception>
+        /// <exception cref="InvalidImageException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Image> GetAsync(string id);
@@ -43,7 +43,7 @@
         /// Gets marked as deleted image by id.
         /// Throw InvalidImageIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidImageIdException"></exception>
+        /// <exception cref="InvalidImageException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Image> GetDeletedAsync(string id);

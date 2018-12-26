@@ -96,7 +96,7 @@
         /// Gets image by id.
         /// Throw InvalidImageIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidImageIdException"></exception>
+        /// <exception cref="InvalidImageException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<Image> GetAsync(string id)
@@ -104,7 +104,7 @@
             var image = await this.db.Images
                 .SingleOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
 
-            CoreValidator.ThrowIfNull(image, new InvalidImageIdException(id));
+            CoreValidator.ThrowIfNull(image, new InvalidImageException());
             return image;
         }
 
@@ -113,7 +113,7 @@
         /// Gets marked as deleted image by id.
         /// Throw InvalidImageIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidImageIdException"></exception>
+        /// <exception cref="InvalidImageException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<Image> GetDeletedAsync(string id)
@@ -121,7 +121,7 @@
             var image = await this.db.Images
                 .SingleOrDefaultAsync(c => c.Id == id && c.IsDeleted);
 
-            CoreValidator.ThrowIfNull(image, new InvalidImageIdException(id));
+            CoreValidator.ThrowIfNull(image, new InvalidImageException());
             return image;
         }
 

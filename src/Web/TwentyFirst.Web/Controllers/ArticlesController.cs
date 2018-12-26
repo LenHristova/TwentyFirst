@@ -22,8 +22,10 @@
         public async Task<IActionResult> Index(int? pageNumber, string categoryId = null)
         {
             var articles = categoryId == null
-                ? await this.articleService.AllAsync<ArticleListViewModel>()
-                : await this.articleService.ByCategoryAsync<ArticleListViewModel>(categoryId);
+                ? await this.articleService
+                    .LatestAsync<ArticleListViewModel>(GlobalConstants.MaxArticlesCountToGet)
+                : await this.articleService
+                    .LatestFromCategoryAsync<ArticleListViewModel>(categoryId, GlobalConstants.MaxArticlesCountToGet);
 
             var onePageOfArticles = await articles.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.ArticlesOnPageCount);

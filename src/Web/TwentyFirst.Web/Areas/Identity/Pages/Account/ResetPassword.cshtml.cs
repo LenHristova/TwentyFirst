@@ -50,7 +50,7 @@
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                throw new InvalidAccountIdException(userId);
+                throw new InvalidAccountException();
             }
 
             UsernameForUserPasswordReset = user.UserName;

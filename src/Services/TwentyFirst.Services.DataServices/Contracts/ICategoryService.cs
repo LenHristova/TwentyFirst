@@ -21,7 +21,7 @@
         /// Get category by id and project it to given model.
         /// Throw InvalidCategoryIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidCategoryIdException"></exception>
+        /// <exception cref="InvalidCategoryException"></exception>
         /// <typeparam name="TModel"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -31,7 +31,7 @@
         /// Get category by id
         /// Throw InvalidCategoryIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidCategoryIdException"></exception>
+        /// <exception cref="InvalidCategoryException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Category> GetAsync(string id);
@@ -42,7 +42,7 @@
         /// Get archived category by id and project it to given model.
         /// Throw InvalidCategoryIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidCategoryIdException"></exception>
+        /// <exception cref="InvalidCategoryException"></exception>
         /// <typeparam name="TModel"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -61,5 +61,9 @@
         Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync();
 
         Task<Category> OrderAsync(string id, bool up, bool down);
+
+        void VerifyExistent(IEnumerable<string> ids);
+
+        void VerifyExistent(string id);
     }
 }

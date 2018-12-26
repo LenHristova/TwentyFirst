@@ -5,6 +5,7 @@
     using Services.DataServices.Contracts;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Common.Constants;
 
     [ViewComponent(Name = "connected-articles")]
     public class ConnectedArticlesViewComponent : ViewComponent
@@ -20,7 +21,8 @@
         => View(new ConnectedArticlesChooseInputModel
         {
             ConnectedArticlesIds = ids,
-            Articles = await this.articleService.AllToSelectListItemsAsync()
+            ArticleBaseViewModels = await this.articleService
+                .LatestAsync<ArticleBaseViewModel>(GlobalConstants.MaxArticlesCountToGet)
         });
 
     }

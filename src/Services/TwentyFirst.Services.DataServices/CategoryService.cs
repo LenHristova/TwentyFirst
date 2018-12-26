@@ -82,7 +82,7 @@
         /// Get category by id and project it to given model.
         /// Throw InvalidCategoryIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidCategoryIdException"></exception>
+        /// <exception cref="InvalidCategoryException"></exception>
         /// <typeparam name="TModel"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -93,7 +93,7 @@
                 .To<TModel>()
                 .SingleOrDefaultAsync();
 
-            CoreValidator.ThrowIfNull(result, new InvalidCategoryIdException(id));
+            CoreValidator.ThrowIfNull(result, new InvalidCategoryException());
             return result;
         }
 
@@ -102,7 +102,7 @@
         /// Get category by id
         /// Throw InvalidCategoryIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidCategoryIdException"></exception>
+        /// <exception cref="InvalidCategoryException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<Category> GetAsync(string id)
@@ -110,7 +110,7 @@
             var result = await this.db.Categories
                 .SingleOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
 
-            CoreValidator.ThrowIfNull(result, new InvalidCategoryIdException(id));
+            CoreValidator.ThrowIfNull(result, new InvalidCategoryException());
             return result;
         }
 
@@ -119,7 +119,7 @@
         /// Get archived category by id and project it to given model.
         /// Throw InvalidCategoryIdException if id is not present.
         /// </summary>
-        /// <exception cref="InvalidCategoryIdException"></exception>
+        /// <exception cref="InvalidCategoryException"></exception>
         /// <typeparam name="TModel"></typeparam>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -130,7 +130,7 @@
                  .To<TModel>()
                  .SingleOrDefaultAsync();
 
-            CoreValidator.ThrowIfNull(result, new InvalidCategoryIdException(id));
+            CoreValidator.ThrowIfNull(result, new InvalidCategoryException());
             return result;
         }
 
@@ -146,7 +146,7 @@
             var result = await this.db.Categories
                 .SingleOrDefaultAsync(c => c.Id == id && c.IsDeleted);
 
-            CoreValidator.ThrowIfNull(result, new InvalidCategoryIdException(id));
+            CoreValidator.ThrowIfNull(result, new InvalidCategoryException());
             return result;
         }
 
@@ -170,7 +170,7 @@
 
             var category = await this.GetAsync(id);
             var categoryToSwitch = isUp
-                ? await this.GetPreviousToSwitchAsync(category.Order) 
+                ? await this.GetPreviousToSwitchAsync(category.Order)
                 : await this.GetNextToSwitchAsync(category.Order);
 
             if (categoryToSwitch == null)
@@ -185,6 +185,26 @@
             await this.db.SaveChangesAsync();
 
             return category;
+        }
+
+        public void VerifyExistent(IEnumerable<string> ids)
+        {
+            if (ids == null)
+            {
+                throw new InvalidCategoryException();
+            }
+
+            var foundCategories = this.db.Categories.Where(c => !c.IsDeleted && ids.Contains(c.Id)).ToList();
+
+            if (foundCategories.Count != ids.Count())
+            {
+                throw new InvalidCategoryException();
+            }
+        }
+
+        public void VerifyExistent(string id)
+        {
+            this.VerifyExistent(new List<string> { id });
         }
 
         private async Task<Category> GetPreviousToSwitchAsync(int order)

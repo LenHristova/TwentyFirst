@@ -53,7 +53,7 @@
             var user = await userManager.GetUserAsync(User);
             if (user == null)
             {
-                throw new InvalidAccountIdException(userManager.GetUserId(User));
+                throw new InvalidAccountException();
             }
 
             var userName = await userManager.GetUserNameAsync(user);
@@ -78,7 +78,7 @@
             var user = await userManager.GetUserAsync(User);
             if (user == null)
             {
-                throw new InvalidAccountIdException(userManager.GetUserId(User));
+                throw new InvalidAccountException();
             }
 
             var email = await userManager.GetEmailAsync(user);
@@ -106,7 +106,7 @@
             var user = await userManager.GetUserAsync(User);
             if (user == null)
             {
-                throw new InvalidAccountIdException(userManager.GetUserId(User));
+                throw new InvalidAccountException();
             }
 
             var userId = await userManager.GetUserIdAsync(user);
