@@ -45,6 +45,6 @@
         /// <returns></returns>
         Task<Subscriber> GetAsync(string email);
 
-        Task<IEnumerable<TModel>> AllSubscribersEmailsAsync<TModel>();
+        Task<IEnumerable<TModel>> AllConfirmedAsync<TModel>();
     }
 }

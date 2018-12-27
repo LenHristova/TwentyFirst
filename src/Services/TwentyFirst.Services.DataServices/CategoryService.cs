@@ -8,7 +8,6 @@
     using Contracts;
     using Data;
     using Data.Models;
-    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
@@ -23,59 +22,19 @@
             this.db = db;
         }
 
-        public async Task<Category> CreateAsync(CategoryCreateInputModel categoryCreateInputModel)
-        {
-            var category = Mapper.Map<Category>(categoryCreateInputModel);
-            category.IsDeleted = false;
-
-            var lastCategoryOrder = this.db.Categories.OrderByDescending(c => c.Order).FirstOrDefault()?.Order ?? 0;
-            category.Order = lastCategoryOrder + 1;
-
-            await this.db.Categories.AddAsync(category);
-            await this.db.SaveChangesAsync();
-            return category;
-        }
-
-        public async Task<Category> EditAsync(CategoryUpdateInputModel categoryUpdateInputModel)
-        {
-            var category = await this.GetAsync(categoryUpdateInputModel.Id);
-            category.Name = categoryUpdateInputModel.Name;
-
-            await this.db.SaveChangesAsync();
-            return category;
-        }
-
-        public async Task<IEnumerable<TModel>> AllWithArchived<TModel>()
+        public async Task<IEnumerable<TModel>> AllWithArchivedAsync<TModel>()
             => await this.db.Categories
                 .OrderBy(c => c.IsDeleted)
                 .ThenBy(c => c.Order)
                 .To<TModel>()
                 .ToListAsync();
 
-        public async Task<IEnumerable<TModel>> All<TModel>()
+        public async Task<IEnumerable<TModel>> AllAsync<TModel>()
             => await this.db.Categories
                 .Where(c => !c.IsDeleted)
                 .OrderBy(c => c.Order)
                 .To<TModel>()
                 .ToListAsync();
-
-        public async Task<Category> ArchiveAsync(string id)
-        {
-            var category = await this.GetAsync(id);
-            category.IsDeleted = true;
-
-            await this.db.SaveChangesAsync();
-            return category;
-        }
-
-        public async Task<Category> RecoverAsync(string id)
-        {
-            var category = await this.GetArchivedAsync(id);
-            category.IsDeleted = false;
-
-            await this.db.SaveChangesAsync();
-            return category;
-        }
 
         /// <inheritdoc />
         /// <summary>
@@ -150,28 +109,20 @@
             return result;
         }
 
-        public async Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync()
+        public async Task<IEnumerable<TModel>> AllOrderedByNameAsync<TModel>()
             => await this.db.Categories
                 .Where(c => c.IsDeleted == false)
                 .OrderBy(c => c.Name)
-                .Select(a => new SelectListItem
-                {
-                    Value = a.Id,
-                    Text = a.Name
-                })
+                .To<TModel>()
                 .ToListAsync();
 
-        public async Task<Category> OrderAsync(string id, bool isUp, bool isDown)
+        public async Task<Category> ReorderUpAsync(string id)
         {
-            if ((isUp && isDown) || (!isUp && !isDown))
-            {
-                throw new InvalidCategoryOrderException();
-            }
-
             var category = await this.GetAsync(id);
-            var categoryToSwitch = isUp
-                ? await this.GetPreviousToSwitchAsync(category.Order)
-                : await this.GetNextToSwitchAsync(category.Order);
+            var categoryToSwitch = await this.db.Categories
+                .Where(c => !c.IsDeleted && c.Order < category.Order)
+                .OrderByDescending(c => c.Order)
+                .FirstOrDefaultAsync();
 
             if (categoryToSwitch == null)
             {
@@ -183,40 +134,86 @@
             category.Order = currentCategoryNewOrder;
 
             await this.db.SaveChangesAsync();
-
             return category;
         }
 
-        public void VerifyExistent(IEnumerable<string> ids)
+        public async Task<Category> ReorderDownAsync(string id)
         {
-            if (ids == null)
-            {
-                throw new InvalidCategoryException();
-            }
-
-            var foundCategories = this.db.Categories.Where(c => !c.IsDeleted && ids.Contains(c.Id)).ToList();
-
-            if (foundCategories.Count != ids.Count())
-            {
-                throw new InvalidCategoryException();
-            }
-        }
-
-        public void VerifyExistent(string id)
-        {
-            this.VerifyExistent(new List<string> { id });
-        }
-
-        private async Task<Category> GetPreviousToSwitchAsync(int order)
-            => await this.db.Categories
-                .Where(c => !c.IsDeleted && c.Order < order)
-                .OrderByDescending(c => c.Order)
-                .FirstOrDefaultAsync();
-
-        private async Task<Category> GetNextToSwitchAsync(int order)
-            => await this.db.Categories
-                .Where(c => !c.IsDeleted && c.Order > order)
+            var category = await this.GetAsync(id);
+            var categoryToSwitch = await this.db.Categories
+                .Where(c => !c.IsDeleted && c.Order > category.Order)
                 .OrderBy(c => c.Order)
                 .FirstOrDefaultAsync();
+
+            if (categoryToSwitch == null)
+            {
+                throw new InvalidCategoryOrderException();
+            }
+
+            var currentCategoryNewOrder = categoryToSwitch.Order;
+            categoryToSwitch.Order = category.Order;
+            category.Order = currentCategoryNewOrder;
+
+            await this.db.SaveChangesAsync();
+            return category;
+        }
+
+        public void ThrowIfAnyNotExist(IEnumerable<string> ids)
+        {
+            if (ids != null)
+            {
+                var foundCategories = this.db.Categories.Where(c => !c.IsDeleted && ids.Contains(c.Id)).ToList();
+
+                if (foundCategories.Count != ids.Count())
+                {
+                    throw new InvalidCategoryException();
+                }
+            }
+        }
+
+        public void ThrowIfNotExists(string id)
+        {
+            this.ThrowIfAnyNotExist(new List<string> { id });
+        }
+
+        public async Task<Category> CreateAsync(CategoryCreateInputModel categoryCreateInputModel)
+        {
+            var category = Mapper.Map<Category>(categoryCreateInputModel);
+            category.IsDeleted = false;
+
+            var lastCategoryOrder = this.db.Categories.OrderByDescending(c => c.Order).FirstOrDefault()?.Order ?? 0;
+            category.Order = lastCategoryOrder + 1;
+
+            await this.db.Categories.AddAsync(category);
+            await this.db.SaveChangesAsync();
+            return category;
+        }
+
+        public async Task<Category> EditAsync(CategoryUpdateInputModel categoryUpdateInputModel)
+        {
+            var category = await this.GetAsync(categoryUpdateInputModel.Id);
+            category.Name = categoryUpdateInputModel.Name;
+
+            await this.db.SaveChangesAsync();
+            return category;
+        }
+
+        public async Task<Category> ArchiveAsync(string id)
+        {
+            var category = await this.GetAsync(id);
+            category.IsDeleted = true;
+
+            await this.db.SaveChangesAsync();
+            return category;
+        }
+
+        public async Task<Category> RecoverAsync(string id)
+        {
+            var category = await this.GetArchivedAsync(id);
+            category.IsDeleted = false;
+
+            await this.db.SaveChangesAsync();
+            return category;
+        }
     }
 }

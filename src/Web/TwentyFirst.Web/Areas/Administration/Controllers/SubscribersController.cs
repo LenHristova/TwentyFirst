@@ -70,7 +70,7 @@
             emailContent = emailContent
                 .Replace(GlobalConstants.HtmlImportantArticlesPlaceholder, stringBuilder.ToString().Trim());
 
-            var subscribers = await this.subscriberService.AllSubscribersEmailsAsync<SubscriberSendArticlesModel>();
+            var subscribers = await this.subscriberService.AllConfirmedAsync<SubscriberSendArticlesModel>();
             foreach (var subscriber in subscribers)
             {
                 var unsubscribeUrl = this.linkGenerator.GetUriByAction(

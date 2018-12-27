@@ -343,7 +343,7 @@ namespace TwentyFirst.Services.DataServices.Tests
             var expectedCount = 2;
 
             var mock = new Mock<ICategoryService>();
-            mock.Setup(m => m.VerifyExistent(wantedCategoryId));
+            mock.Setup(m => m.ThrowIfNotExists(wantedCategoryId));
             var articleService = new ArticleService(this.dbContext, mock.Object);
             var actual = await articleService.LatestFromCategoryAsync<FakeArticle>(wantedCategoryId, 2);
 
@@ -481,7 +481,7 @@ namespace TwentyFirst.Services.DataServices.Tests
             var wantedCategoryId = "2";
 
             var mock = new Mock<ICategoryService>();
-            mock.Setup(m => m.VerifyExistent(wantedCategoryId)).Throws<InvalidCategoryException>();
+            mock.Setup(m => m.ThrowIfNotExists(wantedCategoryId)).Throws<InvalidCategoryException>();
             var articleService = new ArticleService(this.dbContext, mock.Object);
 
             Assert.Throws<InvalidCategoryException>(
@@ -852,7 +852,7 @@ namespace TwentyFirst.Services.DataServices.Tests
             var articleCategoriesIds = new List<string> { "1", "2" };
 
             var mock = new Mock<ICategoryService>();
-            mock.Setup(m => m.VerifyExistent(articleCategoriesIds));
+            mock.Setup(m => m.ThrowIfAnyNotExist(articleCategoriesIds));
             var articleService = new ArticleService(this.dbContext, mock.Object);
 
             var creatorId = Guid.NewGuid().ToString();
@@ -869,7 +869,7 @@ namespace TwentyFirst.Services.DataServices.Tests
             var articleCategoriesIds = new List<string> {"1", "2"};
 
             var mock = new Mock<ICategoryService>();
-            mock.Setup(m => m.VerifyExistent(articleCategoriesIds)).Throws<InvalidCategoryException>();
+            mock.Setup(m => m.ThrowIfAnyNotExist(articleCategoriesIds)).Throws<InvalidCategoryException>();
             var articleService = new ArticleService(this.dbContext, mock.Object);
 
             var creatorId = Guid.NewGuid().ToString();

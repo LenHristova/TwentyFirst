@@ -20,7 +20,7 @@
             => View(new CategoriesChooseInputModel
             {
                 CategoriesIds = ids,
-                Categories = await this.categoryService.AllToSelectListItemsAsync()
+                CategoryBaseViewModels = await this.categoryService.AllOrderedByNameAsync<CategoryBaseViewModel>()
             });
     }
 }

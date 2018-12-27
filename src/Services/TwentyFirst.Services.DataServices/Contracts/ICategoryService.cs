@@ -9,7 +9,7 @@
 
     public interface ICategoryService
     { 
-        Task<IEnumerable<TModel>> AllWithArchived<TModel>();
+        Task<IEnumerable<TModel>> AllWithArchivedAsync<TModel>();
 
         Task<Category> CreateAsync(CategoryCreateInputModel categoryCreateInputModel);
 
@@ -56,14 +56,16 @@
         /// <returns></returns>
         Task<Category> GetArchivedAsync(string id);
 
-        Task<IEnumerable<TModel>> All<TModel>();
+        Task<IEnumerable<TModel>> AllAsync<TModel>();
 
-        Task<IEnumerable<SelectListItem>> AllToSelectListItemsAsync();
+        Task<IEnumerable<TModel>> AllOrderedByNameAsync<TModel>();
 
-        Task<Category> OrderAsync(string id, bool up, bool down);
+        Task<Category> ReorderUpAsync(string id);
 
-        void VerifyExistent(IEnumerable<string> ids);
+        Task<Category> ReorderDownAsync(string id);
 
-        void VerifyExistent(string id);
+        void ThrowIfAnyNotExist(IEnumerable<string> ids);
+
+        void ThrowIfNotExists(string id);
     }
 }

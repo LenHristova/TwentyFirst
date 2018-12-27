@@ -8,6 +8,8 @@
     using Services.DataServices.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
+    using CloudinaryDotNet.Actions;
+    using Common.Exceptions;
     using Filters;
     using Infrastructure.Extensions;
     using Logging;
@@ -28,7 +30,7 @@
         [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var categories = await this.categoryService.AllWithArchived<CategoryListViewModel>();
+            var categories = await this.categoryService.AllWithArchivedAsync<CategoryListViewModel>();
 
             var onePageOfCategories = await categories.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.AdministrationCategoriesOnPageCount);
@@ -140,7 +142,14 @@
         [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Order(string id, bool up, bool down)
         {
-            var category = await this.categoryService.OrderAsync(id, up, down);
+            if ((up && down) || (!up && !down))
+            {
+                throw new InvalidCategoryOrderException();
+            }
+
+            var category = up
+                ? await this.categoryService.ReorderUpAsync(id)
+                : await this.categoryService.ReorderDownAsync(id);
 
             var direction = up ? "предна" : "задна";
             var message = $"Категорията \"{category.Name}\" беше поставена на по-{direction} позиция.";

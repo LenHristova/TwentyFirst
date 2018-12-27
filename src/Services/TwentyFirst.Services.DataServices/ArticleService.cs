@@ -49,7 +49,7 @@
 
         public async Task<IEnumerable<TModel>> LatestFromCategoryAsync<TModel>(string categoryId, int count)
         {
-            this.categoryService.VerifyExistent(categoryId);
+            this.categoryService.ThrowIfNotExists(categoryId);
 
             return await this.db.Articles
                 .Where(a => !a.IsDeleted && a.Categories.Any(c => c.CategoryId == categoryId))
@@ -146,7 +146,7 @@
         {
             var article = Mapper.Map<Article>(articleCreateInputModel);
 
-            this.categoryService.VerifyExistent(articleCreateInputModel.CategoriesIds);
+            this.categoryService.ThrowIfAnyNotExist(articleCreateInputModel.CategoriesIds);
             this.ThrowIfAnyNotExist(articleCreateInputModel.ConnectedArticlesIds);
 
             UpdateCategories(article.Categories, articleCreateInputModel.CategoriesIds?.ToList());
@@ -165,7 +165,7 @@
         {
             var article = await this.GetAsync(articleEditInputModel.Id);
 
-            this.categoryService.VerifyExistent(articleEditInputModel.CategoriesIds);
+            this.categoryService.ThrowIfAnyNotExist(articleEditInputModel.CategoriesIds);
             this.ThrowIfAnyNotExist(articleEditInputModel.ConnectedArticlesIds);
 
             UpdateCategories(article.Categories, articleEditInputModel.CategoriesIds?.ToList());
