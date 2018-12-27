@@ -55,6 +55,14 @@
         public const int MainCategoriesCount = 5;
 
         //Image Constants
+        public const string CorruptedImage = "Файлът \"{0}\" не е снимка или е повреден.";
+
+        public const string SuccessfulImageUpload = "Всички снимки бяха качени успешно.";
+
+        public const string SuccessfulImageDelete = "Снимката беше изтрита успешно.";
+
+        public const string SuccessfulImageRecover = "Снимката беше възстановена успешно.";
+
         public const int ImageShortDescriptionMaxLength = 50;
 
         public const int ImagesOnSearchPageCount = 2;

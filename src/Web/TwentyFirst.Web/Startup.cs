@@ -1,7 +1,6 @@
 ﻿namespace TwentyFirst.Web
 {
     using AutoMapper;
-    using CloudinaryDotNet;
     using Common.Mapping;
     using Common.Models.Articles;
     using Data;
@@ -20,6 +19,7 @@
     using Microsoft.Extensions.Logging;
     using reCAPTCHA.AspNetCore;
     using Services.AuthMessageSender;
+    using Services.CloudFileUploader;
     using System;
 
     public class Startup
@@ -88,14 +88,11 @@
             services.AddAutoMapper();
 
             services.AddDomainServices();
-            services.AddScoped(c => new Cloudinary(
-                new Account(
-                    Configuration["CloudinaryAccount:cloudName"],
-                    Configuration["CloudinaryAccount:apiKey"],
-                    Configuration["CloudinaryAccount:apiSecret"]
-                    )));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSingleton<ICloudFileUploader, CloudinaryFileUploader>();
+            services.Configure<CloudFileUploaderOptions>(Configuration.GetSection("CloudinaryAccount"));
 
             services.AddSingleton<IEmailSender, SendGridEmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration.GetSection("SendGridAccount"));

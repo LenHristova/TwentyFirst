@@ -9,15 +9,6 @@
     public interface IImageService
     {
         /// <summary>
-        /// Upload images async and return count of the corrupted images
-        /// that was not uploaded.
-        /// </summary>
-        /// <param name="imagesCreateInputModel"></param>
-        /// <param name="creatorId"></param>
-        /// <returns></returns>
-        Task<int> UploadAsync(ImagesCreateInputModel imagesCreateInputModel, string creatorId);
-
-        /// <summary>
         /// Search if the description contains search term, and returns that images
         /// </summary>
         /// <param name="searchTerm"></param>
@@ -29,6 +20,12 @@
         Task DeleteAsync(string id);
 
         Task RecoverAsync(string id);
+
+        Task CreateAsync(
+            ImagesCreateInputModel imagesCreateInputModel,
+            string creatorId,
+            string url,
+            string thumbUrl);
 
         /// <summary>
         /// Gets image by id.

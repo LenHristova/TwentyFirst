@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\Data\TwentyFirst.Data.Models\TwentyFirst.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\TwentyFirst.Data\TwentyFirst.Data.csproj" />
     <ProjectReference Include="..\..\Services\TwentyFirst.Services.AuthMessageSender\TwentyFirst.Services.AuthMessageSender.csproj" />
+    <ProjectReference Include="..\..\Services\TwentyFirst.Services.CloudFileUploader\TwentyFirst.Services.CloudFileUploader.csproj" />
     <ProjectReference Include="..\..\Services\TwentyFirst.Services.DataServices\TwentyFirst.Services.DataServices.csproj" />
   </ItemGroup>
 

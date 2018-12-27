@@ -1,6 +1,7 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
     using Common.Constants;
+    using Common.Models.Enums;
     using Common.Models.Images;
     using Data.Models;
     using Filters;
@@ -10,24 +11,29 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Services.CloudFileUploader;
     using Services.DataServices.Contracts;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     public class ImagesController : AdministrationController
     {
         private readonly IImageService imageService;
+        private readonly ICloudFileUploader cloudFileUploader;
         private readonly UserManager<User> userManager;
         private readonly ILogger<ImagesController> logger;
 
         public ImagesController(
             IImageService imageService,
+            ICloudFileUploader cloudFileUploader,
             UserManager<User> userManager,
             ILogger<ImagesController> logger)
         {
             this.imageService = imageService;
             this.userManager = userManager;
             this.logger = logger;
+            this.cloudFileUploader = cloudFileUploader;
         }
 
         public IActionResult Index() => this.View();
@@ -37,21 +43,45 @@
 
         [HttpPost]
         [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
-        public async Task<IActionResult> Upload(ImagesCreateInputModel imageCreateInputModel)
+        public async Task<IActionResult> Upload(ImagesCreateInputModel imagesCreateInputModel)
         {
             if (!ModelState.IsValid)
             {
-                return this.View(imageCreateInputModel);
+                return this.View(imagesCreateInputModel);
             }
 
-            var userId = this.userManager.GetUserId(this.User);
-            var corruptedImages = await this.imageService.UploadAsync(imageCreateInputModel, userId);
-            if (corruptedImages > 0)
+            var images = imagesCreateInputModel.Images.ToList();
+
+            var errors = new List<string>();
+            foreach (var image in images)
             {
-                //TODO tempData[message]
+                var isEmpty = image.Length == 0;
+                if (isEmpty)
+                {
+                    errors.Add(string.Format(GlobalConstants.CorruptedImage, image.FileName));
+                    continue;
+                }
+
+                var fileUrls = this.cloudFileUploader.UploadImageAsync(image);
+                if (fileUrls == null)
+                {
+                    errors.Add(string.Format(GlobalConstants.CorruptedImage, image.FileName));
+                    continue;
+                }
+
+                var userId = this.userManager.GetUserId(this.User);
+                await this.imageService.CreateAsync(imagesCreateInputModel, userId, fileUrls.Url, fileUrls.ThumbUrl);
             }
 
-            //TODO tempData[success message]
+            if (errors.Any())
+            {
+                var formattedErrors = string.Join(GlobalConstants.HtmlNewLine, errors);
+                this.SetAlertMessage(AlertMessageLevel.Error, formattedErrors);
+            }
+            else
+            {
+                this.SetAlertMessage(AlertMessageLevel.Success, GlobalConstants.SuccessfulImageUpload);
+            }
 
             return this.RedirectToAction(nameof(Upload));
         }
@@ -61,9 +91,11 @@
         public async Task<IActionResult> Delete(string id)
         {
             await this.imageService.DeleteAsync(id);
-            //TODO tempData[success message]
-            var message = $"Успешно беше изтрита снимка с ИД: {id}";
-            this.logger.LogInformation((int)LoggingEvents.DeleteItem, message);
+
+            this.SetAlertMessage(AlertMessageLevel.Success, GlobalConstants.SuccessfulImageDelete);
+
+            var logMessage = $"{GlobalConstants.SuccessfulImageDelete} ИД: {id}";
+            this.logger.LogInformation((int)LoggingEvents.DeleteItem, logMessage);
             return RedirectToAction(nameof(Index));
         }
 
@@ -72,9 +104,11 @@
         public async Task<IActionResult> Recover(string id)
         {
             await this.imageService.RecoverAsync(id);
-            //TODO tempData[success message]
-            var message = $"Успешно беше възстановена снимка с ИД: {id}";
-            this.logger.LogInformation((int)LoggingEvents.RecoverItem, message);
+
+            this.SetAlertMessage(AlertMessageLevel.Success, GlobalConstants.SuccessfulImageRecover);
+
+            var logMessage = $"{GlobalConstants.SuccessfulImageRecover} ИД: {id}";
+            this.logger.LogInformation((int)LoggingEvents.RecoverItem, logMessage);
             return RedirectToAction(nameof(Index));
         }
 
