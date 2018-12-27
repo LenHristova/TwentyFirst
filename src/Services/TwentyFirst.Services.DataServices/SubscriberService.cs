@@ -21,6 +21,12 @@
             this.db = db;
         }
 
+        public async Task<IEnumerable<TModel>> AllConfirmedAsync<TModel>()
+            => await this.db.Subscribers
+                .Where(s => s.IsConfirmed)
+                .To<TModel>()
+                .ToListAsync();
+
         public async Task<bool> ExistsAsync(string email)
             => await this.db.Subscribers.AnyAsync(s => s.Email == email);
 
@@ -108,11 +114,5 @@
             CoreValidator.ThrowIfNull(subscriber, new InvalidSubscriberException());
             return subscriber;
         }
-
-        public async Task<IEnumerable<TModel>> AllSubscribersEmailsAsync<TModel>()
-            => await this.db.Subscribers
-                .Where(s => s.IsConfirmed)
-                .To<TModel>()
-                .ToListAsync();
     }
 }
