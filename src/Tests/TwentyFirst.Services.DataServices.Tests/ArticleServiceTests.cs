@@ -41,8 +41,12 @@ namespace TwentyFirst.Services.DataServices.Tests
         [Fact]
         public async Task LatestAsync_ShouldReturnsAll_WhenGivenCountIsGreaterThenAvailable()
         {
-            await this.dbContext.Articles.AddAsync(new Article { IsDeleted = true });
-            await this.dbContext.Articles.AddAsync(new Article { IsDeleted = false });
+            await this.dbContext.Articles.AddRangeAsync(new List<Article>
+            {
+                new Article { IsDeleted = true },
+                new Article { IsDeleted = false },
+            });
+
             await this.dbContext.SaveChangesAsync();
 
             var articleService = new ArticleService(this.dbContext, null);
@@ -81,18 +85,18 @@ namespace TwentyFirst.Services.DataServices.Tests
         {
             await this.dbContext.Articles.AddRangeAsync(new List<Article>
             {
-                new Article { Id = "1", IsDeleted = true, PublishedOn = DateTime.UtcNow },
-                new Article { Id = "2", IsDeleted = false, PublishedOn = DateTime.UtcNow.AddHours(-2) },
-                new Article { Id = "3", IsDeleted = false, PublishedOn = DateTime.UtcNow.AddHours(-20) },
-                new Article { Id = "4", IsDeleted = false, PublishedOn = DateTime.UtcNow.AddHours(-12) },
-                new Article { Id = "5", IsDeleted = false, PublishedOn = DateTime.UtcNow.AddHours(-8) },
+                new Article { Id = "1", PublishedOn = DateTime.UtcNow.AddHours(-20) },
+                new Article { Id = "2", PublishedOn = DateTime.UtcNow.AddHours(-2) },
+                new Article { Id = "3", PublishedOn = DateTime.UtcNow },
+                new Article { Id = "4", PublishedOn = DateTime.UtcNow.AddHours(-12) },
+                new Article { Id = "5", PublishedOn = DateTime.UtcNow.AddHours(-8) },
             });
 
             await this.dbContext.SaveChangesAsync();
 
             var articleService = new ArticleService(this.dbContext, null);
             var result = await articleService.LatestAsync<FakeArticle>(3);
-            var expectedIds = new List<string> { "2", "5", "4" };
+            var expectedIds = new List<string> { "3", "2", "5" };
             var actualArticles = result.ToList();
 
             for (int i = 0; i < expectedIds.Count; i++)
@@ -188,6 +192,102 @@ namespace TwentyFirst.Services.DataServices.Tests
 
             var articleService = new ArticleService(this.dbContext, null);
             var result = await articleService.LatestTopAsync<FakeArticle>(3);
+            var expectedIds = new List<string> { "2", "1", "5" };
+            var actualArticles = result.ToList();
+
+            for (int i = 0; i < expectedIds.Count; i++)
+            {
+                Assert.Equal(expectedIds[i], actualArticles[i].Id);
+            }
+        }
+
+        [Fact]
+        public async Task LatestImportantAsync_ShouldReturnsCorrectCountOfImportantArticles()
+        {
+            await this.dbContext.Articles.AddRangeAsync(new List<Article>
+            {
+                new Article { IsDeleted = false, IsImportant = true },
+                new Article { IsDeleted = true, IsImportant = true },
+                new Article { IsDeleted = false, IsImportant = true },
+                new Article { IsDeleted = false, IsImportant = false },
+                new Article { IsDeleted = false, IsImportant = true },
+                new Article { IsDeleted = false, IsImportant = true },
+                new Article { IsDeleted = false, IsImportant = true },
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            var wantedArticlesCount = 3;
+            var expectedCount = wantedArticlesCount;
+
+            var articleService = new ArticleService(this.dbContext, null);
+            var actual = await articleService.LatestImportantAsync<FakeArticle>(wantedArticlesCount);
+
+            Assert.Equal(expectedCount, actual.Count());
+        }
+
+        [Fact]
+        public async Task LatestImportantAsync_ShouldReturnsAllImportant_WhenGivenCountIsGreaterThenAvailable()
+        {
+            await this.dbContext.Articles.AddRangeAsync(new List<Article>
+            {
+                new Article { IsDeleted = false, IsImportant = true },
+                new Article { IsDeleted = true, IsImportant = true },
+                new Article { IsDeleted = false, IsImportant = false },
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            var wantedArticlesCount = 3;
+            var expectedCount = 1;
+
+            var articleService = new ArticleService(this.dbContext, null);
+            var actual = await articleService.LatestImportantAsync<FakeArticle>(wantedArticlesCount);
+
+            Assert.Equal(expectedCount, actual.Count());
+        }
+
+        [Fact]
+        public async Task LatestImportantAsync_ShouldReturnsLatestImportant()
+        {
+            await this.dbContext.Articles.AddRangeAsync(new List<Article>
+            {
+                new Article { Id = "1", IsImportant = true, PublishedOn = DateTime.UtcNow.AddHours(-2) },
+                new Article { Id = "2", IsImportant = true, PublishedOn = DateTime.UtcNow },
+                new Article { Id = "3", IsImportant = true, PublishedOn = DateTime.UtcNow.AddHours(-20) },
+                new Article { Id = "4", IsImportant = true, PublishedOn = DateTime.UtcNow.AddHours(-12) },
+                new Article { Id = "5", IsImportant = true, PublishedOn = DateTime.UtcNow.AddHours(-8) },
+                new Article { Id = "6", IsImportant = false, PublishedOn = DateTime.UtcNow.AddHours(-1) },
+                new Article { Id = "7", IsImportant = false, PublishedOn = DateTime.UtcNow.AddHours(-3) },
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            var articleService = new ArticleService(this.dbContext, null);
+            var result = await articleService.LatestImportantAsync<FakeArticle>(3);
+            var expectedIds = new List<string> { "2", "1", "5" };
+
+            Assert.True(result.All(a => expectedIds.Contains(a.Id)));
+        }
+
+        [Fact]
+        public async Task LatestImportantAsync_ShouldReturnsImportantOrderedByPublishedOnDescending()
+        {
+            await this.dbContext.Articles.AddRangeAsync(new List<Article>
+            {
+                new Article { Id = "1", IsImportant = true, PublishedOn = DateTime.UtcNow.AddHours(-2) },
+                new Article { Id = "2", IsImportant = true, PublishedOn = DateTime.UtcNow },
+                new Article { Id = "3", IsImportant = true, PublishedOn = DateTime.UtcNow.AddHours(-20) },
+                new Article { Id = "4", IsImportant = true, PublishedOn = DateTime.UtcNow.AddHours(-12) },
+                new Article { Id = "5", IsImportant = true, PublishedOn = DateTime.UtcNow.AddHours(-8) },
+                new Article { Id = "6", IsImportant = false, PublishedOn = DateTime.UtcNow.AddHours(-1) },
+                new Article { Id = "7", IsImportant = false, PublishedOn = DateTime.UtcNow.AddHours(-3) },
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            var articleService = new ArticleService(this.dbContext, null);
+            var result = await articleService.LatestImportantAsync<FakeArticle>(3);
             var expectedIds = new List<string> { "2", "1", "5" };
             var actualArticles = result.ToList();
 
@@ -584,6 +684,17 @@ namespace TwentyFirst.Services.DataServices.Tests
             }
         }
 
+        [Theory]
+        [InlineData(null)]
+        [InlineData(new object[] { new string[0] })]
+        public async Task LatestImportantFromCategoriesAsync_ShouldReturnsEmptyCollection_WhenNoWantedCategories(
+            IEnumerable<string> wantedCategoriesIds)
+        {
+            var articleService = new ArticleService(this.dbContext, null);
+            var result = await articleService.LatestImportantFromCategoriesAsync<FakeArticle>(wantedCategoriesIds, 3);
+            Assert.False(result.Any());
+        }
+
         [Fact]
         public async Task AllImportantForTheDayAsync_ShouldReturnsAllArticles_ThatAreImportantAndArePublishedCurrentDay()
         {
@@ -606,6 +717,50 @@ namespace TwentyFirst.Services.DataServices.Tests
             var actual = await articleService.AllImportantForTheDayAsync<FakeArticle>();
 
             Assert.Equal(expectedCount, actual.Count());
+        }
+
+        [Fact]
+        public async Task ThrowIfAnyNotExist_ShouldPassCheck_WhenArticlesExist()
+        {
+            await this.dbContext.Articles.AddRangeAsync(new List<Article>()
+            {
+                new Article {Id = "1"},
+                new Article {Id = "2"},
+                new Article {Id = "3"},
+            });
+            await this.dbContext.SaveChangesAsync();
+
+            var articleService = new ArticleService(this.dbContext, null);
+
+            var wantedArticlesIds = new List<string> { "1", "2", "3" };
+            articleService.ThrowIfAnyNotExist(wantedArticlesIds);
+            var ex = Record.Exception(() => articleService.ThrowIfAnyNotExist(wantedArticlesIds));
+            Assert.Null(ex);
+        }
+
+        [Fact]
+        public async Task ThrowIfAnyNotExist_ShouldThrowInvalidArticleException_WhenAnyArticleNotExist()
+        {
+            await this.dbContext.Articles.AddRangeAsync(new List<Article>()
+            {
+                new Article {Id = "1"},
+                new Article {Id = "2"},
+            });
+            await this.dbContext.SaveChangesAsync();
+
+            var articleService = new ArticleService(this.dbContext, null);
+
+            var wantedArticlesIds = new List<string> { "1", "2", "3" };
+            Assert.Throws<InvalidArticleException>(() => articleService.ThrowIfAnyNotExist(wantedArticlesIds));
+        }
+
+        [Fact]
+        public void ThrowIfAnyNotExist_ShouldThrowInvalidArticleException_WhenAllArticlesNotExist()
+        {
+            var articleService = new ArticleService(this.dbContext, null);
+
+            var wantedArticlesIds = new List<string> { "1", "2", "3" };
+            Assert.Throws<InvalidArticleException>(() => articleService.ThrowIfAnyNotExist(wantedArticlesIds));
         }
 
         [Fact]
@@ -679,7 +834,102 @@ namespace TwentyFirst.Services.DataServices.Tests
         }
 
         [Fact]
-        public async Task EditAsync_ShouldSaveChangesToDb_WithExistentId()
+        public async Task CreateAsync_ShouldAddCorrectCreatorToNewArticle()
+        {
+            var mock = new Mock<ICategoryService>();
+            var articleService = new ArticleService(this.dbContext, mock.Object);
+
+            var creatorId = Guid.NewGuid().ToString();
+            await articleService.CreateAsync(new ArticleCreateInputModel(), creatorId);
+            var articleFromDb = this.dbContext.Articles.FirstOrDefault();
+
+            Assert.Equal(creatorId, articleFromDb?.CreatorId);
+        }
+
+        [Fact]
+        public async Task CreateAsync_ShouldAddCategoriesToNewArticle()
+        {
+            var articleCategoriesIds = new List<string> { "1", "2" };
+
+            var mock = new Mock<ICategoryService>();
+            mock.Setup(m => m.VerifyExistent(articleCategoriesIds));
+            var articleService = new ArticleService(this.dbContext, mock.Object);
+
+            var creatorId = Guid.NewGuid().ToString();
+            var articleToCreate = new ArticleCreateInputModel { CategoriesIds = articleCategoriesIds };
+            await articleService.CreateAsync(articleToCreate, creatorId);
+            var articleFromDb = this.dbContext.Articles.FirstOrDefault();
+
+            Assert.True(articleFromDb?.Categories.All(c => articleCategoriesIds.Contains(c.CategoryId)));
+        }
+
+        [Fact]
+        public void CreateAsync_ShouldThrowInvalidCategoryException_WhenAnyCategoryIdNotExists()
+        {
+            var articleCategoriesIds = new List<string> {"1", "2"};
+
+            var mock = new Mock<ICategoryService>();
+            mock.Setup(m => m.VerifyExistent(articleCategoriesIds)).Throws<InvalidCategoryException>();
+            var articleService = new ArticleService(this.dbContext, mock.Object);
+
+            var creatorId = Guid.NewGuid().ToString();
+            var articleToCreate = new ArticleCreateInputModel {CategoriesIds = articleCategoriesIds};
+
+            Assert.Throws<InvalidCategoryException>(() =>
+                articleService.CreateAsync(articleToCreate, creatorId).GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public async Task CreateAsync_ShouldAddConnectedArticlesToNewArticle()
+        {
+            var articles = new List<Article>
+            {
+                new Article {Id = "1"},
+                new Article {Id = "2"},
+            };
+
+            await this.dbContext.Articles.AddRangeAsync(articles);
+            await this.dbContext.SaveChangesAsync();
+
+            var connectedArticlesIds = new List<string> { "1", "2" };
+
+            var mock = new Mock<ICategoryService>();
+            var articleService = new ArticleService(this.dbContext, mock.Object);
+
+            var creatorId = Guid.NewGuid().ToString();
+            var articleToCreate = new ArticleCreateInputModel { ConnectedArticlesIds = connectedArticlesIds };
+            await articleService.CreateAsync(articleToCreate, creatorId);
+
+            var articleFromDb = this.dbContext.Articles.FirstOrDefault();
+
+            Assert.True(articleFromDb?.ConnectedTo.All(c => connectedArticlesIds.Contains(c.ConnectedToId)));
+        }
+
+        [Fact]
+        public async Task CreateAsync_ShouldThrowInvalidArticleException_WhenAnyConnectedArticleIdNotExists()
+        {
+            var articles = new List<Article>
+            {
+                new Article {Id = "1"},
+            };
+
+            await this.dbContext.Articles.AddRangeAsync(articles);
+            await this.dbContext.SaveChangesAsync();
+
+            var connectedArticlesIds = new List<string> { "1", "2" };
+
+            var mock = new Mock<ICategoryService>();
+            var articleService = new ArticleService(this.dbContext, mock.Object);
+
+            var creatorId = Guid.NewGuid().ToString();
+            var articleToCreate = new ArticleCreateInputModel { ConnectedArticlesIds = connectedArticlesIds };
+
+            Assert.Throws<InvalidArticleException>(() =>
+                articleService.CreateAsync(articleToCreate, creatorId).GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public async Task EditAsync_ShouldSaveChangesToDb_WhenArticleExists()
         {
             var articleToEditId = Guid.NewGuid().ToString();
             var articleToDb = new Article
@@ -704,7 +954,7 @@ namespace TwentyFirst.Services.DataServices.Tests
                 Lead = "NewLead",
                 Author = "NewAuthor",
                 Content = "NewContent",
-                Image = new ImageForArticleInputModel { Id = "2" },
+                Image = new ImageBaseInputModel { Id = "2" },
                 IsTop = true,
                 IsImportant = false
             };
@@ -729,7 +979,7 @@ namespace TwentyFirst.Services.DataServices.Tests
         }
 
         [Fact]
-        public async Task EditAsync_ShouldAddEditsToArticle_WithExistentId()
+        public async Task EditAsync_ShouldAddCorrectEditToArticle_WhenArticleExists()
         {
             var articleToEditId = Guid.NewGuid().ToString();
             var articleToDb = new Article { Id = articleToEditId };
@@ -751,7 +1001,7 @@ namespace TwentyFirst.Services.DataServices.Tests
         }
 
         [Fact]
-        public void EditAsync_ShouldThrowInvalidArticleException_WithNonExistentId()
+        public void EditAsync_ShouldThrowInvalidArticleException_WhenArticleNotExists()
         {
             var articleWithEdits = new ArticleEditInputModel { Id = Guid.NewGuid().ToString() };
 
@@ -776,25 +1026,38 @@ namespace TwentyFirst.Services.DataServices.Tests
         }
 
         [Fact]
-        public async Task DeleteAsync_ShouldSoftDeleteArticle_WithExistentId()
+        public async Task DeleteAsync_ShouldSoftDeleteArticle_WhenArticleExists()
         {
-            var articleId = Guid.NewGuid().ToString();
-            await this.dbContext.Articles.AddAsync(new Article { Id = articleId, IsDeleted = false });
+            var articleToDeleteId = Guid.NewGuid().ToString();
+            await this.dbContext.Articles.AddAsync(new Article { Id = articleToDeleteId, IsDeleted = false });
             await this.dbContext.SaveChangesAsync();
 
             var articleService = new ArticleService(this.dbContext, null);
             var editorId = Guid.NewGuid().ToString();
-            await articleService.DeleteAsync(articleId, editorId);
+            await articleService.DeleteAsync(articleToDeleteId, editorId);
 
-            var resultArticle = await this.dbContext.Articles.FindAsync(articleId);
+            var resultArticle = await this.dbContext.Articles.FindAsync(articleToDeleteId);
             Assert.True(resultArticle.IsDeleted);
-
-            var resultEditorId = resultArticle.Edits.FirstOrDefault(e => e.EditorId == editorId);
-            Assert.NotNull(resultEditorId);
         }
 
         [Fact]
-        public void DeleteAsync_ShouldThrowInvalidArticleException_WithNonExistentId()
+        public async Task DeleteAsync_ShouldAddCorrectEditToArticle_WhenArticleExists()
+        {
+            var articleToDeleteId = Guid.NewGuid().ToString();
+            await this.dbContext.Articles.AddAsync(new Article { Id = articleToDeleteId, IsDeleted = false });
+            await this.dbContext.SaveChangesAsync();
+
+            var articleService = new ArticleService(this.dbContext, null);
+            var editorId = Guid.NewGuid().ToString();
+            await articleService.DeleteAsync(articleToDeleteId, editorId);
+
+            var resultArticle = await this.dbContext.Articles.FindAsync(articleToDeleteId);
+
+            Assert.Equal(editorId, resultArticle.Edits.FirstOrDefault()?.EditorId);
+        }
+
+        [Fact]
+        public void DeleteAsync_ShouldThrowInvalidArticleException_WhenArticleNotExists()
         {
             var articleService = new ArticleService(this.dbContext, null);
 
@@ -813,26 +1076,6 @@ namespace TwentyFirst.Services.DataServices.Tests
 
             Assert.Throws<InvalidArticleException>(
                 () => articleService.DeleteAsync(articleId, Guid.NewGuid().ToString()).GetAwaiter().GetResult());
-        }
-
-        [Fact]
-        public async Task DeleteAsync_ShouldAddEditsToArticle_WithExistentId()
-        {
-            var articleToDeleteId = Guid.NewGuid().ToString();
-            var articleToDb = new Article { Id = articleToDeleteId };
-
-            await this.dbContext.Articles.AddAsync(articleToDb);
-            await this.dbContext.SaveChangesAsync();
-
-            var mock = new Mock<ICategoryService>();
-            var articleService = new ArticleService(this.dbContext, mock.Object);
-
-            var editorId = Guid.NewGuid().ToString();
-            await articleService.DeleteAsync(articleToDeleteId, editorId);
-
-            var actualArticle = this.dbContext.Articles.First();
-
-            Assert.Equal(editorId, actualArticle.Edits.FirstOrDefault()?.EditorId);
         }
 
         internal class FakeArticle

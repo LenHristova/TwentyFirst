@@ -35,7 +35,7 @@
         {
             [Required(ErrorMessage = ValidationErrorMessages.Required)]
             [MinLength(GlobalConstants.MinUsernameLength, ErrorMessage = ValidationErrorMessages.MinLength)]
-            [MaxLength(GlobalConstants.MaxPasswordLength, ErrorMessage = ValidationErrorMessages.MaxLength)]
+            [MaxLength(GlobalConstants.MaxUsernameLength, ErrorMessage = ValidationErrorMessages.MaxLength)]
             [Display(Name = "Потребителско име")]
             public string Username { get; set; }
 

@@ -34,7 +34,7 @@
 
         /// <summary>
         /// Gets article by id and project it to given model.
-        /// Throw InvalidArticleIdException if id is not present.
+        /// Throw InvalidArticleException if id is not present.
         /// </summary>
         /// <exception cref="InvalidArticleException"></exception>
         /// <typeparam name="TModel"></typeparam>
@@ -44,13 +44,13 @@
 
         /// <summary>
         /// Gets article by id.
-        /// Throw InvalidArticleIdException if id is not present.
+        /// Throw InvalidArticleException if id is not present.
         /// </summary>
         /// <exception cref="InvalidArticleException"></exception>
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Article> GetAsync(string id);
 
-        void VerifyExistent(IEnumerable<string> ids);
+        void ThrowIfAnyNotExist(IEnumerable<string> ids);
     }
 }

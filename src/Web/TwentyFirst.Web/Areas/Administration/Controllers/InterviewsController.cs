@@ -25,10 +25,10 @@
             this.userManager = userManager;
         }
 
-
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var interviews = await this.interviewService.AllAsync<InterviewAdminListViewModel>();
+            var interviews = await this.interviewService
+                .LatestAsync<InterviewAdminListViewModel>(GlobalConstants.MaxInterviewsCountToGet);
 
             var onePageOfInterviews = await interviews.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.AdministrationInterviewsOnPageCount);
@@ -67,7 +67,7 @@
             }
 
             var userId = this.userManager.GetUserId(this.User);
-            var editedInterview = await this.interviewService.Edit(interviewUpdateInputModel, userId);
+            var editedInterview = await this.interviewService.EditAsync(interviewUpdateInputModel, userId);
             return RedirectToAction("Details", "Interviews", new { editedInterview.Id });
         }
 
@@ -81,7 +81,7 @@
         public async Task<IActionResult> Delete(string id, string name)
         {
             var userId = this.userManager.GetUserId(this.User);
-            await this.interviewService.Delete(id, userId);
+            await this.interviewService.DeleteAsync(id, userId);
 
             return RedirectToAction(nameof(Index));
         }

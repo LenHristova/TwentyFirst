@@ -22,7 +22,8 @@
 
         public async Task<IActionResult> Index(int? pageNumber, string categoryId = null)
         {
-            var interviews = await this.interviewService.AllAsync<InterviewListViewModel>();
+            var interviews = await this.interviewService
+                .LatestAsync<InterviewListViewModel>(GlobalConstants.MaxInterviewsCountToGet);
 
             var onePageOfInterviews = await interviews.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.InterviewsOnPageCount);

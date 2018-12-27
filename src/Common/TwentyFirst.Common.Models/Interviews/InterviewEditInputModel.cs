@@ -34,7 +34,7 @@
 
         [Required(ErrorMessage = ValidationErrorMessages.Required)]
         [Display(Name = "Снимка")]
-        public ImageForArticleInputModel Image { get; set; }
+        public ImageBaseInputModel Image { get; set; }
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {

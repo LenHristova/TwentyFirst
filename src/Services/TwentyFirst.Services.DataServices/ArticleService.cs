@@ -74,7 +74,7 @@
         public async Task<IEnumerable<TModel>> LatestImportantFromCategoriesAsync<TModel>(
             IEnumerable<string> ids, int count)
         {
-            if (ids == null)
+            if (ids == null || !ids.Any())
             {
                 return new List<TModel>();
             }
@@ -106,7 +106,7 @@
         /// <inheritdoc />
         /// <summary>
         /// Gets article by id and project it to given model.
-        /// Throw InvalidArticleIdException if id is not present.
+        /// Throw InvalidArticleException if id is not present.
         /// </summary>
         /// <exception cref="InvalidArticleException"></exception>
         /// <typeparam name="TModel"></typeparam>
@@ -126,7 +126,7 @@
         /// <inheritdoc />
         /// <summary>
         /// Gets article by id.
-        /// Throw InvalidArticleIdException if id is not present.
+        /// Throw InvalidArticleException if id is not present.
         /// </summary>
         /// <exception cref="InvalidArticleException"></exception>
         /// <param name="id"></param>
@@ -147,7 +147,7 @@
             var article = Mapper.Map<Article>(articleCreateInputModel);
 
             this.categoryService.VerifyExistent(articleCreateInputModel.CategoriesIds);
-            this.VerifyExistent(articleCreateInputModel.ConnectedArticlesIds);
+            this.ThrowIfAnyNotExist(articleCreateInputModel.ConnectedArticlesIds);
 
             UpdateCategories(article.Categories, articleCreateInputModel.CategoriesIds?.ToList());
             UpdateConnectedArticles(article.ConnectedTo, articleCreateInputModel.ConnectedArticlesIds?.ToList());
@@ -166,7 +166,7 @@
             var article = await this.GetAsync(articleEditInputModel.Id);
 
             this.categoryService.VerifyExistent(articleEditInputModel.CategoriesIds);
-            this.VerifyExistent(articleEditInputModel.ConnectedArticlesIds);
+            this.ThrowIfAnyNotExist(articleEditInputModel.ConnectedArticlesIds);
 
             UpdateCategories(article.Categories, articleEditInputModel.CategoriesIds?.ToList());
             UpdateConnectedArticles(article.ConnectedTo, articleEditInputModel.ConnectedArticlesIds?.ToList());
@@ -236,7 +236,7 @@
             }
         }
 
-        public void VerifyExistent(IEnumerable<string> ids)
+        public void ThrowIfAnyNotExist(IEnumerable<string> ids)
         {
             if (ids != null)
             {

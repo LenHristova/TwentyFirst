@@ -8,13 +8,13 @@
 
     public interface IInterviewService
     {
-        Task<IEnumerable<TModel>> AllAsync<TModel>();
+        Task<IEnumerable<TModel>> LatestAsync<TModel>(int count);
 
         Task<Interview> CreateAsync(InterviewCreateInputModel interviewCreateInputModel, string creatorId);
 
-        Task<Interview> Edit(InterviewEditInputModel interviewEditInputModel, string editorId);
+        Task<Interview> EditAsync(InterviewEditInputModel interviewEditInputModel, string editorId);
 
-        Task Delete(string articleId, string editorId);
+        Task DeleteAsync(string interviewId, string editorId);
 
         /// <summary>
         /// Gets interview by id and project it to given model.
@@ -34,7 +34,5 @@
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Interview> GetAsync(string id);
-
-        Task<IEnumerable<TModel>> LatestAsync<TModel>(int count);
     }
 }

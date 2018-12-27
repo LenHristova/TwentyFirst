@@ -72,6 +72,9 @@
 
         public const int ArticlesCountForLatestSection = 10;
 
+        //Interview Constants
+        public const int MaxInterviewsCountToGet = 3000;
+
         public const int InterviewsCountForLatestSection = 9;
 
         //Static html files

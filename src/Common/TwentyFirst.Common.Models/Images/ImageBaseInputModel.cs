@@ -1,6 +1,6 @@
 ﻿namespace TwentyFirst.Common.Models.Images
 {
-    public class ImageForArticleInputModel 
+    public class ImageBaseInputModel 
     {
         public string Id { get; set; }
 

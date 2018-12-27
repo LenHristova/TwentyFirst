@@ -37,7 +37,7 @@
         public string Author { get; set; }
 
         [Display(Name = "Снимка")]
-        public ImageForArticleInputModel Image { get; set; }
+        public ImageBaseInputModel Image { get; set; }
 
         [Display(Name = "Топ новина?")]
         public bool IsTop { get; set; }
