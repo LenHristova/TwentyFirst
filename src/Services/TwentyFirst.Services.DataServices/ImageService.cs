@@ -25,6 +25,8 @@
 
         public async Task<IEnumerable<TModel>> GetBySearchTermAsync<TModel>(string searchTerm)
         {
+            searchTerm = searchTerm ?? string.Empty;
+
             return await this.db.Images
                 .Where(i => !i.IsDeleted && i.Description.ToLower().Contains(searchTerm.ToLower().Trim()))
                 .OrderByDescending(a => a.CreatedOn)
@@ -34,25 +36,13 @@
 
         public async Task<IEnumerable<TModel>> GetBySearchTermWithDeletedAsync<TModel>(string searchTerm)
         {
+            searchTerm = searchTerm ?? string.Empty;
+
             return await this.db.Images
                 .Where(i => i.Description.ToLower().Contains(searchTerm.ToLower().Trim()))
                 .OrderByDescending(a => a.CreatedOn)
                 .To<TModel>()
                 .ToListAsync();
-        }
-
-        public async Task DeleteAsync(string id)
-        {
-            var image = await this.GetAsync(id);
-            image.IsDeleted = true;
-            await this.db.SaveChangesAsync();
-        }
-
-        public async Task RecoverAsync(string id)
-        {
-            var image = await this.GetDeletedAsync(id);
-            image.IsDeleted = false;
-            await this.db.SaveChangesAsync();
         }
 
         /// <inheritdoc />
@@ -103,6 +93,20 @@
             imageToDb.IsDeleted = false;
 
             await this.db.Images.AddAsync(imageToDb);
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var image = await this.GetAsync(id);
+            image.IsDeleted = true;
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task RecoverAsync(string id)
+        {
+            var image = await this.GetDeletedAsync(id);
+            image.IsDeleted = false;
             await this.db.SaveChangesAsync();
         }
     }

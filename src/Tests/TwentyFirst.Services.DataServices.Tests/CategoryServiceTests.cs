@@ -649,7 +649,7 @@
             var categoryService = new CategoryService(this.dbContext);
 
             Assert.Throws<InvalidCategoryException>(
-                () => categoryService.ReorderDownAsync(Guid.NewGuid().ToString()).GetAwaiter().GetResult());
+                () => categoryService.RecoverAsync(Guid.NewGuid().ToString()).GetAwaiter().GetResult());
         }
 
         [Fact]
