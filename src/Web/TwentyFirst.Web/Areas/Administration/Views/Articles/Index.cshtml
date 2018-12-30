@@ -9,7 +9,7 @@
         <thead class="thead-light">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Title)</th>
-                <th>@Html.DisplayNameFor(model => model.PublishedOn)</th>
+                <th>@Html.DisplayNameFor(model => model.PublishedOnString)</th>
                 <th>@Html.DisplayNameFor(model => model.IsTop)</th>
                 <th>@Html.DisplayNameFor(model => model.IsImportant)</th>
                 <th>@Html.DisplayNameFor(model => model.CreatorUserName)</th>
@@ -27,9 +27,7 @@
                             </a>
                         </div>
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => article.PublishedOn)
-                    </td>
+                    <td>@article.PublishedOnString</td>
                     <td>
                         @if (article.IsTop)
                         {

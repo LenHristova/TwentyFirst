@@ -1,5 +1,4 @@
-﻿@using TwentyFirst.Common.Constants
-@model TwentyFirst.Common.Models.Images.ImageSearchViewModel
+﻿@model TwentyFirst.Common.Models.Images.ImageSearchViewModel
 
 @if (Model.SearchResultImages.Any())
 {
@@ -20,7 +19,7 @@
                         </a>
                         <div class="blockquote-footer">
                             <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
-                            <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOn.ToShortDateString()</div>
+                            <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOnOnString</div>
                         </div>
                         @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
                         {
@@ -45,7 +44,7 @@
                         </a>
                         <div class="blockquote-footer">
                             <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
-                            <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOn.ToShortDateString()</div>
+                            <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOnOnString</div>
                         </div>
                         <form asp-area="Administration" asp-controller="Images" asp-action="Recover" method="post" asp-route-id="@image.Id">
                             <div class="btn-group my-3">

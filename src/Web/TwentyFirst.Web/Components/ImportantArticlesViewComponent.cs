@@ -20,7 +20,7 @@
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var connectedArticleViewModels = await this.articleService
-                .LatestImportantAsync<ArticleViewModel>(GlobalConstants.ArticlesCountForFromCategoriesSection);
+                .LatestImportantAsync<ArticleViewModel>(GlobalConstants.ImportantArticlesCount);
             return this.View(connectedArticleViewModels);
         }
     }

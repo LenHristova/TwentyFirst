@@ -12,11 +12,11 @@
             <div class="single-blog-title text-center">
                 <h1 class="display-4">@Model.Title</h1>
             </div>
+            <hr />
+            <h5 class="text-center text-muted">@Model.Lead</h5>
         </div>
     </div>
 </div>
-<hr />
-<h5 class="text-center text-muted">@Model.Lead</h5>
 <!-- ********** Hero Area End ********** -->
 
 <div class="main-content-wrapper section-padding-100">
@@ -26,9 +26,7 @@
             <div class="col-12 col-lg-8">
                 <div class="single-blog-content mb-100">
                     <!-- Post Meta -->
-                    <div class="d-inline post-meta text-muted p-2 fa fa-calendar">
-                        <script>ToLocal("@Model.PublishedOn.ToString("MM/dd/yyyy h:m:s tt")")</script>
-                    </div>
+                    <p class="fa fa-clock-o text-muted"> @Model.PublishedOnString</p>
                     <!-- Post Content -->
                     <div class="post-content">
                         <h6>@Html.Raw(Model.HtmlContent)</h6>
@@ -39,33 +37,24 @@
                                 @foreach (var category in Model.Categories)
                                 {
                                     <li>
-                                        <a asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">
-                                            @category.Name
-                                        </a>
+                                        <a asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
                                     </li>
                                 }
                             </ul>
                         }
                         <!-- Post Meta -->
-                        <div class="post-meta second-part text-muted p-2">
-                            <div class="post-author d-inline mx-3">Източник: @Model.Author</div>
-                            <div class="d-inline fa fa-calendar mx-3"> @Model.PublishedOn.ToString("g")</div>
-                        </div>
+                            <div class="post-meta second-part text-muted p-2">
+                                <p class="post-author d-inline"> @Model.Author</p>
+                                <p class="post-date d-inline fa fa-clock-o"> @Model.PublishedOnString</p>
+                            </div>
                     </div>
                 </div>
             </div>
 
             <!-- ========== Sidebar Area ========== -->
             <div class="col-12 col-md-8 col-lg-4">
-                <div class="post-sidebar-area">
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title">Четете още</h5>
-                        <div class="widget-content">
-                            @await Component.InvokeAsync("important-articles-by-categories", Model.CategoriesIds)
-                        </div>
-                    </div>
-                </div>
+                <!-- ============== Important articles by categories ============== -->
+                @await Component.InvokeAsync("important-articles-by-categories", Model.CategoriesIds)
 
                 <!-- ============== Stay Connected ============== -->
                 <partial name="_StayConnectedPartial" />

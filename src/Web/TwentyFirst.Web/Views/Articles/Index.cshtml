@@ -2,11 +2,11 @@
 @{
     ViewData["Title"] = "Всички новини";
 }
-
+<div class="hero-area fixed-height-100 sides"></div>
 @if (Model.Any())
 {
 
-    <div class="main-content-wrapper section-padding-100">
+    <div class="main-content-wrapper py-3">
         <div class="container">
             <div class="row justify-content-center">
                 <!-- ============= Post Content Area Start ============= -->
@@ -34,7 +34,7 @@
                                                 <p>@article.Lead</p>
                                                 <!-- Post Meta -->
                                                 <div class="post-meta">
-                                                    <p><a href="#" class="post-author">@article.Author</a> на <a href="#" class="post-date">@article.PublishedOn</a></p>
+                                                    <p class="post-date">@article.PublishedOnString</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -46,15 +46,7 @@
                 </div>
                 <!-- ========== Sidebar Area ========== -->
                 <div class="col-12 col-md-8 col-lg-4">
-                    <div class="post-sidebar-area mb-3">
-                        <h5 class="title">Препоръчани</h5>
-                        <div class="widget-content">
-                            @await Component.InvokeAsync("important-articles")
-                        </div>
-                    </div>
-
-                    <!-- ============== Stay Connected ============== -->
-                    <partial name="_StayConnectedPartial" />
+                    <partial name="_SidebarPartial" />
                 </div>
             </div>
             <hr />
@@ -71,10 +63,10 @@ else
 @section Scripts {
     <script>
         $('document').ready(function () {
-            var loc = window.location.href;
+            var href = window.location.href;
 
             $("a").each(function () {
-                if (this.href == loc) {
+                if (this.href == href) {
                     $(this).addClass("text-admin-twenty-first font-weight-bold");
                 }
             });

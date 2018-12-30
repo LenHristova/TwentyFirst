@@ -23,18 +23,7 @@
             </div>
             <!-- ========== Sidebar Area ========== -->
             <div class="col-12 col-md-8 col-lg-4">
-                <div class="post-sidebar-area">
-                    <!-- Widget Area -->
-                    <div class="sidebar-widget-area">
-                        <h5 class="title">Препоръчани</h5>
-                        <div class="widget-content">
-                            @await Component.InvokeAsync("important-articles")
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ============== Stay Connected ============== -->
-                <partial name="_StayConnectedPartial" />
+                <partial name="_SidebarPartial" />
             </div>
         </div>
         <div class="row justify-content-center">
@@ -51,7 +40,7 @@
 
                         <div class="tab-content" id="myTabContent2">
                             <div class="tab-pane fade show active">
-                                    @await Component.InvokeAsync("latest-interviews")
+                                @await Component.InvokeAsync("latest-interviews")
                             </div>
                         </div>
                     </div>
@@ -60,25 +49,3 @@
         </div>
     </div>
 </div>
-
-
-@section Scripts {
-    <script>
-        $('document').ready(function () {
-            $(".a-predefined").click(function (e) {
-                e.preventDefault();
-                $.get(e.target.href)
-                    .done(function (data) {
-                        $("#results-table").html(data);
-                    });
-            });
-
-            $(".search-term").keypress(function (e) {
-                if (e.which == 13) {
-                    e.preventDefault();
-                    $("#search-button").click();
-                }
-            });
-        });
-    </script>
-}

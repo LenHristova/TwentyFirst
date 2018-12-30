@@ -21,7 +21,7 @@
         public const string AdministrationAccountsPage = "/Identity/Account/Index";
 
         //HTML
-        public const string HtmlTab = "&emsp;";
+        public const string HtmlTab = "&emsp;&emsp;";
 
         public const string HtmlNewLine = "<br />";
 
@@ -40,10 +40,10 @@
         
         //Pagination Constants
         public const int AdministrationArticlesOnPageCount = 10;
-        public const int ArticlesOnPageCount = 6;
+        public const int ArticlesOnPageCount = 5;
 
         public const int AdministrationInterviewsOnPageCount = 10;
-        public const int InterviewsOnPageCount = 6;
+        public const int InterviewsOnPageCount = 5;
 
         public const int AdministrationCategoriesOnPageCount = 10;
 
@@ -52,7 +52,7 @@
         public const int AdministrationUsersOnPageCount = 3;
 
         //Category Constants
-        public const int MainCategoriesCount = 5;
+        public const int MainCategoriesCount = 3;
 
         //Image Constants
         public const string CorruptedImage = "Файлът \"{0}\" не е снимка или е повреден.";
@@ -72,9 +72,10 @@
 
         public const int AdminMaxArticlesCountToGet = int.MaxValue;
 
-        public const int ConnectedArticleShortTitleMaxLength = 50;
+        public const int ArticleShortTitleMaxLength = 50;
 
         public const int TopArticlesCount = 4;
+        public const int ImportantArticlesCount = 6;
 
         public const int ArticlesCountForFromCategoriesSection = 10;
 

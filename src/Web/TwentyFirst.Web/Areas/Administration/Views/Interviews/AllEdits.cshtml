@@ -4,7 +4,7 @@
 }
 <h2>@ViewData["Title"]</h2>
 <hr />
-<p>Добавена от @Model.CreatorUserName на @Model.PublishedOn</p>
+<p>Добавена от @Model.CreatorUserName на @Model.PublishedOnString</p>
 @if (Model.Edits != null && Model.Edits.Any())
 {
     <table class="table table-hover">
@@ -19,7 +19,7 @@
             {
                 <tr>
                     <td>@Html.DisplayFor(modelItem => edit.EditorUserName)</td>
-                    <td>@Html.DisplayFor(modelItem => edit.EditDateTime)</td>
+                    <td>@Html.DisplayFor(modelItem => edit.EditDateTimeString)</td>
                 </tr>
             }
         </tbody>

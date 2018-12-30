@@ -17,13 +17,11 @@
     @if (Model.AdditionalCategories.Any())
     {
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">More</a>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Още</a>
             <div class="dropdown-menu">
                 @foreach (var category in Model.AdditionalCategories)
                 {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
-                    </li>
+                    <a class="nav-link" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
                 }
             </div>
         </li>

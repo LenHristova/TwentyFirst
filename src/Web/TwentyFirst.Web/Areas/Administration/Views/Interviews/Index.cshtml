@@ -9,7 +9,7 @@
         <thead class="thead-light">
             <tr>
                 <th>@Html.DisplayNameFor(model => model.Title)</th>
-                <th>@Html.DisplayNameFor(model => model.PublishedOn)</th>
+                <th>@Html.DisplayNameFor(model => model.PublishedOnString)</th>
                 <th>@Html.DisplayNameFor(model => model.Interviewed)</th>
                 <th>@Html.DisplayNameFor(model => model.CreatorUserName)</th>
                 <th></th>
@@ -28,7 +28,7 @@
                         </div>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => interview.PublishedOn)
+                        @Html.DisplayFor(modelItem => interview.PublishedOnString)
                     </td>
                     <td>@interview.Interviewed</td>
                     <td>@interview.CreatorUserName</td>

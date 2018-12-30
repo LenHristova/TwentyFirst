@@ -3,9 +3,10 @@
     ViewData["Title"] = "Всички интервюта";
 }
 
+<div class="hero-area fixed-height-100 sides"></div>
 @if (Model.Any())
 {
-    <div class="main-content-wrapper section-padding-100">
+    <div class="main-content-wrapper py-3">
         <div class="container">
             <div class="row justify-content-center">
                 <!-- ============= Post Content Area Start ============= -->
@@ -29,7 +30,7 @@
                                             <p>Интервю с @interview.Interviewed</p>
                                             <!-- Post Meta -->
                                             <div class="post-meta">
-                                                <p><a href="#" class="post-author">@interview.Author</a> на <a href="#" class="post-date">@interview.PublishedOn</a></p>
+                                                <p><a href="#" class="post-author">@interview.Author</a> на <a href="#" class="post-date">@interview.PublishedOnString</a></p>
                                             </div>
                                         </div>
                                     </div>
@@ -40,8 +41,7 @@
                 </div>
                 <!-- ========== Sidebar Area ========== -->
                 <div class="col-12 col-md-8 col-lg-4">
-                    <!-- ============== Stay Connected ============== -->
-                    <partial name="_StayConnectedPartial" />
+                    <partial name="_SidebarPartial" />
                 </div>
             </div>
             <hr />
@@ -52,16 +52,16 @@
 }
 else
 {
-    <p>Все още няма добавени новини.</p>
+    <p>Все още няма добавени интервюта.</p>
 }
 
 @section Scripts {
     <script>
         $('document').ready(function () {
-            var loc = window.location.href;
+            var href = window.location.href;
 
             $("a").each(function () {
-                if (this.href == loc) {
+                if (this.href == href) {
                     $(this).addClass("text-admin-twenty-first font-weight-bold");
                 }
             });

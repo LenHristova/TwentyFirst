@@ -5,34 +5,37 @@
 }
 
 <!-- ********** Hero Area Start ********** -->
-<div class="hero-area height-600 bg-img background-overlay" style="background-image: url(@Model.ImageUrl);"></div>
-<div class="single-blog-title text-center">
-    <h1>@Model.Title</h1>
+<div class="hero-area height-600 bg-img" style="background-image: url(@Model.ImageUrl);"></div>
+<div class="container h-100">
+    <div class="row h-100 align-items-center justify-content-center">
+        <div class="col-12 col-md-12 col-lg-12">
+            <div class="single-blog-title text-center">
+                <h1 class="display-4">@Model.Title</h1>
+            </div>
+            <hr />
+            <h5 class="text-center text-muted">Интервю с @Model.Interviewed</h5>
+        </div>
+    </div>
 </div>
-<hr />
-<h5 class="text-center text-muted">
-    Интервю с @Model.Interviewed
-</h5>
 <!-- ********** Hero Area End ********** -->
 
-<div class="regular-page-wrap section-padding-100">
+<div class="main-content-wrapper section-padding-100">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8">
-                <!-- Post Meta -->
-                <div class="d-inline post-meta text-muted p-2 fa fa-calendar">
-                    <script>ToLocal("@Model.PublishedOn.ToString("MM/dd/yyyy h:m:s tt")")</script>
-                </div>
-                <div class="page-content">
-                    <!-- Interview Content -->
+            <!-- ============= Post Content Area ============= -->
+            <div class="col-12 col-lg-8">
+                <div class="single-blog-content mb-100">
+                    <!-- Post Meta -->
+                    <p class="fa fa-clock-o text-muted"> @Model.PublishedOnString</p>
+                    <!-- Post Content -->
                     <div class="post-content">
                         <h6>@Html.Raw(Model.HtmlContent)</h6>
-                    </div>
-                    <!-- Post Meta -->
-                    <hr />
-                    <div class="post-meta second-part text-muted p-2">
-                        <div class="post-author d-inline mx-3">Източник: @Model.Author</div>
-                        <div class="d-inline fa fa-calendar mx-3"> @Model.PublishedOn.ToString("g")</div>
+
+                        <!-- Post Meta -->
+                        <div class="post-meta second-part text-muted p-2">
+                            <p class="post-author d-inline"> @Model.Author</p>
+                            <p class="post-date d-inline fa fa-clock-o"> @Model.PublishedOnString</p>
+                        </div>
                     </div>
                 </div>
             </div>

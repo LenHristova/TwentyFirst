@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using Data.Models;
+    using Extensions;
     using Mapping.Contracts;
 
     public class ArticleAdminListViewModel: IMapFrom<Article>
@@ -23,5 +24,9 @@
 
         [Display(Name = "Добавил")]
         public string CreatorUserName { get; set; }
+
+        [Display(Name = "Публикувана")]
+        public string PublishedOnString 
+            => this.PublishedOn.UtcToEstFormatted().ToFormattedString();
     }
 }

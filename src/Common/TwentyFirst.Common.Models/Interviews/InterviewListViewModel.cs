@@ -4,6 +4,7 @@
     using Images;
     using Mapping.Contracts;
     using System;
+    using Extensions;
 
     public class InterviewListViewModel : IMapFrom<Interview>
     {
@@ -18,5 +19,8 @@
         public DateTime PublishedOn { get; set; }
 
         public ImageThumbBaseViewModel Image { get; set; }
+
+        public string PublishedOnString
+            => this.PublishedOn.UtcToEstFormatted().ToFormattedString();
     }
 }

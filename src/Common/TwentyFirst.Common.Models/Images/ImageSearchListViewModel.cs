@@ -3,6 +3,7 @@
     using System;
     using Constants;
     using Data.Models;
+    using Extensions;
     using Mapping.Contracts;
 
     public class ImageSearchListViewModel : IMapFrom<Image>
@@ -28,5 +29,8 @@
         public DateTime CreatedOn { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public string CreatedOnOnString
+            => this.CreatedOn.UtcToEstFormatted().ToFormattedString();
     }
 }

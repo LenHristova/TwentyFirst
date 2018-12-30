@@ -7,6 +7,7 @@
     using Categories;
     using Constants;
     using Data.Models;
+    using Extensions;
     using Mapping.Contracts;
 
     public class ArticleDetailsViewModel : IMapFrom<Article>, IHaveCustomMappings
@@ -19,7 +20,9 @@
 
         public string HtmlContent 
             => this.Content.Insert(0, GlobalConstants.HtmlTab)
-                .Replace("\n", $"{GlobalConstants.HtmlNewLine}{GlobalConstants.HtmlTab}");
+                .Replace("\n", GlobalConstants.HtmlNewLine +
+                               GlobalConstants.HtmlNewLine +
+                               GlobalConstants.HtmlTab);
 
         public string Author { get; set; }
 
@@ -33,6 +36,9 @@
 
         public virtual IEnumerable<string> CategoriesIds
             => this.Categories.Select(c => c.Id).ToList();
+
+        public string PublishedOnString
+            => this.PublishedOn.UtcToEstFormatted().ToFormattedString();
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {

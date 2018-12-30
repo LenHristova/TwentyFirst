@@ -8,7 +8,7 @@
 
 @if (showBanner)
 {
-    <nav id="cookieConsent" class="navbar navbar-expand-lg bg-secondary fixed-top" role="alert">
+    <nav id="cookieConsent" class="navbar navbar-expand-lg bg-secondary fixed-bottom" role="alert">
         <div class="container">
             <div class="nav-item">
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#cookieConsent .navbar-collapse">
@@ -20,12 +20,11 @@
             </div>
             <div class="collapse navbar-collapse justify-content-around">
                 <p class="text-white">
-                    This website uses cookies. By continuing to use this website,
-                    you consent to our use of these cookies.
+                    21st използва “Бисквитки”. Изберете “Приемам”, за да приемете използването им.
                 </p>
                 <div class="navbar-right">
-                    <a asp-controller="Home" asp-action="Privacy" class="btn btn-info">Learn More</a>
-                    <button type="button" class="btn btn-success" data-cookie-string="@cookieString">Accept</button>
+                    <a asp-controller="Home" asp-action="Privacy" class="btn btn-info">Научете повече</a>
+                    <button type="button" class="btn btn-success" data-cookie-string="@cookieString">Приемам</button>
                 </div>
             </div>
         </div>

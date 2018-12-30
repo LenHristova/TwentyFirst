@@ -1,9 +1,10 @@
 ﻿namespace TwentyFirst.Common.Models.Interviews
 {
-    using System;
     using Constants;
     using Data.Models;
+    using Extensions;
     using Mapping.Contracts;
+    using System;
 
     public class InterviewDetailsViewModel : IMapFrom<Interview>
     {
@@ -22,5 +23,8 @@
         public DateTime PublishedOn { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public string PublishedOnString
+            => this.PublishedOn.UtcToEstFormatted().ToFormattedString();
     }
 }

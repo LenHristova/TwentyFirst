@@ -2,6 +2,7 @@
 {
     using System;
     using Data.Models;
+    using Extensions;
     using Images;
     using Mapping.Contracts;
 
@@ -13,10 +14,11 @@
 
         public string Lead { get; set; }
 
-        public string Author { get; set; }
-
         public DateTime PublishedOn { get; set; }
 
         public ImageThumbBaseViewModel Image { get; set; }
+
+        public string PublishedOnString
+            => this.PublishedOn.UtcToEstFormatted().ToFormattedString();
     }
 }
