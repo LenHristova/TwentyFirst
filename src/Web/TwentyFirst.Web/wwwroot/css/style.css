@@ -394,3 +394,52 @@ button:focus {
     background-color: #ffffff;
 }
 
+
+
+fieldset {
+
+    padding: 10px;
+    display: block;
+    clear: both;
+    margin: 5px 0px;
+}
+
+legend {
+    padding: 0px 10px;
+    /*background: black;
+    color: #FFF;*/
+}
+
+input.fieldname {
+    width: 93%;
+    float: left;
+    clear: left;
+    display: inline;
+    margin: 5px;
+}
+
+input.add {
+    float: right;
+    display: inline;
+    padding: 4px 9px;
+    margin: 0 5px;
+}
+
+input.remove {
+    float: right;
+    display: inline;
+    padding: 4px 10px;
+}
+
+#poll-answer-form label {
+    float: left;
+    clear: left;
+    display: block;
+    margin: 5px;
+}
+
+#poll-answer-form input, #poll-answer-form textarea {
+    float: left;
+    display: block;
+    margin: 5px;
+}

@@ -48,9 +48,7 @@
                             <span>&#10008;</span>
                         }
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => article.CreatorUserName)
-                    </td>
+                    <td>@article.CreatorUserName</td>
                     <td>
                         <div class="row">
                             <a asp-area="" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"

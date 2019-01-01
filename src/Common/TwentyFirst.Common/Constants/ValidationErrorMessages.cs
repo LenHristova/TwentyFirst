@@ -4,6 +4,8 @@
     {
         public const string Required = "Полето е задължително.";
 
+        public const string RequiredSelect = "Моля, изберете една от посочените опции.";
+
         public const string MinLength = "Въведете поне {1} символа.";
 
         public const string MaxLength = "Въведете не повече от {1} символа.";
@@ -23,5 +25,7 @@
         public const string MaxConnectedArticles = "Максималният брой свързани новини е {0}.";
 
         public const string InvalidCredentials = "Невалидни потребитеслки данни.";
+
+        public const string MinPollOptions = "Минималният брой опции е {0}.";
     }
 }

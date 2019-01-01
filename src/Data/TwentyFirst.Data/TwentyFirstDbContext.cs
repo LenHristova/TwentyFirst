@@ -30,9 +30,11 @@
 
         public DbSet<Poll> Polls { get; set; }
 
-        public DbSet<PollAnswer> PollAnswers { get; set; }
+        public DbSet<PollOption> PollOptions { get; set; }
 
         public DbSet<Subscriber> Subscribers { get; set; }
+
+        public DbSet<PollVote> PollVotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

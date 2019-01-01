@@ -1,0 +1,51 @@
+﻿@model TwentyFirst.Common.Models.Polls.PollDetailsViewModel
+
+@{
+    ViewData["Title"] = "Детайли";
+}
+
+<div class="container h-100">
+    <div class="row h-100 align-items-center justify-content-center">
+        <div class="col-12 col-md-12 col-lg-12">
+            <div class="single-blog-title text-center">
+                <h5>@Model.Question</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+
+<div class="main-content-wrapper section-padding-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="single-blog-content mb-100">
+                    <h5 class="text-muted text-center">Активна: @Html.Raw(Model.IsActiveAsSymbol)</h5>
+                    <h5 class="text-muted text-center">Гласували: @Model.AllVotes</h5>
+                    <div class="post-content my-5">
+                        @if (Model.Options.Any())
+                        {
+                            <h5 class="text-muted">Опции:</h5>
+                            <hr />
+                            foreach (var option in Model.Options)
+                            {
+                                <div class="row">
+                                    <div class="col-10">
+                                        <p>@option.Value</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p>@option.GetVotesPercentage(Model.AllVotes)%</p>
+                                    </div>
+                                </div>
+                                <hr />
+                            }
+                        }
+                        <div class="post-meta second-part text-muted p-2">
+                            <p class="post-author text-center">Добавил @Model.CreatorUserName в @Model.CreatedOnString</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

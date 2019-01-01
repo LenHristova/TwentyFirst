@@ -47,9 +47,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                var errors = string.Join(GlobalConstants.HtmlNewLine, this.ModelState.Values);
-                this.SetAlertMessage(AlertMessageLevel.Error, errors);
-
+                this.SetAlertMessage(AlertMessageLevel.Error, this.GetModelStateErrorMessages());
                 return RedirectToAction(nameof(Index));
             }
 
@@ -78,9 +76,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                var errors = string.Join(GlobalConstants.HtmlNewLine, this.ModelState.Values);
-                this.SetAlertMessage(AlertMessageLevel.Error, errors);
-
+                this.SetAlertMessage(AlertMessageLevel.Error, this.GetModelStateErrorMessages());
                 return RedirectToAction(nameof(Index));
             }
 

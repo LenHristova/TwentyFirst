@@ -32,6 +32,14 @@
                         <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимки</a>
                     </div>
                 </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" asp-area="Administration" asp-controller="Articles" asp-action="Index"
+                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Анкети</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Polls" asp-action="Index">Всички анкети</a>
+                        <a class="dropdown-item" asp-area="Administration" asp-controller="Polls" asp-action="Create">Добави анкета</a>
+                    </div>
+                </li>
                 <li>
                     <a class="nav-link" asp-area="Administration" asp-controller="Subscribers" asp-action="ConfirmArticlesSend">Изпрати абонамент</a>
                 </li>
@@ -49,7 +57,7 @@
             {
                 <ul class="nav navbar-nav navbar-right font-weight-bold">
                     <li class="nav-item dropdown active">
-                        <a class="nav-link dropdown-toggle" asp-area="Identity" asp-controller="Images" asp-action="Upload"
+                        <a class="nav-link dropdown-toggle" asp-page="/Account/Index"
                            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Акаунти</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))

@@ -12,6 +12,6 @@
         public DateTime EditDateTime { get; set; }
 
         public string EditDateTimeOnString
-            => this.EditDateTime.UtcToEstFormatted().ToFormattedString();
+            => this.EditDateTime.UtcToEst().ToFormattedString();
     }
 }

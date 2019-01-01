@@ -84,29 +84,8 @@
     <!-- Active js -->
     <script src="~/js/active.js"></script>
     <!-- Weather js -->
-    <script src="~/js/weather.js"></script>
+    <script src="~/js/site.js"></script>
 
-    <script>
-        $('document').ready(function () {
-            $("#subscribe-button").click(function (e) {
-                e.preventDefault();
-                var email = $("#subscriber-email").val();
-                $.post("/Subscribers/Subscribe", { email: email })
-                    .done(function (data) {
-                        $("#subscribe-result").html(data);
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        alert("Изникна проблем при зареждането на формата.");
-                    });
-            });
-
-            $("#subscriber-email").keypress(function (e) {
-                if (e.which == 13) {
-                    e.preventDefault();
-                    $("#subscribe-button").click();
-                }
-            });
-        });
-    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

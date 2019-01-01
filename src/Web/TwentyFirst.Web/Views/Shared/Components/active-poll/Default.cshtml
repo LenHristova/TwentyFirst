@@ -1,0 +1,27 @@
+﻿@model TwentyFirst.Common.Models.Polls.ActivePollVoteInputModel
+
+@if (Model != null)
+{
+    <div class="post-sidebar-area">
+        <div class="sidebar-widget-area">
+            <h5 class="title"></h5>
+            <h5 class="title">Анкета</h5>
+            <div class="widget-content">
+                <p class="font-bold py-3">@Model.Question</p>
+                <form asp-area="" asp-controller="Polls" asp-action="Vote" method="post" id="poll-form">
+                    <input asp-for="Id" type="hidden" />
+                    @foreach (var option in Model.Options)
+                    {
+                        <div class="radio">
+                            <input asp-for="SelectedOptionId" type="radio" value="@option.Id">
+                            <label asp-for="@option.Id">@option.Value</label>
+                            <input asp-for="@option.Id" type="hidden">
+                        </div>
+                    }
+                    <button type="submit" class="btn btn-sm btn-admin-twenty-first text-white">Гласувай</button>
+                </form>
+                <p id="pole-vote-result" class="text-admin-twenty-first py-3"></p>
+            </div>
+        </div>
+    </div>
+}

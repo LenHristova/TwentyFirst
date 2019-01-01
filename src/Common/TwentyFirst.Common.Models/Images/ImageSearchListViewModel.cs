@@ -31,6 +31,6 @@
         public bool IsDeleted { get; set; }
 
         public string CreatedOnOnString
-            => this.CreatedOn.UtcToEstFormatted().ToFormattedString();
+            => this.CreatedOn.UtcToEst().ToFormattedString();
     }
 }

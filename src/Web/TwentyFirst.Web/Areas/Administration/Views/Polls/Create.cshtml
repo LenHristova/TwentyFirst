@@ -1,0 +1,58 @@
+﻿@model TwentyFirst.Common.Models.Polls.PollCreateInputModel
+
+@{
+    ViewData["Title"] = "Добави анкета";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+<hr />
+<form asp-action="Create" method="post">
+    <div class="row h5">
+        <div class="col-md-8 offset-2">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Question" class="control-label"></label>
+                <input asp-for="Question" class="form-control" />
+                <span asp-validation-for="Question" class="text-danger"></span>
+            </div>
+            <fieldset id="options">
+                <legend>Опции</legend>
+                <span asp-validation-for="Options" class="text-danger"></span>
+                <div class="fieldwrapper" id="field1">
+                    <input type="text" class="fieldname form-control" name="options">
+                </div>
+            </fieldset>
+            <input type="button" class="btn btn-sm btn-success add" id="add" value="+" />
+        </div>
+
+        <div class="fixed-bottom bg-dark">
+            <div class="form-group w-25 mx-auto my-1">
+                <input type="submit" value="Запази" class="btn btn-lg btn-admin-twenty-first text-light" />
+                <a asp-action="Index" class="btn btn-lg btn-secondary">Излез</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/jquery.dropdown.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#add").click(function () {
+                var lastField = $("#options div:last");
+                var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 2;
+                var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"field" + intId + "\"/>");
+                fieldWrapper.data("idx", intId);
+                var fName = $("<input type=\"text\" class=\"fieldname form-control\" name=\"options\" />");
+                var removeButton = $("<input type=\"button\" class=\"remove btn btn-sm btn-warning text-white\" value=\"–\" />");
+                removeButton.click(function () {
+                    $(this).parent().remove();
+                });
+                fieldWrapper.append(fName);
+                fieldWrapper.append(removeButton);
+                $("#options").append(fieldWrapper);
+            });
+        });
+    </script>
+}

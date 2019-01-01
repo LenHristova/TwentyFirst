@@ -17,6 +17,6 @@
         public IEnumerable<InterviewEditsViewModel> Edits { get; set; }
 
         public string PublishedOnString
-            => this.PublishedOn.UtcToEstFormatted().ToFormattedString();
+            => this.PublishedOn.UtcToEst().ToFormattedString();
     }
 }

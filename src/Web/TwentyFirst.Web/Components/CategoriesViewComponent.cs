@@ -15,7 +15,7 @@
             this.categoryService = categoryService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string activeCategoryId)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var allCategories = await this.categoryService.AllAsync<CategoryViewModel>();
             var categoriesToShow = new IndexCategoryViewComponentViewModel { Categories = allCategories };

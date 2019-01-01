@@ -26,7 +26,6 @@
         public void Dispose()
         {
             this.dbContext.Dispose();
-
         }
 
         private DbContextOptions<TwentyFirstDbContext> GetDbOptions()

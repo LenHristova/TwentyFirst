@@ -15,7 +15,13 @@
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
-                .HasMany(p => p.Answers)
+                .HasMany(p => p.Options)
+                .WithOne(a => a.Poll)
+                .HasForeignKey(a => a.PollId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasMany(p => p.Votes)
                 .WithOne(a => a.Poll)
                 .HasForeignKey(a => a.PollId)
                 .OnDelete(DeleteBehavior.Restrict);

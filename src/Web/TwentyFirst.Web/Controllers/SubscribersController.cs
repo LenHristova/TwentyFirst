@@ -47,8 +47,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                var errors = string.Join("</br>", this.ModelState.Values);
-                return this.Content(errors);
+                return this.Content(this.GetModelStateErrorMessages());
             }
 
             var subscriberExists = await this.subscriberService.ExistsAsync(email);

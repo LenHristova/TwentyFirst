@@ -38,7 +38,7 @@
             => this.Categories.Select(c => c.Id).ToList();
 
         public string PublishedOnString
-            => this.PublishedOn.UtcToEstFormatted().ToFormattedString();
+            => this.PublishedOn.UtcToEst().ToFormattedString();
 
         public void CreateMappings(IMapperConfigurationExpression configuration)
         {

@@ -40,12 +40,14 @@
         
         //Pagination Constants
         public const int AdministrationArticlesOnPageCount = 10;
-        public const int ArticlesOnPageCount = 5;
+        public const int ArticlesOnPageCount = 10;
 
         public const int AdministrationInterviewsOnPageCount = 10;
-        public const int InterviewsOnPageCount = 5;
+        public const int InterviewsOnPageCount = 10;
 
         public const int AdministrationCategoriesOnPageCount = 10;
+
+        public const int PollsOnPageCount = 10;
 
         public const int AdministrationArticleEditsOnPageCount = 10;
 
@@ -63,6 +65,8 @@
 
         public const string SuccessfulImageRecover = "Снимката беше възстановена успешно.";
 
+        public const string SuccessfulPollDelete = "Анкетата беше изтрита успешно.";
+
         public const int ImageShortDescriptionMaxLength = 50;
 
         public const int ImagesOnSearchPageCount = 2;
@@ -75,7 +79,7 @@
         public const int ArticleShortTitleMaxLength = 50;
 
         public const int TopArticlesCount = 4;
-        public const int ImportantArticlesCount = 6;
+        public const int ImportantArticlesCount = 10;
 
         public const int ArticlesCountForFromCategoriesSection = 10;
 
@@ -84,7 +88,7 @@
         //Interview Constants
         public const int MaxInterviewsCountToGet = 3000;
 
-        public const int InterviewsCountForLatestSection = 9;
+        public const int InterviewsCountForLatestSection = 4;
 
         //Static html files
         public const string HtmlTemplatesFolderPath = "html-templates";

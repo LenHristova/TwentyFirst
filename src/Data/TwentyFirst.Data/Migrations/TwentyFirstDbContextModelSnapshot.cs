@@ -356,8 +356,12 @@ namespace TwentyFirst.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedOn");
+
                     b.Property<string>("CreatorId")
                         .IsRequired();
+
+                    b.Property<bool>("IsActive");
 
                     b.Property<bool>("IsDeleted");
 
@@ -372,17 +376,18 @@ namespace TwentyFirst.Data.Migrations
                     b.ToTable("Polls");
                 });
 
-            modelBuilder.Entity("TwentyFirst.Data.Models.PollAnswer", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.PollOption", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasMaxLength(500);
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("PollId")
                         .IsRequired();
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(300);
 
                     b.Property<int>("Votes");
 
@@ -390,7 +395,25 @@ namespace TwentyFirst.Data.Migrations
 
                     b.HasIndex("PollId");
 
-                    b.ToTable("PollAnswers");
+                    b.ToTable("PollOptions");
+                });
+
+            modelBuilder.Entity("TwentyFirst.Data.Models.PollVote", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Ip")
+                        .IsRequired();
+
+                    b.Property<string>("PollId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PollId");
+
+                    b.ToTable("PollVotes");
                 });
 
             modelBuilder.Entity("TwentyFirst.Data.Models.Subscriber", b =>
@@ -603,10 +626,18 @@ namespace TwentyFirst.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TwentyFirst.Data.Models.PollAnswer", b =>
+            modelBuilder.Entity("TwentyFirst.Data.Models.PollOption", b =>
                 {
                     b.HasOne("TwentyFirst.Data.Models.Poll", "Poll")
-                        .WithMany("Answers")
+                        .WithMany("Options")
+                        .HasForeignKey("PollId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TwentyFirst.Data.Models.PollVote", b =>
+                {
+                    b.HasOne("TwentyFirst.Data.Models.Poll", "Poll")
+                        .WithMany("Votes")
                         .HasForeignKey("PollId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

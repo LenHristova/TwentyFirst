@@ -7,8 +7,8 @@
 <div class="main-content-wrapper section-padding-100">
     <div class="container">
         <div class="row justify-content-center">
-            <!-- ============= Articles Content Area Start ============= -->
             <div class="col-12 col-lg-8">
+                <!-- ============= Articles Content Area Start ============= -->
                 <div class="post-content-area mb-50">
                     <div class="world-catagory-area">
                         @await Component.InvokeAsync("categories")
@@ -20,15 +20,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- ========== Sidebar Area ========== -->
-            <div class="col-12 col-md-8 col-lg-4">
-                <partial name="_SidebarPartial" />
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <!-- ============= Articles Content Area Start ============= -->
-            <div class="col-12 col-lg-12">
+
+                <!-- ============= Interviews Content Area Start ============= -->
                 <div class="post-content-area mb-50 py-3">
                     <div class="world-catagory-area">
                         <ul class="nav nav-tabs" id="myTab2" role="tablist">
@@ -45,6 +38,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- ========== Sidebar Area ========== -->
+            <div class="col-12 col-md-8 col-lg-4">
+                <partial name="_SidebarPartial" />
             </div>
         </div>
     </div>

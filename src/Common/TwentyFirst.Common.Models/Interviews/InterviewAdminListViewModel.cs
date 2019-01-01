@@ -24,6 +24,6 @@
 
         [Display(Name = "Публикувана")]
         public string PublishedOnString
-            => this.PublishedOn.UtcToEstFormatted().ToFormattedString();
+            => this.PublishedOn.UtcToEst().ToFormattedString();
     }
 }

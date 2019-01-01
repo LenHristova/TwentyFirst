@@ -87,7 +87,8 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
+        [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Delete(string id)
         {
             await this.imageService.DeleteAsync(id);
@@ -100,7 +101,8 @@
         }
 
         [HttpPost]
-        [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
+        [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Recover(string id)
         {
             await this.imageService.RecoverAsync(id);

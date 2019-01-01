@@ -1,5 +1,6 @@
 ﻿namespace TwentyFirst.Data.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -13,8 +14,14 @@
         public string CreatorId { get; set; }
         public virtual User Creator { get; set; }
 
+        public DateTime CreatedOn { get; set; }
+
         public bool IsDeleted { get; set; }
 
-        public virtual ICollection<PollAnswer> Answers { get; set; } = new HashSet<PollAnswer>();
+        public bool IsActive { get; set; }
+
+        public virtual ICollection<PollOption> Options { get; set; } = new HashSet<PollOption>();
+
+        public virtual ICollection<PollVote> Votes { get; set; } = new HashSet<PollVote>();
     }
 }

@@ -1,10 +1,6 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
-    using System.Linq;
-    using System.Threading.Tasks;
     using Common.Constants;
-    using Common.Models.Articles;
-    using Common.Models.Categories;
     using Common.Models.Interviews;
     using Data.Models;
     using Filters;
@@ -12,6 +8,8 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class InterviewsController : AdministrationController
