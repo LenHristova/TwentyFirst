@@ -2,14 +2,12 @@
 {
     using Common.Constants;
     using Common.Models.Interviews;
-    using Filters;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
 
-    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class InterviewsController : BaseController
     {
         private readonly IInterviewService interviewService;

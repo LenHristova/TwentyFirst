@@ -15,7 +15,6 @@
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
-    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class SubscribersController : BaseController
     {
         private readonly IEmailSender emailSender;

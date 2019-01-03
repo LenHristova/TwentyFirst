@@ -4,7 +4,6 @@
     using Common.Models.Enums;
     using Common.Models.Polls;
     using Data.Models;
-    using Filters;
     using Infrastructure.Extensions;
     using Logging;
     using Microsoft.AspNetCore.Identity;
@@ -14,7 +13,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class PollsController : AdministrationController
     {
         private readonly IPollService pollService;

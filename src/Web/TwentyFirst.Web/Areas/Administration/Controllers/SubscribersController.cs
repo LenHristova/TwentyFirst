@@ -3,7 +3,6 @@
     using Common.Constants;
     using Common.Models.Articles;
     using Common.Models.Subscribers;
-    using Filters;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
@@ -15,7 +14,6 @@
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
-    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class SubscribersController : AdministrationController
     {
         private readonly ISubscriberService subscriberService;
@@ -56,7 +54,9 @@
 
         public IActionResult SuccessfulArticlesSend() => this.View();
 
-        private async Task<string> SendToSubscribers(string emailContent, IEnumerable<SubscriberSendArticlesModel> subscribers)
+        private async Task<string> SendToSubscribers(
+            string emailContent, 
+            IEnumerable<SubscriberSendArticlesModel> subscribers)
         {
             foreach (var subscriber in subscribers)
             {
@@ -76,7 +76,8 @@
             return emailContent;
         }
 
-        private async Task<string> PrepareEmailContent(IEnumerable<ArticleBaseViewModel> articlesToSend)
+        private async Task<string> PrepareEmailContent(
+            IEnumerable<ArticleBaseViewModel> articlesToSend)
         {
             var stringBuilder = new StringBuilder();
             var singleArticleFilePath = this.GetHtmlTemplateFilePath(GlobalConstants.HtmlSingleArticleFilePath);

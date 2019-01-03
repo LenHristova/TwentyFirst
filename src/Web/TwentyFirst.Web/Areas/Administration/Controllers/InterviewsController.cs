@@ -3,7 +3,6 @@
     using Common.Constants;
     using Common.Models.Interviews;
     using Data.Models;
-    using Filters;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -11,13 +10,14 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class InterviewsController : AdministrationController
     {
         private readonly IInterviewService interviewService;
         private readonly UserManager<User> userManager;
 
-        public InterviewsController(IInterviewService interviewService, UserManager<User> userManager)
+        public InterviewsController(
+            IInterviewService interviewService,
+            UserManager<User> userManager)
         {
             this.interviewService = interviewService;
             this.userManager = userManager;

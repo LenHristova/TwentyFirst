@@ -2,14 +2,12 @@
 {
     using Common.Constants;
     using Common.Models.Articles;
-    using Filters;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
 
-    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class ArticlesController : BaseController
     {
         private readonly IArticleService articleService;

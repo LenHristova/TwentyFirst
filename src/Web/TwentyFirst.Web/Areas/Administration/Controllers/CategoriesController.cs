@@ -1,19 +1,18 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
     using Common.Constants;
+    using Common.Exceptions;
     using Common.Models.Categories;
     using Common.Models.Enums;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Services.DataServices.Contracts;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using CloudinaryDotNet.Actions;
-    using Common.Exceptions;
     using Filters;
     using Infrastructure.Extensions;
     using Logging;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Services.DataServices.Contracts;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class CategoriesController : AdministrationController
@@ -21,13 +20,14 @@
         private readonly ICategoryService categoryService;
         private readonly ILogger logger;
 
-        public CategoriesController(ICategoryService categoryService, ILogger<CategoriesController> logger)
+        public CategoriesController(
+            ICategoryService categoryService,
+            ILogger<CategoriesController> logger)
         {
             this.categoryService = categoryService;
             this.logger = logger;
         }
 
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Index(int? pageNumber)
         {
             var categories = await this.categoryService.AllWithArchivedAsync<CategoryListViewModel>();
@@ -38,11 +38,10 @@
             return this.View(onePageOfCategories);
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
         public IActionResult Create() => this.PartialView("_CategoryCreateFormPartial");
 
         [HttpPost]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Create(CategoryCreateInputModel categoryCreateInputModel)
         {
             if (!this.ModelState.IsValid)
@@ -51,8 +50,8 @@
                 return RedirectToAction(nameof(Index));
             }
 
-           var createdCategory = await this.categoryService
-               .CreateAsync(categoryCreateInputModel);
+            var createdCategory = await this.categoryService
+                .CreateAsync(categoryCreateInputModel);
 
             var message = $"Категорията \"{createdCategory.Name}\" беше добавена успешно.";
             this.logger.LogInformation((int)LoggingEvents.InsertItem, message);
@@ -61,7 +60,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
         public async Task<IActionResult> Edit(string id)
         {
             var categoryToEdit = await this.categoryService
@@ -71,7 +70,6 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Edit(CategoryUpdateInputModel categoryUpdateInputModel)
         {
             if (!this.ModelState.IsValid)
@@ -89,7 +87,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
         public async Task<IActionResult> Archive(string id)
         {
             var categoryToArchive = await this.categoryService
@@ -99,7 +97,6 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Archive(CategoryUpdateInputModel categoryUpdateInputModel)
         {
             var archivedCategory = await this.categoryService
@@ -112,7 +109,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
         public async Task<IActionResult> Recover(string id)
         {
             var categoryToRecover = await this.categoryService
@@ -122,7 +119,6 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Recover(CategoryUpdateInputModel categoryUpdateInputModel)
         {
             var archivedCategory = await this.categoryService
@@ -135,7 +131,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
         public async Task<IActionResult> Order(string id, bool up, bool down)
         {
             if ((up && down) || (!up && !down))

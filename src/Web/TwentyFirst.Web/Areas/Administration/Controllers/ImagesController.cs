@@ -38,11 +38,9 @@
 
         public IActionResult Index() => this.View();
 
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public IActionResult Upload() => this.View();
 
         [HttpPost]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Upload(ImagesCreateInputModel imagesCreateInputModel)
         {
             if (!ModelState.IsValid)
@@ -87,7 +85,6 @@
         }
 
         [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Delete(string id)
         {
             var image = await this.imageService.GetAsync<ImageUrlBaseViewModel>(id);
@@ -96,7 +93,6 @@
 
         [HttpPost]
         [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Delete(string id, string name)
         {
             await this.imageService.DeleteAsync(id);
@@ -109,7 +105,6 @@
         }
 
         [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Recover(string id)
         {
             var image = await this.imageService.GetDeletedAsync<ImageUrlBaseViewModel>(id);
@@ -118,7 +113,6 @@
 
         [HttpPost]
         [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
-        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Recover(string id, string name)
         {
             await this.imageService.RecoverAsync(id);
@@ -130,7 +124,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
         public async Task<IActionResult> Search(string search, int? pageNumber)
         {
             search = search ?? string.Empty;

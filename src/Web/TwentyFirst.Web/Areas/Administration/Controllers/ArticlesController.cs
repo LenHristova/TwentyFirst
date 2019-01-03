@@ -3,7 +3,6 @@
     using Common.Constants;
     using Common.Models.Articles;
     using Data.Models;
-    using Filters;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class ArticlesController : AdministrationController
     {
         private readonly IArticleService articleService;
@@ -26,7 +24,7 @@
         public async Task<IActionResult> Index(int? pageNumber)
         {
             var articles = await this.articleService
-                .LatestAsync<ArticleAdminListViewModel>(GlobalConstants.AdminMaxArticlesCountToGet);
+                    .LatestAsync<ArticleAdminListViewModel>(GlobalConstants.AdminMaxArticlesCountToGet);
 
             var onePageOfArticles = await articles.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.AdministrationArticlesOnPageCount);

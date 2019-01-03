@@ -7,7 +7,6 @@
     using Services.DataServices.Contracts;
     using System.Threading.Tasks;
 
-    [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
     public class PollsController : BaseController
     {
         private readonly IPollService pollService;
@@ -18,6 +17,7 @@
         }
 
         [HttpPost]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
         public async Task<IActionResult> Vote(ActivePollVoteInputModel activePollViewModel)
         {
             if (!this.ModelState.IsValid)

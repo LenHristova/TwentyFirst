@@ -4,8 +4,10 @@
     using Common.Constants;
     using Common.Extensions;
     using Common.Models.Enums;
+    using Filters;
     using Microsoft.AspNetCore.Mvc;
 
+    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute), Order = 2)]
     public class BaseController : Controller
     {
         /// <summary>
