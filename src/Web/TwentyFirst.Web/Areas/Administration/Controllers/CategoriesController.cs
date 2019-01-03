@@ -1,5 +1,6 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
+    using System;
     using Common.Constants;
     using Common.Exceptions;
     using Common.Models.Categories;
@@ -44,6 +45,7 @@
         [HttpPost]
         public async Task<IActionResult> Create(CategoryCreateInputModel categoryCreateInputModel)
         {
+            throw new Exception("Test");
             if (!this.ModelState.IsValid)
             {
                 this.SetAlertMessage(AlertMessageLevel.Error, this.GetModelStateErrorMessages());
@@ -60,7 +62,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Edit(string id)
         {
             var categoryToEdit = await this.categoryService

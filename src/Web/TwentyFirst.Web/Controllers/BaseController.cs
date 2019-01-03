@@ -1,13 +1,11 @@
 ﻿namespace TwentyFirst.Web.Controllers
 {
-    using System.Linq;
     using Common.Constants;
     using Common.Extensions;
     using Common.Models.Enums;
-    using Filters;
     using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
 
-    [TypeFilter(typeof(ErrorPageExceptionFilterAttribute), Order = 2)]
     public class BaseController : Controller
     {
         /// <summary>
@@ -24,7 +22,7 @@
 
         protected string GetModelStateErrorMessages()
         => string.Join(
-            GlobalConstants.HtmlNewLine, 
+            GlobalConstants.HtmlNewLine,
             this.ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage)));
     }
 }

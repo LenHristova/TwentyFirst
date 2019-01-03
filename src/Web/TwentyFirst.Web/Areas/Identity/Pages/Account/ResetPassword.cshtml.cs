@@ -6,9 +6,9 @@
     using Microsoft.AspNetCore.Mvc;
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
-    using TwentyFirst.Data.Models;
+    using Data.Models;
 
-    public class ResetPasswordModel : IdentityAdministrationBasePageModel<ResetPasswordModel>
+    public class ResetPasswordModel : AdministrationPageModel<ResetPasswordModel>
     {
         private readonly UserManager<User> userManager;
 

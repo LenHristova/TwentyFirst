@@ -9,7 +9,7 @@
     using System.Threading.Tasks;
     using TwentyFirst.Data.Models;
 
-    public class ForgotPasswordModel : IdentityAdministrationEmailConfirmationPageModel<ForgotPasswordModel>
+    public class ForgotPasswordModel : AdministrationEmailConfirmationPageModel<ForgotPasswordModel>
     {
         public ForgotPasswordModel(
             UserManager<User> userManager,

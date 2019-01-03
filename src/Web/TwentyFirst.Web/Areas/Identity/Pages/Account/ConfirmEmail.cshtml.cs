@@ -5,9 +5,9 @@
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Threading.Tasks;
-    using TwentyFirst.Data.Models;
+    using Data.Models;
 
-    public class ConfirmEmailModel : IdentityAdministrationBasePageModel<ConfirmEmailModel>
+    public class ConfirmEmailModel : AdministrationPageModel<ConfirmEmailModel>
     {
         private readonly UserManager<User> userManager;
 

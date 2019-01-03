@@ -29,6 +29,8 @@
 
         public const string ConfirmationEmailSend = "Изпратихме ви имейл за потвърждение";
 
+        public const string BaseExceptionMessage = "Нещо се обърка...";
+
         //Validation constants
         public const int MinPasswordLength = 6;
 

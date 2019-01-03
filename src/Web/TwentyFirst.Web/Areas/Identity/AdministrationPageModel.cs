@@ -5,9 +5,7 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
-    //[Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
-    //[Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    public abstract class IdentityAdministrationBasePageModel<TPageModel> : PageModel
+    public abstract class AdministrationPageModel<TPageModel> : PageModel
     {
     }
 }

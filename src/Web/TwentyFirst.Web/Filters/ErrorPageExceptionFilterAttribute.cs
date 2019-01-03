@@ -7,6 +7,8 @@
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
     using Microsoft.Extensions.Logging;
+    using System.Linq;
+    using Common.Constants;
 
     public class ErrorPageExceptionFilterAttribute : ExceptionFilterAttribute
     {
@@ -26,6 +28,11 @@
 
         public override void OnException(ExceptionContext context)
         {
+            if (HasAnotherExceptionFilter(context))
+            {
+                return;
+            }
+
             this.logger.LogError(context.Exception.Message);
 
             var result = new ViewResult
@@ -36,18 +43,36 @@
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                if (context.Exception is BaseTwentyFirstException &&
-                    context.HttpContext.User.Identity.IsAuthenticated)
+                if (context.HttpContext.User.Identity.IsAuthenticated)
                 {
-                    result.ViewData.Add("Error", context.Exception.Message);
+                    var errorMessage = context.Exception is BaseTwentyFirstException ex
+                        ? ex.Message
+                        : GlobalConstants.BaseExceptionMessage;
+
+                    result.ViewData.Add("Error", errorMessage);
                     context.Result = result;
                 }
-
-                return;
+                else
+                {
+                    context.Result = new RedirectResult("/");
+                }
             }
+            else
+            {
+                result.ViewData.Add("Error", context.Exception);
+                context.Result = result;
+            }
+        }
 
-            result.ViewData.Add("Error", context.Exception);
-            context.Result = result;
+        private bool HasAnotherExceptionFilter(ExceptionContext context)
+        {
+            var exceptionFiltersCount = context.ActionDescriptor.FilterDescriptors
+                .Select(attr => attr.Filter)
+                .Where(f => f is TypeFilterAttribute || f is ExceptionFilterAttribute)
+                .Select(f => f is TypeFilterAttribute tf ? tf.ImplementationType : f.GetType())
+                .Count(a => a.BaseType == typeof(ExceptionFilterAttribute));
+
+            return exceptionFiltersCount > 1;
         }
     }
 }

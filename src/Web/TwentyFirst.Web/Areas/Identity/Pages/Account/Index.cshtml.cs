@@ -1,23 +1,23 @@
 namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
     using Common.Constants;
+    using Common.Extensions;
+    using Common.Models.Enums;
     using Data.Models;
     using Infrastructure.Extensions;
+    using Logging;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Common.Extensions;
-    using Common.Models.Enums;
-    using Logging;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-    using Microsoft.Extensions.Logging;
     using X.PagedList;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
-    public class IndexModel : PageModel
+    public class IndexModel : AdministrationPageModel<IndexModel>
     {
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;

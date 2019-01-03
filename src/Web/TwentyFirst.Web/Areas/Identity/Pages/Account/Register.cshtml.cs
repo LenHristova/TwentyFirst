@@ -12,7 +12,7 @@
     using System.Threading.Tasks;
     using TwentyFirst.Data.Models;
 
-    public class RegisterModel : IdentityAdministrationEmailConfirmationPageModel<RegisterModel>
+    public class RegisterModel : AdministrationEmailConfirmationPageModel<RegisterModel>
     {
         private readonly ILogger<RegisterModel> logger;
 

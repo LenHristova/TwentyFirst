@@ -1,5 +1,6 @@
 ﻿namespace TwentyFirst.Web.Filters
 {
+    using Common.Constants;
     using Common.Exceptions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -34,20 +35,27 @@
                 ViewData = new ViewDataDictionary(modelMetadataProvider, context.ModelState)
             };
 
-            if (!hostingEnvironment.IsDevelopment())
+            if (hostingEnvironment.IsDevelopment())
             {
-                if (context.Exception is BaseTwentyFirstException &&
-                    context.HttpContext.User.Identity.IsAuthenticated)
+                if (context.HttpContext.User.Identity.IsAuthenticated)
                 {
-                    result.ViewData.Add("Error", context.Exception.Message);
+                    var errorMessage = context.Exception is BaseTwentyFirstException ex
+                        ? ex.Message
+                        : GlobalConstants.BaseExceptionMessage;
+
+                    result.ViewData.Add("Error", errorMessage);
                     context.Result = result;
                 }
-
-                return;
+                else
+                {
+                    context.Result = new EmptyResult();
+                }
             }
-
-            result.ViewData.Add("Error", context.Exception);
-            context.Result = result;
+            else
+            {
+                result.ViewData.Add("Error", context.Exception);
+                context.Result = result;
+            }
         }
     }
 }

@@ -21,6 +21,7 @@
     using Services.AuthMessageSender;
     using Services.CloudFileUploader;
     using System;
+    using Filters;
 
     public class Startup
     {
@@ -89,7 +90,10 @@
 
             services.AddDomainServices();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<ErrorPageExceptionFilterAttribute>();
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSingleton<ICloudFileUploader, CloudinaryFileUploader>();
             services.Configure<CloudFileUploaderOptions>(Configuration.GetSection("CloudinaryAccount"));

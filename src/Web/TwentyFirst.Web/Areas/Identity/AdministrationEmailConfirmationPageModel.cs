@@ -9,13 +9,13 @@
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
-    public abstract class IdentityAdministrationEmailConfirmationPageModel<TPageModel> : IdentityAdministrationBasePageModel<TPageModel>
+    public abstract class AdministrationEmailConfirmationPageModel<TPageModel> : AdministrationPageModel<TPageModel>
     {
         protected readonly UserManager<User> userManager;
         protected readonly IEmailSender emailSender;
         protected readonly IConfiguration configuration;
 
-        protected IdentityAdministrationEmailConfirmationPageModel(
+        protected AdministrationEmailConfirmationPageModel(
             UserManager<User> userManager,
             IEmailSender emailSender,
             IConfiguration configuration)
