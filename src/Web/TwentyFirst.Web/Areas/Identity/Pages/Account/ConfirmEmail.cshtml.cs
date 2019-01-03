@@ -5,9 +5,13 @@
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Threading.Tasks;
+    using Common.Constants;
     using Data.Models;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
 
-    public class ConfirmEmailModel : AdministrationPageModel<ConfirmEmailModel>
+    [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
+    public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<User> userManager;
 

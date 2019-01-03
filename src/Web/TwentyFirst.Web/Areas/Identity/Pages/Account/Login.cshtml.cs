@@ -9,7 +9,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using Common.Constants;
-    using TwentyFirst.Data.Models;
+    using Data.Models;
 
     [AllowAnonymous]
     public class LoginModel : PageModel

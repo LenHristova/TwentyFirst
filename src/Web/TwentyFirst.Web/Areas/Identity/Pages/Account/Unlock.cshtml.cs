@@ -38,7 +38,7 @@
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                throw new InvalidAccountException();
+                return RedirectToPage("./AccessDenied");
             }
 
             UserToUnlock = new UserToUnlockModel

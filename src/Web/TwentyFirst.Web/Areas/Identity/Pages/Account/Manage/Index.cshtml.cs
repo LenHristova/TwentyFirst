@@ -11,7 +11,7 @@
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
     using Common.Exceptions;
-    using TwentyFirst.Data.Models;
+    using Data.Models;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public partial class IndexModel : PageModel

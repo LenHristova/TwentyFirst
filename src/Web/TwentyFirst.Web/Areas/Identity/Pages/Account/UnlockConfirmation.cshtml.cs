@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using System.Threading.Tasks;
 
-    [AllowAnonymous]
+    [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class UnlockConfirmationModel : PageModel
     {
         private readonly UserManager<User> userManager;
@@ -23,7 +23,7 @@
         public async Task<IActionResult> OnGet(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
-            if (user == null || !this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+            if (user == null)
             {
                 return RedirectToPage("./AccessDenied");
             }

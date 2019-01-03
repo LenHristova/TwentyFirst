@@ -10,7 +10,7 @@
     using Common.Exceptions;
     using Logging;
     using Microsoft.AspNetCore.Authorization;
-    using TwentyFirst.Data.Models;
+    using Data.Models;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class ChangePasswordModel : PageModel

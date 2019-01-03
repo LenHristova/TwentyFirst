@@ -3,7 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
-    [AllowAnonymous]
+    [Authorize]
     public class AccessDeniedModel : PageModel
     {
         public void OnGet() { }

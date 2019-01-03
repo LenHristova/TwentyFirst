@@ -2,27 +2,35 @@
 {
     using Common.Constants;
     using Logging;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using System.ComponentModel.DataAnnotations;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
-    using TwentyFirst.Data.Models;
+    using Data.Models;
 
-    public class RegisterModel : AdministrationEmailConfirmationPageModel<RegisterModel>
+    [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
+    public class RegisterModel : PageModel
     {
-        private readonly ILogger<RegisterModel> logger;
+        private readonly UserManager<User> userManager;
+        private readonly IEmailSender emailSender;
+        private readonly IConfiguration configuration;
+        private readonly ILogger logger;
 
         public RegisterModel(
             UserManager<User> userManager,
-            ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IConfiguration configuration)
-            : base(userManager, emailSender, configuration)
+            IConfiguration configuration,
+            ILogger<RegisterModel> logger)
         {
+            this.userManager = userManager;
+            this.emailSender = emailSender;
+            this.configuration = configuration;
             this.logger = logger;
         }
 
@@ -78,7 +86,7 @@
                         subject: "Потвърждение на новорегистриран акаунт",
                         content: $"Моля потвърдете новорегистрирания акаунт с username: \"{user.UserName}\"");
 
-                    return LocalRedirect(returnUrl);
+                    return RedirectToPage("./RegisterConfirmation");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -88,6 +96,23 @@
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task SendConfirmationEmail(string userId, string code, string callBackPageName, string subject, string content)
+        {
+            var callbackUrl = Url.Page(
+                pageName: callBackPageName,
+                pageHandler: null,
+                values: new { userId = userId, code = code },
+                protocol: Request.Scheme);
+
+            var masterAdminUsername = this.configuration[GlobalConstants.MasterAdministratorUsernameConfiguration];
+            var masterAdminUser = await this.userManager.FindByNameAsync(masterAdminUsername);
+
+            await emailSender.SendEmailAsync(
+                masterAdminUser.Email,
+                subject,
+                content + $" <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>кликайки тук</a>.");
         }
     }
 }

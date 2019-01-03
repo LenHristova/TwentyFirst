@@ -25,6 +25,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Index">Всички акаунти</a>
                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Добави акаунт</a>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/ForgotPassword">Забравена парола</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Профил</a>
                 }
@@ -32,8 +33,9 @@
                 {
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Добави акаунт</a>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/ForgotPassword">Забравена парола</a>
                 }
-                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Identity" })" 
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Identity" })"
                       method="post" id="logoutForm" class="navbar-right">
                     <button type="submit" class="dropdown-item">Изход</button>
                 </form>

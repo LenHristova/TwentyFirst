@@ -1,7 +1,6 @@
 ﻿namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
     using Common.Constants;
-    using Common.Exceptions;
     using Data.Models;
     using Logging;
     using Microsoft.AspNetCore.Authorization;
@@ -38,7 +37,7 @@
             var user = await userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                throw new InvalidAccountException();
+                return RedirectToPage("./AccessDenied");
             }
 
             UserToLock = new UserToLockModel

@@ -7,7 +7,7 @@
     using Microsoft.Extensions.Logging;
     using System.Threading.Tasks;
     using Common.Constants;
-    using TwentyFirst.Data.Models;
+    using Data.Models;
 
     [Authorize]
     public class LogoutModel : PageModel

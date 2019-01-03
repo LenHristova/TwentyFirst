@@ -5,10 +5,10 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
 
-    [AllowAnonymous]
+    [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class LockConfirmationModel : PageModel
     {
         private readonly UserManager<User> userManager;
@@ -23,7 +23,7 @@
         public async Task<IActionResult> OnGet(string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
-            if (user == null || !this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+            if (user == null)
             {
                 return RedirectToPage("./AccessDenied");
             }

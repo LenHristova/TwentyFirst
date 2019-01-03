@@ -7,8 +7,11 @@
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
     using Data.Models;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
 
-    public class ResetPasswordModel : AdministrationPageModel<ResetPasswordModel>
+    [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
+    public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<User> userManager;
 
@@ -28,6 +31,7 @@
             [MinLength(GlobalConstants.MinPasswordLength, ErrorMessage = ValidationErrorMessages.MinLength)]
             [MaxLength(GlobalConstants.MaxPasswordLength, ErrorMessage = ValidationErrorMessages.MaxLength)]
             [DataType(DataType.Password)]
+            [Display(Name = "Парола")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]

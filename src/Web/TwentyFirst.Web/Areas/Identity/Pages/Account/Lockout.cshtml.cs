@@ -1,9 +1,10 @@
 ﻿namespace TwentyFirst.Web.Areas.Identity.Pages.Account
 {
+    using Common.Constants;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
-    [AllowAnonymous]
+    [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
     public class LockoutModel : PageModel
     {
         public void OnGet() { }

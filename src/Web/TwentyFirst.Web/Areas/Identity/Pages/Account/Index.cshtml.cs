@@ -9,15 +9,15 @@ namespace TwentyFirst.Web.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using X.PagedList;
 
     [Authorize(Roles = GlobalConstants.MasterAdministratorRoleName)]
-    public class IndexModel : AdministrationPageModel<IndexModel>
+    public class IndexModel : PageModel
     {
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
@@ -110,7 +110,7 @@ namespace TwentyFirst.Web.Areas.Identity.Pages.Account
             else
             {
                 this.TempData["AlertLevelColor"] = AlertMessageLevel.Error.GetDisplayName();
-                this.TempData["AlertMessage"] = "Нещо се обърка.";
+                this.TempData["AlertMessage"] = GlobalConstants.BaseExceptionMessage;
             }
 
             return RedirectToPage("./Index");

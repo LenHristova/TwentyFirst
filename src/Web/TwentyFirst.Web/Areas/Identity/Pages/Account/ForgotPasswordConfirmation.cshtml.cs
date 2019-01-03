@@ -2,20 +2,11 @@
 {
     using Common.Constants;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
 
-    [AllowAnonymous]
+    [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
     public class ForgotPasswordConfirmation : PageModel
     {
-        public IActionResult OnGet()
-        {
-            if (!this.User.IsInRole(GlobalConstants.MasterAdministratorOrAdministrator))
-            {
-                return RedirectToPage("./AccessDenied");
-            }
-
-            return this.Page();
-        }
+        public void OnGet() { }
     }
 }

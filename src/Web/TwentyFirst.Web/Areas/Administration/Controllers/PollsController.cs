@@ -12,6 +12,7 @@
     using Services.DataServices.Contracts;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
 
     public class PollsController : AdministrationController
     {
@@ -62,6 +63,7 @@
             return RedirectToAction("Details", "Polls", new { article.Id });
         }
 
+        [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
         public async Task<IActionResult> Delete(string id)
         {
             var poll = await this.pollService.GetAsync<PollDeleteViewModel>(id);
@@ -69,6 +71,7 @@
         }
 
         [HttpPost]
+        [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
         public async Task<IActionResult> Delete(string id, string name)
         {
             await this.pollService.DeleteAsync(id);
