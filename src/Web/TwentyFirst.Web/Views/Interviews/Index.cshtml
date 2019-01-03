@@ -54,17 +54,3 @@ else
 {
     <p>Все още няма добавени интервюта.</p>
 }
-
-@section Scripts {
-    <script>
-        $('document').ready(function () {
-            var href = window.location.href;
-
-            $("a").each(function () {
-                if (this.href == href) {
-                    $(this).addClass("text-admin-twenty-first font-weight-bold");
-                }
-            });
-        });
-    </script>
-}

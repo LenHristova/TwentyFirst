@@ -2,9 +2,9 @@
 {
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.Extensions.Options;
-    using System.Threading.Tasks;
     using SendGrid;
     using SendGrid.Helpers.Mail;
+    using System.Threading.Tasks;
 
     public class SendGridEmailSender : IEmailSender
     {
@@ -13,30 +13,38 @@
             Options = optionsAccessor.Value;
         }
 
-        public AuthMessageSenderOptions Options { get; } 
+        public AuthMessageSenderOptions Options { get; }
 
-        public Task SendEmailAsync(string email, string subject, string message)
-        {
-            return Execute(Options.SendGridKey, subject, message, email);
-        }
+        public Task SendEmailAsync(string recipient, string subject, string message)
+        => Execute(
+            this.Options.SendGridKey,
+            this.Options.SendGridDefaultEmailSender,
+            this.Options.SendGridUser,
+            recipient,
+            subject,
+            message);
 
-        public Task Execute(string apiKey, string subject, string message, string email)
+
+        public Task Execute(
+            string apiKey, 
+            string apiSender, 
+            string apiSenderName, 
+            string recipient, 
+            string subject, 
+            string message)
         {
             var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
+            var sendGridMessage = new SendGridMessage
             {
-                From = new EmailAddress("twenty.first.news@gmail.com", "21st"),
+                From = new EmailAddress(apiSender, apiSenderName),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
             };
-            msg.AddTo(new EmailAddress(email));
+            sendGridMessage.AddTo(new EmailAddress(recipient));
+            sendGridMessage.SetClickTracking(false, false);
 
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
-            msg.SetClickTracking(false, false);
-
-            return client.SendEmailAsync(msg);
+            return client.SendEmailAsync(sendGridMessage);
         }
     }
 }

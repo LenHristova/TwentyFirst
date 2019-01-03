@@ -37,6 +37,15 @@
         Task<Image> GetAsync(string id);
 
         /// <summary>
+        /// Gets image by id.
+        /// Throw InvalidImageIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidImageException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<TModel> GetAsync<TModel>(string id);
+
+        /// <summary>
         /// Gets marked as deleted image by id.
         /// Throw InvalidImageIdException if id is not present.
         /// </summary>
@@ -44,5 +53,14 @@
         /// <param name="id"></param>
         /// <returns></returns>
         Task<Image> GetDeletedAsync(string id);
+
+        /// <summary>
+        /// Gets marked as deleted image by id.
+        /// Throw InvalidImageIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidImageException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<TModel> GetDeletedAsync<TModel>(string id);
     }
 }

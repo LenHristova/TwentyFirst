@@ -1,10 +1,8 @@
 ﻿namespace TwentyFirst.Web.Controllers
 {
     using Common.Constants;
-    using Common.Models.Articles;
     using Common.Models.Subscribers;
     using Filters;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity.UI.Services;
@@ -14,7 +12,6 @@
     using Services.DataServices.Contracts;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
-    using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
@@ -93,7 +90,6 @@
         {
             if (env.IsDevelopment())
             {
-                //TODO remove this
                 this.Request.Host = new HostString("localhost");
             }
 

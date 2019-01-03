@@ -1,14 +1,13 @@
 ﻿namespace TwentyFirst.Web.Controllers
 {
-    using System.Linq;
+    using Common.Constants;
     using Common.Models.Interviews;
     using Filters;
+    using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using Services.DataServices.Contracts;
+    using System.Linq;
     using System.Threading.Tasks;
-    using Common.Constants;
-    using Common.Models.Articles;
-    using Infrastructure.Extensions;
 
     [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
     public class InterviewsController : BaseController
@@ -20,7 +19,7 @@
             this.interviewService = interviewService;
         }
 
-        public async Task<IActionResult> Index(int? pageNumber, string categoryId = null)
+        public async Task<IActionResult> Index(int? pageNumber)
         {
             var interviews = await this.interviewService
                 .LatestAsync<InterviewListViewModel>(GlobalConstants.MaxInterviewsCountToGet);

@@ -36,7 +36,8 @@
 
             if (!hostingEnvironment.IsDevelopment())
             {
-                if (context.Exception is BaseTwentyFirstException)
+                if (context.Exception is BaseTwentyFirstException &&
+                    context.HttpContext.User.Identity.IsAuthenticated)
                 {
                     result.ViewData.Add("Error", context.Exception.Message);
                     context.Result = result;

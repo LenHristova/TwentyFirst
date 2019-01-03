@@ -1,5 +1,6 @@
 ﻿namespace TwentyFirst.Web.Controllers
 {
+    using Common.Constants;
     using Common.Models.Polls;
     using Filters;
     using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@
 
             await this.pollService.VoteAsync(activePollViewModel);
 
-            return this.Content("Благодаря, че гласувахте.");
+            return this.Content(GlobalConstants.PollVoteThanks);
         }
     }
 }

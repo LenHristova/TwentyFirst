@@ -18,6 +18,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
+                <button type="button" class="btn btn-sm btn-info" data-toggle="tooltip" data-placement="right" 
+                        title="Този имейл е основен и се използва за потвърждение на новорегистрираните акаунти.">
+                    ?
+                </button>
                 @if (Model.IsEmailConfirmed)
                 {
                     <div class="input-group">
@@ -39,4 +43,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover();
+        })
+    </script>
 }

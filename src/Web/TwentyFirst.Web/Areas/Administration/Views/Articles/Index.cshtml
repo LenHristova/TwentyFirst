@@ -54,7 +54,7 @@
                             <a asp-area="" asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"
                                class="btn btn-sm btn-admin-twenty-first text-light w-100">Виж</a>
                             @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName) ||
-                           this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                          this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                             {
                                 <a asp-area="Administration" asp-controller="Articles" asp-action="AllEdits" asp-route-id="@article.Id"
                                    class="btn btn-sm btn-primary text-light w-100">Редакции</a>
@@ -72,7 +72,10 @@
     @Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }),
         PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
 }
-
+else
+{
+    <p>Все още няма добавени новини.</p>
+}
 
 
 

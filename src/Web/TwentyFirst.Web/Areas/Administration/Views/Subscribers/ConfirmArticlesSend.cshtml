@@ -7,8 +7,10 @@
         <h2 class="text-center">Потвърждавате ли изпращането на важни новини до абонираните потребители?</h2>
 
         <div class="btn-group-lg my-3 w-50 mx-auto">
-            <a asp-area="Administration" asp-controller="Subscribers" asp-action="SendImportantArticles"
-               class="btn btn-admin-twenty-first text-white">Изпрати</a>
+            <form asp-area="Administration" asp-controller="Subscribers" asp-action="SendImportantArticles" method="post">
+                <button type="submit" class="btn btn-admin-twenty-first text-white">Изпрати</button>
+                <a asp-area="Administration" asp-controller="Articles" asp-action="Index"  class="btn btn-lg btn-secondary">Излез</a>
+            </form>
         </div>
     </div>
 </div>

@@ -33,6 +33,7 @@
         [Display(Name = "Автор")]
         public string Author { get; set; }
 
+        [Required(ErrorMessage = ValidationErrorMessages.Required)]
         [Display(Name = "Снимка")]
         public ImageBaseInputModel Image { get; set; }
 

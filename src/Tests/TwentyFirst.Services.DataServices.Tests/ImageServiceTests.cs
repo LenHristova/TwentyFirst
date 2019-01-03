@@ -264,6 +264,35 @@
         }
 
         [Fact]
+        public async Task GetAsync_Projection_ShouldGetCorrectImage_WhenImageExists()
+        {
+            await this.dbContext.Images.AddRangeAsync(new List<Image>()
+            {
+                new Image {Id = "1"},
+                new Image {Id = "2"},
+                new Image {Id = "3"},
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            var imageService = new ImageService(this.dbContext);
+
+            var wantedImageId = "2";
+            var expectedIImageId = wantedImageId;
+            var image = await imageService.GetAsync<FakeImage>(wantedImageId);
+
+            Assert.Equal(expectedIImageId, image.Id);
+        }
+
+        [Fact]
+        public void GetAsync_Projection_ShouldThrowInvalidImageException_WhenImageNotExists()
+        {
+            var imageService = new ImageService(this.dbContext);
+            Assert.Throws<InvalidImageException>(
+                () => imageService.GetAsync<FakeImage>(Guid.NewGuid().ToString()).GetAwaiter().GetResult());
+        }
+
+        [Fact]
         public async Task GetDeletedAsync_ShouldGetCorrectImage_WhenImageExistsAndIsSoftDeleted()
         {
             await this.dbContext.Images.AddRangeAsync(new List<Image>()
@@ -290,6 +319,35 @@
             var imageService = new ImageService(this.dbContext);
             Assert.Throws<InvalidImageException>(
                 () => imageService.GetDeletedAsync(Guid.NewGuid().ToString()).GetAwaiter().GetResult());
+        }
+
+        [Fact]
+        public async Task GetDeletedAsync_Projection_ShouldGetCorrectImage_WhenImageExistsAndIsSoftDeleted()
+        {
+            await this.dbContext.Images.AddRangeAsync(new List<Image>()
+            {
+                new Image {Id = "1", IsDeleted = true },
+                new Image {Id = "2", IsDeleted = true },
+                new Image {Id = "3", IsDeleted = true },
+            });
+
+            await this.dbContext.SaveChangesAsync();
+
+            var imageService = new ImageService(this.dbContext);
+
+            var wantedImageId = "2";
+            var expectedImageId = wantedImageId;
+            var image = await imageService.GetDeletedAsync<FakeImage>(wantedImageId);
+
+            Assert.Equal(expectedImageId, image.Id);
+        }
+
+        [Fact]
+        public void GetDeletedAsync_Projection_ShouldThrowInvalidImageException_WhenImageNotExists()
+        {
+            var imageService = new ImageService(this.dbContext);
+            Assert.Throws<InvalidImageException>(
+                () => imageService.GetDeletedAsync<FakeImage>(Guid.NewGuid().ToString()).GetAwaiter().GetResult());
         }
 
         [Fact]

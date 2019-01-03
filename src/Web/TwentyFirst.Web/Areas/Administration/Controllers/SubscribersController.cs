@@ -1,16 +1,15 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
-    using System;
     using Common.Constants;
     using Common.Models.Articles;
     using Common.Models.Subscribers;
     using Filters;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Routing;
     using Services.DataServices.Contracts;
+    using System.Collections.Generic;
     using System.IO;
     using System.Text;
     using System.Text.Encodings.Web;
@@ -41,14 +40,48 @@
 
         public IActionResult ConfirmArticlesSend() => this.View();
 
+        [HttpPost]
         public async Task<IActionResult> SendImportantArticles()
         {
             var articlesToSend = await this.articleService.AllImportantForTheDayAsync<ArticleBaseViewModel>();
 
+            var emailContent = await this.PrepareEmailContent(articlesToSend);
+
+            var subscribers = await this.subscriberService.AllConfirmedAsync<SubscriberSendArticlesModel>();
+
+            await this.SendToSubscribers(emailContent, subscribers);
+
+            return this.RedirectToAction(nameof(SuccessfulArticlesSend));
+        }
+
+        public IActionResult SuccessfulArticlesSend() => this.View();
+
+        private async Task<string> SendToSubscribers(string emailContent, IEnumerable<SubscriberSendArticlesModel> subscribers)
+        {
+            foreach (var subscriber in subscribers)
+            {
+                var unsubscribeUrl = this.linkGenerator.GetUriByAction(
+                    this.HttpContext,
+                    action: "Unsubscribe",
+                    values: new { id = subscriber.Id, cc = subscriber.ConfirmationCode });
+
+                var encodedUnsubscribeUrl = HtmlEncoder.Default.Encode(unsubscribeUrl);
+
+                emailContent = emailContent
+                    .Replace(GlobalConstants.HtmlUnsubscribeLinkPlaceholder, encodedUnsubscribeUrl);
+
+                await this.emailSender.SendEmailAsync(subscriber.Email, GlobalConstants.ImportantArticlesEmailSubject, emailContent);
+            }
+
+            return emailContent;
+        }
+
+        private async Task<string> PrepareEmailContent(IEnumerable<ArticleBaseViewModel> articlesToSend)
+        {
             var stringBuilder = new StringBuilder();
             var singleArticleFilePath = this.GetHtmlTemplateFilePath(GlobalConstants.HtmlSingleArticleFilePath);
             var singleArticleHtml = await System.IO.File.ReadAllTextAsync(singleArticleFilePath);
-            
+
             foreach (var article in articlesToSend)
             {
                 var articleUrl = this.linkGenerator.GetUriByAction(
@@ -69,27 +102,8 @@
             var emailContent = await System.IO.File.ReadAllTextAsync(articlesToEmailFilePath);
             emailContent = emailContent
                 .Replace(GlobalConstants.HtmlImportantArticlesPlaceholder, stringBuilder.ToString().Trim());
-
-            var subscribers = await this.subscriberService.AllConfirmedAsync<SubscriberSendArticlesModel>();
-            foreach (var subscriber in subscribers)
-            {
-                var unsubscribeUrl = this.linkGenerator.GetUriByAction(
-                    this.HttpContext,
-                    action: "Unsubscribe",
-                    values: new { id = subscriber.Id, cc = subscriber.ConfirmationCode });
-
-                var encodedUnsubscribeUrl = HtmlEncoder.Default.Encode(unsubscribeUrl);
-
-                emailContent = emailContent
-                    .Replace(GlobalConstants.HtmlUnsubscribeLinkPlaceholder, encodedUnsubscribeUrl);
-
-                await this.emailSender.SendEmailAsync(subscriber.Email, GlobalConstants.ImportantArticlesEmailSubject, emailContent);
-            }
-
-            return this.RedirectToAction(nameof(SuccessfulArticlesSend));
+            return emailContent;
         }
-
-        public IActionResult SuccessfulArticlesSend() => this.View();
 
         private string GetHtmlTemplateFilePath(string templateFileName)
         {

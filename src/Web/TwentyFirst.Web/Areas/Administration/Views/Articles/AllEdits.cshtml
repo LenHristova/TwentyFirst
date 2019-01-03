@@ -29,7 +29,10 @@
     @Html.PagedListPager((IPagedList)Model.Edits, pageNumber => Url.Action("AllEdits", new { pageNumber }),
         PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
 }
-
+else
+{
+    <p>Тази новина не е редактирана.</p>
+}
 
 
 

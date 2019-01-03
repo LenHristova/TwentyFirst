@@ -86,10 +86,18 @@
             return this.RedirectToAction(nameof(Upload));
         }
 
-        [HttpPost]
         [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
         [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Delete(string id)
+        {
+            var image = await this.imageService.GetAsync<ImageUrlBaseViewModel>(id);
+            return this.View(image);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
+        public async Task<IActionResult> Delete(string id, string name)
         {
             await this.imageService.DeleteAsync(id);
 
@@ -100,10 +108,18 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
         [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
         [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
         public async Task<IActionResult> Recover(string id)
+        {
+            var image = await this.imageService.GetDeletedAsync<ImageUrlBaseViewModel>(id);
+            return this.View(image);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = GlobalConstants.MasterAdministratorOrAdministrator)]
+        [TypeFilter(typeof(ErrorPageExceptionFilterAttribute))]
+        public async Task<IActionResult> Recover(string id, string name)
         {
             await this.imageService.RecoverAsync(id);
 
@@ -119,7 +135,8 @@
         {
             search = search ?? string.Empty;
 
-            var images = this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName)
+            var images = this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName) ||
+                         this.User.IsInRole(GlobalConstants.AdministratorRoleName)
                 ? await this.imageService.GetBySearchTermWithDeletedAsync<ImageSearchListViewModel>(search)
                 : await this.imageService.GetBySearchTermAsync<ImageSearchListViewModel>(search);
 

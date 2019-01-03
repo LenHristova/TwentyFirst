@@ -7,11 +7,11 @@
     using System.Threading.Tasks;
 
     [ViewComponent(Name = "active-poll")]
-    public class PollViewComponent : ViewComponent
+    public class ActivePollViewComponent : ViewComponent
     {
         private readonly IPollService pollService;
 
-        public PollViewComponent(IPollService pollService)
+        public ActivePollViewComponent(IPollService pollService)
         {
             this.pollService = pollService;
         }

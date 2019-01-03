@@ -14,7 +14,7 @@
 
         public string VoteIp { get; set; }
 
-        [Required(ErrorMessage = ValidationErrorMessages.RequiredSelect)]
+        [Range(1, int.MaxValue, ErrorMessage = ValidationErrorMessages.RequiredSelect)]
         public int SelectedOptionId { get; set; }
 
         public IList<PollOptionChooseModel> Options { get; set; }

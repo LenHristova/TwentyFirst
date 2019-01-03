@@ -73,20 +73,8 @@
                     Email = masterAdminEmail
                 };
 
-                var result = await userManager.CreateAsync(masterAdmin, masterAdminPassword);
-
-                if (!result.Succeeded)
-                {
-                    //TODO Log Error
-                    return;
-                }
-
-                result = await userManager.AddToRoleAsync(masterAdmin, Role.MasterAdmin.GetDisplayName());
-
-                if (!result.Succeeded)
-                {
-                    //TODO Log Error
-                }
+                await userManager.CreateAsync(masterAdmin, masterAdminPassword);
+                await userManager.AddToRoleAsync(masterAdmin, Role.MasterAdmin.GetDisplayName());
             }
         }
     }

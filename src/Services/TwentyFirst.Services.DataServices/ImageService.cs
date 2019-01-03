@@ -64,6 +64,25 @@
 
         /// <inheritdoc />
         /// <summary>
+        /// Gets image by id.
+        /// Throw InvalidImageIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidImageException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<TModel> GetAsync<TModel>(string id)
+        {
+            var image = await this.db.Images
+                .Where(c => c.Id == id && !c.IsDeleted)
+                .To<TModel>()
+                .SingleOrDefaultAsync();
+
+            CoreValidator.ThrowIfNull(image, new InvalidImageException());
+            return image;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
         /// Gets marked as deleted image by id.
         /// Throw InvalidImageIdException if id is not present.
         /// </summary>
@@ -74,6 +93,25 @@
         {
             var image = await this.db.Images
                 .SingleOrDefaultAsync(c => c.Id == id && c.IsDeleted);
+
+            CoreValidator.ThrowIfNull(image, new InvalidImageException());
+            return image;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets marked as deleted image by id.
+        /// Throw InvalidImageIdException if id is not present.
+        /// </summary>
+        /// <exception cref="InvalidImageException"></exception>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<TModel> GetDeletedAsync<TModel>(string id)
+        {
+            var image = await this.db.Images
+                .Where(c => c.Id == id && c.IsDeleted)
+                .To<TModel>()
+                .SingleOrDefaultAsync();
 
             CoreValidator.ThrowIfNull(image, new InvalidImageException());
             return image;

@@ -21,17 +21,18 @@
                             <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
                             <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOnOnString</div>
                         </div>
-                        @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+                        @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName) || 
+                             this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
-                            <form asp-area="Administration" asp-controller="Images" asp-action="Delete" method="post" asp-route-id="@image.Id">
-                                <div class="btn-group my-3">
-                                    <button type="submit" class="btn btn-sm btn-danger">Изтрий</button>
-                                </div>
-                            </form>
+                            <div class="btn-group my-3">
+                                <a asp-area="Administration" asp-controller="Images" asp-action="Delete" asp-route-id="@image.Id" class="btn btn-sm btn-danger">Изтрий</a>
+                            </div>
                         }
                     </div>
                 }
-                else if (image.IsDeleted && this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+                else if (image.IsDeleted && 
+                         (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName) || 
+                         this.User.IsInRole(GlobalConstants.AdministratorRoleName)))
                 {
                     <div class="card col-md-6 border-top">
                         <a href="#" class="selected-image" data-item-id="@image.Id" data-item-url="@image.ThumbUrl">
@@ -46,11 +47,9 @@
                             <div class="col-md-12 fa fa-camera-retro"><em> @image.Author</em></div>
                             <div class="col-md-12 fa fa-calendar-check-o"> @image.CreatedOnOnString</div>
                         </div>
-                        <form asp-area="Administration" asp-controller="Images" asp-action="Recover" method="post" asp-route-id="@image.Id">
-                            <div class="btn-group my-3">
-                                <button type="submit" class="btn btn-sm btn-success">Възстанови</button>
-                            </div>
-                        </form>
+                        <div class="btn-group my-3">
+                            <a asp-area="Administration" asp-controller="Images" asp-action="Recover" asp-route-id="@image.Id" class="btn btn-sm btn-success">Възстанови</a>
+                        </div>
                     </div>
                 }
             }

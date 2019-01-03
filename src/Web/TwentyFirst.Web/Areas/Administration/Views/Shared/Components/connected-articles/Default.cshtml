@@ -1,9 +1,9 @@
 ﻿@model TwentyFirst.Common.Models.Articles.ConnectedArticlesChooseInputModel
 
 <div class="py-3">
-<div class="drop-search">
-    <h6>Избери свързани новини</h6>
-    <span asp-validation-for="ConnectedArticlesIds" class="text-danger"></span>
-    <select asp-for="ConnectedArticlesIds" multiple="multiple" style="display: none" asp-items="@Model.Articles"></select>
-</div>
+    <div class="drop-search">
+        <h6>Избери свързани новини</h6>
+        <span asp-validation-for="ConnectedArticlesIds" class="text-danger"></span>
+        <select asp-for="ConnectedArticlesIds" multiple="multiple" style="display: none" asp-items="@Model.Articles"></select>
+    </div>
 </div>

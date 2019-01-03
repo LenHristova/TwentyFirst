@@ -1,4 +1,5 @@
-﻿@if (this.User.Identity.IsAuthenticated)
+﻿@using TwentyFirst.Common.Constants
+@if (this.User.Identity.IsAuthenticated)
 {
     <ul class="navbar-nav">
         <li class="nav-item dropdown">
@@ -10,13 +11,34 @@
                 <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Index">Интервюта</a>
                 <a class="dropdown-item" asp-area="Administration" asp-controller="Interviews" asp-action="Create">Добави интервю</a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Index">Всички снимки</a>
                 <a class="dropdown-item" asp-area="Administration" asp-controller="Images" asp-action="Upload">Добави снимки</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" asp-area="Administration" asp-controller="Polls" asp-action="Index">Всички анкети</a>
-                <a class="dropdown-item" asp-area="Administration" asp-controller="Polls" asp-action="Create">Добави анкета</a>                
+                <a class="dropdown-item" asp-area="Administration" asp-controller="Polls" asp-action="Create">Добави анкета</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" asp-area="Administration" asp-controller="Subscribers" asp-action="ConfirmArticlesSend">Изпрати абонамент</a>
+                @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
+                {
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" asp-area="Administration" asp-controller="Categories" asp-action="Index">Категории</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Index">Всички акаунти</a>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Регистриране</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Профил</a>
+                }
+                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Добави акаунт</a>
+                }
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Identity" })" 
+                      method="post" id="logoutForm" class="navbar-right">
+                    <button type="submit" class="dropdown-item">Изход</button>
+                </form>
             </div>
         </li>
     </ul>
 }
+

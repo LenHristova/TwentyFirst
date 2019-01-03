@@ -1,5 +1,13 @@
 ﻿(function ($) {
     $("document").ready(function () {
+        var href = window.location.href;
+
+        $("a.show-active").each(function () {
+            if (this.href == href) {
+                $(this).addClass("text-admin-twenty-first font-weight-bold");
+            }
+        });
+
         $("#subscribe-button").click(function (e) {
             e.preventDefault();
             var email = $("#subscriber-email").val();

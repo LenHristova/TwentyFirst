@@ -3,14 +3,14 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="title">Новини</li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-controller="Articles" asp-action="Index">Всички</a>
+        <a class="nav-link show-active" asp-area="" asp-controller="Articles" asp-action="Index">Всички</a>
     </li>
     @if (Model.MainCategories.Any())
     {
         foreach (var category in Model.MainCategories)
         {
             <li class="nav-item">
-                <a class="nav-link" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
+                <a class="nav-link show-active" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
             </li>
         }
     }
@@ -21,7 +21,7 @@
             <div class="dropdown-menu">
                 @foreach (var category in Model.AdditionalCategories)
                 {
-                    <a class="nav-link" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
+                    <a class="nav-link show-active" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
                 }
             </div>
         </li>

@@ -90,6 +90,9 @@
 
         public const int InterviewsCountForLatestSection = 4;
 
+        //Poll Constants
+        public const string PollVoteThanks = "Благодаря, че гласувахте.";
+
         //Static html files
         public const string HtmlTemplatesFolderPath = "html-templates";
 

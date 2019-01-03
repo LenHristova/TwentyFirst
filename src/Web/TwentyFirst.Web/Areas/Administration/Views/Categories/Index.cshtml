@@ -31,48 +31,55 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
-            @for (var i = 0; i < Model.Count; i++)
-            {
-                var category = Model[i];
-                var isDeletedTextColor = category.IsDeleted ? "muted" : "dark";
-                var isUpInactive = i == 0 || category.IsDeleted;
-                var isDownInactive = i == Model.Count - 1 || Model[i + 1].IsDeleted;
-                <tr>
-                    <td></td>
-                    <td class="text-@isDeletedTextColor">@Html.DisplayFor(modelItem => category.Name)</td>
-                    <td>
-                        @if (!isUpInactive)
-                        {
-                            <a asp-area="Administration" asp-controller="Categories" asp-action="Order" asp-route-id="@category.Id" asp-route-up="true"
-                               class="btn font-weight-bold">
-                                <i class="fa fa-arrow-circle-up"></i>
-                            </a>
-                        }
-                    </td>
-                    <td>
-                        @if (!isDownInactive)
-                        {
-                            <a asp-area="Administration" asp-controller="Categories" asp-action="Order" asp-route-id="@category.Id" asp-route-down="true"
-                               class="btn font-weight-bold">
-                                <i class="fa fa-arrow-circle-down"></i>
-                            </a>
-                        }
-                    </td>
-                    <td class="btn-group justify-content-center w-50 mx-auto">
-                        @if (category.IsDeleted)
-                        {
-                            <button type="button" class="btn btn-default recover" data-item-id="@category.Id">Възстанови</button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-warning edit" data-item-id="@category.Id">Редактирай</button>
-                            <button type="button" class="btn btn-danger archive" data-item-id="@category.Id">Архивирай</button>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
+        @if (Model.Any())
+        {
+            <tbody>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var category = Model[i];
+                    var isDeletedTextColor = category.IsDeleted ? "muted" : "dark";
+                    var isUpInactive = i == 0 || category.IsDeleted;
+                    var isDownInactive = i == Model.Count - 1 || Model[i + 1].IsDeleted;
+                    <tr>
+                        <td></td>
+                        <td class="text-@isDeletedTextColor">@Html.DisplayFor(modelItem => category.Name)</td>
+                        <td>
+                            @if (!isUpInactive)
+                            {
+                                <a asp-area="Administration" asp-controller="Categories" asp-action="Order" asp-route-id="@category.Id" asp-route-up="true"
+                                   class="btn font-weight-bold">
+                                    <i class="fa fa-arrow-circle-up"></i>
+                                </a>
+                            }
+                        </td>
+                        <td>
+                            @if (!isDownInactive)
+                            {
+                                <a asp-area="Administration" asp-controller="Categories" asp-action="Order" asp-route-id="@category.Id" asp-route-down="true"
+                                   class="btn font-weight-bold">
+                                    <i class="fa fa-arrow-circle-down"></i>
+                                </a>
+                            }
+                        </td>
+                        <td class="btn-group justify-content-center w-50 mx-auto">
+                            @if (category.IsDeleted)
+                            {
+                                <button type="button" class="btn btn-default recover" data-item-id="@category.Id">Възстанови</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-warning edit" data-item-id="@category.Id">Редактирай</button>
+                                <button type="button" class="btn btn-danger archive" data-item-id="@category.Id">Архивирай</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <p>Все още няма добавени категории.</p>
+        }
     </table>
 </div>
 
