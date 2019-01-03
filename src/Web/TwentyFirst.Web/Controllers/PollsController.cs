@@ -17,7 +17,7 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Vote(ActivePollVoteInputModel activePollViewModel)
         {
             if (!this.ModelState.IsValid)

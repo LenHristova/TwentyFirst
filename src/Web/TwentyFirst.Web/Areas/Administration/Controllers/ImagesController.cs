@@ -124,7 +124,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Search(string search, int? pageNumber)
         {
             search = search ?? string.Empty;

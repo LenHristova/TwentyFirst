@@ -1,6 +1,5 @@
 ﻿namespace TwentyFirst.Web.Areas.Administration.Controllers
 {
-    using System;
     using Common.Constants;
     using Common.Exceptions;
     using Common.Models.Categories;
@@ -39,13 +38,12 @@
             return this.View(onePageOfCategories);
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public IActionResult Create() => this.PartialView("_CategoryCreateFormPartial");
 
         [HttpPost]
         public async Task<IActionResult> Create(CategoryCreateInputModel categoryCreateInputModel)
         {
-            throw new Exception("Test");
             if (!this.ModelState.IsValid)
             {
                 this.SetAlertMessage(AlertMessageLevel.Error, this.GetModelStateErrorMessages());
@@ -89,7 +87,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Archive(string id)
         {
             var categoryToArchive = await this.categoryService
@@ -111,7 +109,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Recover(string id)
         {
             var categoryToRecover = await this.categoryService
@@ -133,7 +131,7 @@
             return RedirectToAction(nameof(Index));
         }
 
-        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute), Order = 1)]
+        [TypeFilter(typeof(ErrorAlertExceptionFilterAttribute))]
         public async Task<IActionResult> Order(string id, bool up, bool down)
         {
             if ((up && down) || (!up && !down))
