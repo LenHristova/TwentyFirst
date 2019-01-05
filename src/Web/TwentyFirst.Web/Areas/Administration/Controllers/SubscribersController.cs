@@ -67,10 +67,10 @@
 
                 var encodedUnsubscribeUrl = HtmlEncoder.Default.Encode(unsubscribeUrl);
 
-                emailContent = emailContent
+                var currentContent = emailContent
                     .Replace(GlobalConstants.HtmlUnsubscribeLinkPlaceholder, encodedUnsubscribeUrl);
 
-                await this.emailSender.SendEmailAsync(subscriber.Email, GlobalConstants.ImportantArticlesEmailSubject, emailContent);
+                await this.emailSender.SendEmailAsync(subscriber.Email, GlobalConstants.ImportantArticlesEmailSubject, currentContent);
             }
 
             return emailContent;

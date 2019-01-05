@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<TwentyFirst.Common.Models.Articles.ArticleListViewModel>
 @{
     ViewData["Title"] = "Всички новини";
+    var categoryId = ViewData["CategoryId"];
 }
 <div class="hero-area fixed-height-100 sides"></div>
 @if (Model.Any())
@@ -56,7 +57,7 @@
                 </div>
             </div>
             <hr />
-            @Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber }),
+            @Html.PagedListPager((IPagedList)Model, pageNumber => Url.Action("Index", new { pageNumber = pageNumber, categoryId = categoryId }),
                 PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
         </div>
     </div>

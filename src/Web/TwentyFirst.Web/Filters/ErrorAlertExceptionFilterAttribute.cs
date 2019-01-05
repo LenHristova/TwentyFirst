@@ -35,7 +35,7 @@
                 ViewData = new ViewDataDictionary(modelMetadataProvider, context.ModelState)
             };
 
-            if (hostingEnvironment.IsDevelopment())
+            if (!hostingEnvironment.IsDevelopment())
             {
                 if (context.HttpContext.User.Identity.IsAuthenticated)
                 {

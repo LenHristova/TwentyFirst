@@ -28,6 +28,7 @@
             var onePageOfArticles = await articles.ToList()
                 .PaginateAsync(pageNumber, GlobalConstants.ArticlesOnPageCount);
 
+            this.ViewData["CategoryId"] = categoryId;
             return this.View(onePageOfArticles);
         }
 
