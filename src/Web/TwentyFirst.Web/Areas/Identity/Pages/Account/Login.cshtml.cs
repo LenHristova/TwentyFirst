@@ -41,9 +41,6 @@
             [DataType(DataType.Password)]
             [Display(Name = "Парола")]
             public string Password { get; set; }
-
-            [Display(Name = "Запомни ме?")]
-            public bool RememberMe { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -67,11 +64,7 @@
 
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(
-                    Input.Username,
-                    Input.Password,
-                    Input.RememberMe,
-                    lockoutOnFailure: true);
+                var result = await signInManager.PasswordSignInAsync(Input.Username, Input.Password, false, true);
 
                 if (result.Succeeded)
                 {
@@ -80,7 +73,7 @@
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl });
                 }
                 if (result.IsLockedOut)
                 {

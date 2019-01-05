@@ -18,6 +18,10 @@
 
         public const string AdministrationLoginPage = "/Identity/Account/Login";
 
+        public const string AdministrationLogoutPage = "/Identity/Account/Logout";
+
+        public const string AdministrationAccessDeniedPage = "/Identity/Account/AccessDenied";
+
         public const string AdministrationAccountsPage = "/Identity/Account/Index";
 
         //HTML
@@ -32,7 +36,12 @@
         public const string BaseExceptionMessage = "Нещо се обърка...";
 
         //Validation constants
+        public const string AllowedUserNameCharacters =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
         public const int MinPasswordLength = 6;
+
+        public const int RequiredUniqueChars = 1;
 
         public const int MaxPasswordLength = 100;
 
@@ -53,7 +62,7 @@
 
         public const int AdministrationArticleEditsOnPageCount = 10;
 
-        public const int AdministrationUsersOnPageCount = 3;
+        public const int AdministrationUsersOnPageCount = 10;
 
         //Category Constants
         public const int MainCategoriesCount = 3;

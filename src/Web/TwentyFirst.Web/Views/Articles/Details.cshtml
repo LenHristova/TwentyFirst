@@ -54,7 +54,7 @@
             <!-- ========== Sidebar Area ========== -->
             <div class="col-12 col-md-8 col-lg-4">
                 <!-- ============== Important articles by categories ============== -->
-                @await Component.InvokeAsync("important-articles-by-categories", Model.CategoriesIds)
+                @await Component.InvokeAsync("important-articles-by-categories",new { ids = Model.CategoriesIds, excludeArticleId = Model.Id })
 
                 <!-- ============== Stay Connected ============== -->
                 <partial name="_StayConnectedPartial" />

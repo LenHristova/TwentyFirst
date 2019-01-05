@@ -13,7 +13,7 @@
     {
         [Required(ErrorMessage = ValidationErrorMessages.Required)]
         [MaxLength(200, ErrorMessage = ValidationErrorMessages.MaxLength)]
-        [MinLength(5, ErrorMessage = ValidationErrorMessages.MinLength)]
+        [MinLength(3, ErrorMessage = ValidationErrorMessages.MinLength)]
         [Display(Name = "Заглавие")]
         public string Title { get; set; }
 

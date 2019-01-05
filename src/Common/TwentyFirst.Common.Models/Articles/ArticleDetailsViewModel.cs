@@ -12,6 +12,8 @@
 
     public class ArticleDetailsViewModel : IMapFrom<Article>, IHaveCustomMappings
     {
+        public string Id { get; set; }
+
         public string Title { get; set; }
 
         public string Content { get; set; }

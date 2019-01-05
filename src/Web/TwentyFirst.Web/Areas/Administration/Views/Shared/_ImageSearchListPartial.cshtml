@@ -56,7 +56,7 @@
         </div>
         <div class="row justify-content-center py-3">
             @Html.PagedListPager((IPagedList)Model.SearchResultImages,
-                pageNumber => Url.Action("Search", "Images", new { Model.SearchTerm, pageNumber }),
+                pageNumber => Url.Action("Search", "Images", new { search = Model.SearchTerm, pageNumber = pageNumber }),
                 PagedListRenderOptionsBase.OnlyShowFivePagesAtATime)
         </div>
     </div>

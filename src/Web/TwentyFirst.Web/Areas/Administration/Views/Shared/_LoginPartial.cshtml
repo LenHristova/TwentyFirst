@@ -41,7 +41,7 @@
                     </div>
                 </li>
                 <li>
-                    <a class="nav-link" asp-area="Administration" asp-controller="Subscribers" asp-action="ConfirmArticlesSend">Изпрати абонамент</a>
+                    <a class="nav-link text-white" asp-area="Administration" asp-controller="Subscribers" asp-action="ConfirmArticlesSend">Изпрати абонамент</a>
                 </li>
             </ul>
             @if (this.User.IsInRole(GlobalConstants.MasterAdministratorRoleName))
@@ -73,7 +73,7 @@
                 {
                     <ul class="nav navbar-nav navbar-right font-weight-bold">
                         <li>
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Профил</a>
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Настройки</a>
                         </li>
                     </ul>
                 }
@@ -81,7 +81,7 @@
             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Login", new { area = "Identity" })" method="post" id="logoutForm" class="navbar-right">
                 <ul class="nav navbar-nav navbar-right font-weight-bold">
                     <li>
-                        <button type="submit" class="nav-link bg-admin-twenty-first font-weight-bold">Изход</button>
+                        <button type="submit" class="nav-link bg-admin-twenty-first text-white font-weight-bold">Изход</button>
                     </li>
                 </ul>
             </form>

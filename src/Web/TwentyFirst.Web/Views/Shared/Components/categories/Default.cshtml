@@ -1,29 +1,23 @@
 ﻿@model TwentyFirst.Common.Models.Categories.IndexCategoryViewComponentViewModel
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="title">Новини</li>
-    <li class="nav-item">
-        <a class="nav-link show-active" asp-area="" asp-controller="Articles" asp-action="Index">Всички</a>
-    </li>
-    @if (Model.MainCategories.Any())
+@if (Model.MainCategories.Any())
+{
+    foreach (var category in Model.MainCategories)
     {
-        foreach (var category in Model.MainCategories)
-        {
-            <li class="nav-item">
-                <a class="nav-link show-active" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
-            </li>
-        }
-    }
-    @if (Model.AdditionalCategories.Any())
-    {
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Още</a>
-            <div class="dropdown-menu">
-                @foreach (var category in Model.AdditionalCategories)
-                {
-                    <a class="nav-link show-active" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
-                }
-            </div>
+        <li class="nav-item">
+            <a class="nav-link show-active" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
         </li>
     }
-</ul>
+}
+@if (Model.AdditionalCategories.Any())
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Още</a>
+        <div class="dropdown-menu">
+            @foreach (var category in Model.AdditionalCategories)
+            {
+                <a class="nav-link show-active" asp-area="" asp-controller="Articles" asp-action="Index" asp-route-categoryId="@category.Id">@category.Name</a>
+            }
+        </div>
+    </li>
+}

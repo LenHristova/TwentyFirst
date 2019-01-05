@@ -44,16 +44,6 @@
                 });
         });
 
-        function translateDescription(description) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("GET",
-                "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=bg&dt=t&q=" + description,
-                false);
-            xhttp.send();
-            var response = JSON.parse(xhttp.responseText);
-            return response[0][0][0];
-        };
-
         var geo = {};
 
         //Sofia, Bulgaria Lat Long Coordinates
@@ -71,11 +61,11 @@
                     lat + "&lon=" + lng + "&APPID=127b3297581e099bd5ecc657bf34b3fb",
                 dataType: "jsonp",
                 success: function (data) {
-                    var location = translateDescription(data["name"]);
+                    //var location = data["name"];
                     var temp = data["main"]["temp"];
                     var icon = data["weather"][0]["icon"];
                     var iconUrl = "https://openweathermap.org/img/w/" + icon + ".png";
-                    var desc = translateDescription(data["weather"][0]["description"]);
+                    var desc = data["weather"][0]["description"];
                     $("#location").html(location);
                     $("#temp").html(temp);
                     $("#desc").html(desc);

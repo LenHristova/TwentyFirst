@@ -31,7 +31,7 @@
         /// <returns></returns>
         public static string ToFormattedString(this DateTime dateTime)
         {
-            var formattedString = dateTime.ToString("hh:mm, dd MMMM yyyy ", new CultureInfo("bg"));
+            var formattedString = dateTime.ToString("HH:mm, dd MMMM yyyy ", new CultureInfo("bg"));
             return formattedString;
         }
     }

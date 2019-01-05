@@ -1,6 +1,7 @@
 ﻿namespace TwentyFirst.Web.Components
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Common.Constants;
     using Common.Models.Articles;
@@ -17,13 +18,12 @@
             this.articleService = articleService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(IEnumerable<string> ids)
+        public async Task<IViewComponentResult> InvokeAsync(IEnumerable<string> ids, string excludeArticleId)
         {
             var connectedArticleViewModels = await this.articleService
                 .LatestImportantFromCategoriesAsync<ArticleViewModel>(
-                    ids,
-                    GlobalConstants.ArticlesCountForFromCategoriesSection);
-            return this.View(connectedArticleViewModels);
+                    ids, GlobalConstants.ArticlesCountForFromCategoriesSection);
+            return this.View(connectedArticleViewModels.Where(a => a.Id != excludeArticleId));
         }
     }
 }

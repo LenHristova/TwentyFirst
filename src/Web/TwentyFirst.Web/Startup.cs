@@ -21,6 +21,7 @@
     using Services.AuthMessageSender;
     using Services.CloudFileUploader;
     using System;
+    using Common.Constants;
     using Filters;
 
     public class Startup
@@ -56,8 +57,8 @@
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequiredLength = GlobalConstants.MinPasswordLength;
+                options.Password.RequiredUniqueChars = GlobalConstants.RequiredUniqueChars;
 
                 // Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
@@ -65,8 +66,7 @@
                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings.
-                options.User.AllowedUserNameCharacters =
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.AllowedUserNameCharacters = GlobalConstants.AllowedUserNameCharacters;
                 options.User.RequireUniqueEmail = false;
 
                 options.SignIn.RequireConfirmedEmail = true;
@@ -77,12 +77,11 @@
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                //TODO uncomment
-                //options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
 
-                options.LoginPath = "/Identity/Account/Login";
-                options.LogoutPath = "/Identity/Account/Logout";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.LoginPath = GlobalConstants.AdministrationLoginPage;
+                options.LogoutPath = GlobalConstants.AdministrationLogoutPage;
+                options.AccessDeniedPath = GlobalConstants.AdministrationAccessDeniedPage;
                 options.SlidingExpiration = true;
             });
 
